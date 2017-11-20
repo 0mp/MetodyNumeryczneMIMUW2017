@@ -9,3 +9,4 @@ Wersja live: https://www.sharelatex.com/project/59d606877ef26a08a8cf3c58
  * poprawić niektóre macierze
  * dodać brakujące rysunki
  * ogarnąć pakiet `minted` do wpisywania kodów algorytmów
+ * poprawić błędy latexowe

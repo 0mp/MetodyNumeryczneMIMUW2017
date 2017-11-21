@@ -1,4 +1,4 @@
-\documentclass[hidelinks,a4paper]{article}
+\documentclass[hidelinks,a4paper,fleqn]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[hmargin=2.4cm,vmargin=2.4cm]{geometry}
 \usepackage{amsfonts}
@@ -23,6 +23,7 @@
 
 \usepackage{longtable}
 
+\author{wiedza zebrana z wykładów dr Piotra Krzyżanowskiego i materiałów na ważniaku}
 \title{Numerki}
 
 \newcommand{\II}{\mathbb{I}}
@@ -42,11 +43,7 @@
 \newtheorem{lemat}{Lemat}
 \newtheorem{twierdz}{Twierdzenie}
 
-\usepackage{ wasysym }
-\usepackage{ marvosym }
 \usepackage{dirtytalk}
-
-
 
 \begin{document}
 \linespread{1.0}
@@ -174,7 +171,7 @@ $\arraycolsep=0.6em\def\arraystretch{1.8}
 \right]	
 $
 
-Jej kolumny są wzajemnie prostopadłe o normie euklidesowej równej $1$. Nie trudno zauważyć, że zachodzi też $Q \cdot Q^T = \eye$.
+Jej kolumny są wzajemnie prostopadłe o normie euklidesowej równej $1$. Nietrudno zauważyć, że zachodzi też $Q \cdot Q^T = \eye$.
 
 Układ $Q \cdot x = b$ ma rozwiązanie:
 \begin{equation}
@@ -652,15 +649,21 @@ Dane:
 \end{enumerate}
 
 
-\subsection{Błąd względny i bezwzględny}
-$x \in \RR^n$ - dokładna wartość
+\subsection{Numeryczna poprawność}
 
-$\tilde{x} \in \RR^n$ - wartość przybliżona
+Pożądane jest, aby algorytm dawał "dobry" wynik zarówno w arytmetyce idealnej, jak i w arytmetyce $fl$u. Niestety, jak zobaczymy, nie zawsze jest to możliwe. Nawet jeśli algorytm jest dokładny, to w wyniku jego realizacji w $fl$ możemy otrzymać wynik $fl(ALG(x))$ daleko odbiegający od $P(x)$. W szczególności, prawie zawsze mamy
+\[P(x) \neq fl(ALG(x))\]
+Zauważmy również, że o ile z reguły znamy dokładne zachowanie się algorytmu w arytmetyce idealnej dla danej informacji, to nie można tego samego powiedzieć o jego zachowaniu się w arytmetyce $fl$u. W związku z tym powstaje pytanie, jak kontrolować błąd algorytmów wynikający z błędów zaokrągleń i jakie algorytmy uznamy za te o najwyższej jakości numerycznej.
 
-błąd bezwzględny - $\parallel \tilde{x} - x \parallel$
+Istnienie błędów reprezentacji liczb rzeczywistych powoduje, że informacja $y=N(f)$ o danej $f$ nie jest w ogólności reprezentowana dokładnie. Znaczy to, że zamiast na informacji dokładnej, dowolny algorytm będzie operować na informacji nieco zaburzonej $y_\nu$, tzn. zaburzonej na poziomie błędu reprezentacji. Tak samo wynik dawany przez algorytm będzie w ogólności zaburzony na poziomie błędu reprezentacji. W najlepszym więc wypadku wynikiem działania algorytmu w $fl_\nu$ będzie $(\varphi(y_\nu))_\nu$ zamiast $\varphi(y)$. Algorytmy dające tego rodzaju wyniki uznamy za posiadające najlepsze własności numeryczne w arytmetyce $fl$u i nazwiemy numerycznie poprawnymi.
 
-błąd względny - $\cfrac{\textrm{błąd bezwzględny}}{\parallel x \parallel}$
-
+Niech:
+\begin{itemize}
+    \item $x \in \RR^n$ - dokładna wartość
+    \item $\tilde{x} \in \RR^n$ - wartość przybliżona
+    \item błąd bezwzględny - $\parallel \tilde{x} - x \parallel$
+    \item błąd względny - $\cfrac{\textrm{błąd bezwzględny}}{\parallel x \parallel}$
+\end{itemize}
 {\centering \begin{tikzpicture}
 	\draw  (-3,0) ellipse (2 and 2);
 	\draw  (3,0) ellipse (2 and 2);
@@ -730,6 +733,7 @@ błąd względny - $\cfrac{\textrm{błąd bezwzględny}}{\parallel x \parallel}$
 \begin{defi}[Polityczna poprawność]\end{defi}
 
 \subsection{Uwarunkowanie zadania (czułość zadania na zaburzenia)}
+Jak zobaczyliśmy w poprzednich przykładach, dane, jakimi dysponujemy wykonując zadanie obliczeniowe, są z natury rzeczy wartościami zaburzonymi. Okazuje się, że powszechna intuicja, że małe zaburzenia danych powinny dawać małe zaburzenia wyniku, nie znajduje potwierdzenia nawet w bardzo prostych przypadkach. Z drugiej strony, umiejętność oceny jakościowego wpływu zaburzenia danych na wynik jest kapitalna w świecie obliczeń numerycznych w ogólności, a w szczególności - inżynierskich.
 
 Pytanie: jak dobrym przybliżeniem $P(x)$ jest y? 
 
@@ -738,38 +742,29 @@ $\cfrac{\norm{P(x) - P(\tilde{x})}}{\norm{P(x)}} = \cfrac{\norm{P(X) < y}}{\norm
 To jest pytanie o czułość zadania P na zaburzenia danych i nie ma nic wspólnego z tym jaki algorytm użyjemy.
 
 
-Zamiast iksa biorę iks zaburzony. Pytanie jaki jest błąd (Względny):
-
+Zamiast iksa biorę iks zaburzony. Pytanie jaki jest błąd (względny):
 \[
 	\cfrac{\parallel P(x + \delta) - P(x) \parallel}{\parallel P(x) \parallel} \leq ? \cdot \frac{\norm{\delta}}{\norm{x}}
 \]
-
 (błąd względny wyniku vs zaburzenie względne danych)
 
 Lub bezwzględny (błąd bezwzględny wyniku)
 
 
 \begin{defi}
-	Wskaźnik (wspólczynnik) uwarunkowania zadania P w punkcie x
-	
+	Wskaźnik (współczynnik) uwarunkowania zadania P w punkcie x
 	\[
 		cond_{abs}(P, x) := sup_{\delta\textrm{ dost. małe}}\left(\frac{\norm{P(x + \delta) - P(x)}}{\norm{\delta}}\right)
 	\]
-	
 	wtedy (dla tych $\delta$):
-	
 	\[
 		\norm{P(x + \delta) - P(x)} \leq cond_{abs} (P, x) \cdot \norm{\delta}
 	\]
-	
 	Analogicznie:
-	
 	\[
 		cond_{rel}(P, x) := sup_{\delta\textrm{ dost. małe}}\left(\frac{\norm{P(x + \delta) - P(x)} \cdot \norm{x}}{\norm{\delta} \cdot \norm{P(x)}}\right)
 	\]
-	
 	wtedy dla tych $\delta$:
-	
 	\[
 		\frac{\norm{P(x + \delta) - P(X)}}{\norm{P(x)}} \leq cond_{rel} (P, x) \frac{\norm{\delta}}{\norm{x}}
 	\]
@@ -1209,15 +1204,21 @@ Na czym polega ukulele $\norm{B}$ - dostatecznie małe?
 Jeśli więc $cond(A)$ jest niezbyt duże względem $\cfrac{1}{\nu}$ to algorytm IR (modelowy) jest zbieżny.
 
 \section{Liniowe zadania najmniejszych kwadratów (LZNK)}
+Zajmiemy się zadaniem wygładzania liniowego, nazywanym też liniowym zadaniem najmniejszych kwadratów. Jest ono uogólnieniem zadania rozwiązywania kwadratowych układów równań liniowych do przypadku, gdy układ jest nadokreślony - to znaczy, jest więcej równań niż niewiadomych. W takim przypadku nie należy liczyć na to, że uda się nam wskazać rozwiązanie spełniające wszystkie równania (jest ich za dużo!), dlatego będziemy szukać rozwiązania $x$, które minimalizuje resztę:
+\[\norm{|b-Ax}_2\]
+Jest to praktycznie bardzo często pojawiające się zadanie, a autorem pierwszego rozwiązania był nie kto inny jak sam wielki Gauss.
 
-Układ $n$ równań z $m$ niewiadomymi.
+Okazuje się bowiem, że jeśli np. potraktować $b$ jako dane eksperymentalne (obarczone pewnym losowym błędem pomiaru o rozkładzie normalnym), a $x$ - parametrami zależności liniowej dla punktów pomiaru zadanych w macierzy $A$, to $x$ minimalizujący $\norm{b-Ax}_2$ (właśnie w tej normie!) jest jednocześnie najbardziej prawdopodobnym zestawem współczynników tej zależności. W języku statystyki takie zadanie nazywa się zadaniem regresji liniowej i jest w tym kontekście bardzo często znajdowane w najrozmaitszych gałęziach nauki - wszędzie tam, gdzie zachodzi potrzeba dopasowania parametrów liniowego modelu do wyników uzyskanych na drodze eksperymentu.
+
+Stąd zresztą nazwa zadania: wygładzanie liniowe, bo chodzi nam o to, by dopasowując parametry krzywej do wyników eksperymentu, wygładzić ewentualne błędy pomiarowe.
+
+Mamy zatem układ $n$ równań z $m$ niewiadomymi.
 \begin{align*}
 	a_{11}x_{1} + ... + a_{1, m}x_m & = b_1 \\
 	a_{21}x_{1} + ... + a_{2, m}x_m & = b_2 \\
 	\vdots & \\
 	a_{n1}x_{1} + ... + a_{n, m}x_m & = b_n
 \end{align*}
-
 \[
 \left[
 	\begin{array}{cc}
@@ -1247,7 +1248,7 @@ Układ $n$ równań z $m$ niewiadomymi.
 	\end{array}
 \right]
 \]
-Chcemy aby reziduum było możliwie małe, tj $\norm{b - Ax}_2 \ra \textrm{min}$!
+Chcemy aby residuum było możliwie małe, tj $\norm{b - Ax}_2 \ra \textrm{min}$!
 
 $\sum_{i}(\sum_{j} a_{ij} x_{j} - b_{i})^2 \ra \textrm{min}$!
 
@@ -1278,7 +1279,6 @@ Rozwiąanie to dostajemy kosztem $O(m^2)$. Obliczenie $Q_1^Tb$ kosztuje $O(n \cd
 
 \subsubsection{Wyznaczanie rozkładu QR macierzy $A$ metodą Householdera}
 
-
 \begin{defi}[Przekształcenie (odbicie) Householdera] 
 Niech $v \in R^n$. Określamy:
 	
@@ -1304,14 +1304,12 @@ Ponadto $H = H^T$: $(I - \gamma vv^T)^T = I^T - \gamma(vv^T)^T = I - \gamma(v^T)
 \end{wniosek}
 
 Wskażemy $H_1$ takie, żeby:
-
 \[
 H_1 \cdot \left[ \begin{array}{c}\\ \\ \quad A \quad \\ \\ \ \end{array} \right] = 
 \left[ \begin{array}{c|c}\star & \quad \star \quad \\ \hline \\ 0 & \tilde{A}\\ & \\ & \end{array}\right]
 \]
 
 W kolejnym kroku znajdziemy $H_2$ takie, że:
-
 \[
 H_2 \tilde{A} = \left[ \begin{array}{c|c}\star & \quad  \quad \\  \\ 0 & \star \\ & \\ & \end{array}\right]
 \]
@@ -1321,14 +1319,12 @@ Po $m$ krokach:
 $H_m \cdots H_3 H_2 (H_1 A) = \left[ \begin{array}{ccc} & & \text{\huge R}_1 \\ \\ \\ \hline \\ & \quad 0 & \end{array}\right]$.
 
 Jak skonstruować $H_1$? $H_1$ musi mieć następującą własność, mianowicie:
-
 \[
 	H_1 a = const\ e_1
 \]
 gdzie $a_1$ to pierwsza kolumna naszej macierzy.
 
 Szukamy więc $v \in R^n$ takie, że:
-
 \[
 	\left(I - \cfrac{2}{\norm{v}_2^2 vv^T}\right)a = const\ e_1
 \]
@@ -1597,14 +1593,8 @@ Zatem:
 \end{enumerate}
 
 \section{Zagadnienie własne}
+Jednym z podstawowych problemów algebry liniowej jest rozwiązanie zadania własnego, tzn. określeni wartości własnych $\lambda_k$ i wektorów własnych $v$ ($\neq 0$), takich że $Av_k = \lambda_k v_k$. Jeśli $A = A^T$, to wszystkie wartości własne i wektory własne są rzeczywiste i tworzą bazę ortogonalną:
 
-$A \in \RR^{n \times n}$: $(\lambda, v) \in \CC \times \CC^n$ jest parą własną, tzn.
-
-\[
-	Av = \lambda v
-\]
-
-oraz $v \neq 0$. Jeśli $A = A^T$, to wszystkie warotści własne i wektory wlasne są rzeczywiste i tworzą bazę ortogonalną:
 \[
 	Q^TAQ = \Lambda = \left[\begin{array}{ccc}
 	\lambda_1 &  & \\ 
@@ -1621,7 +1611,7 @@ gdzie
 
 gdzie $Q^TQ = I$.
 
-Typowe zadania obliczeniowe:
+Zadanie wyznaczania wartości własnych i wektorów własnych macierzy ma bardzo szerokie zastosowania w tak odległych od siebie dziedzinach, jak np. analiza odporności konstrukcji mechanicznych (wieżowce, mosty, wagony kolejowe) na wibracje, czy też rankingowanie stron internetowych w wyszukiwarce Google. Typowe zadania obliczeniowe:
 
 \begin{itemize}
 	\item znaleźć ekstremalne wartości własne (lub wektory własne im odpowiadające)

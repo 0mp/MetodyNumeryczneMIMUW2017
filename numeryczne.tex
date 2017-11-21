@@ -65,9 +65,9 @@
 	\item 50p. egzamin
 \end{itemize}
 
-Ocena: $max(K + L + Ć + E, 2 \cdot E - 5)$
+Ocena: $max(K + L + C + E, 2 \cdot E - 5)$
 
-I termin: $K + L + Ć > 20p$
+I termin: $K + L + C > 20p$
 
 G. Stewart "Afternotes on numerical analysis"
 
@@ -661,6 +661,43 @@ błąd bezwzględny - $\parallel \tilde{x} - x \parallel$
 
 błąd względny - $\cfrac{\textrm{błąd bezwzględny}}{\parallel x \parallel}$
 
+{\centering \begin{tikzpicture}
+	\draw  (-3,0) ellipse (2 and 2);
+	\draw  (3,0) ellipse (2 and 2);
+	
+	\draw  [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,1.25) (0,2.25) (3,1.25)};
+	\node at (-3,1) {$x$};
+	\node at (3,1) {$P(x)=y$};
+	\node at (0,2.5) {$P$};
+	
+	\draw  [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,-0.75) (0,0.25) (3,-0.75)};
+	\node at (-3,-1) {$\tilde{x} = fl(x)$};
+	\node at (3,-1) {$\tilde{y}$};
+	\node at (0,0.5) {$fl(A(\tilde{x}))$};
+\end{tikzpicture}\par}
+
+{\centering \begin{tikzpicture}
+	\draw  (-3,0) ellipse (2 and 2);
+	\draw  (3,0) ellipse (2 and 2);
+	
+	\draw  [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,1.25) (0,2.25) (3,1.25)};
+	\node at (-3,1) {$x$};
+	\node at (3,1) {$P(x)=y$};
+	\node at (0,2.5) {$P$};
+	
+	\draw  [dashed] [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,-0.75) (0,-0.65) (3,-0.75)};
+	\node at (-3,-1) {$\tilde{x} = fl(x)$};
+	\node at (3,-1) {$\tilde{y}$};
+	\node at (0,0.25) {$fl(A(fl(x)))$};
+	
+	\draw  [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,0.75) (0,-.25) (2.75,-0.55)};
+\end{tikzpicture}\par}
+
 \begin{defi}[Silnie numeryczna poprawność]
 	Algorytm A jest \textbf{silnie numerycznie poprawny (NP)} jeśli $\tilde{y} = P(\tilde{x})$ - dokładny wynik dla trochę zaburzonych danych, gdzie $\frac{\parallel \tilde{x} - x\parallel}{\parallel x \parallel} \leq \underbrace{k}_{\textrm{nieduża stała}} \cdot \nu$
 \end{defi}
@@ -673,6 +710,22 @@ błąd względny - $\cfrac{\textrm{błąd bezwzględny}}{\parallel x \parallel}$
 	$\cfrac{\parallel \tilde{y} - P(\tilde{x}) \parallel}{\parallel P(x) \parallel} \leq k \cdot \nu$ (prawie dokładny wynik)
 	
 \end{defi}
+
+{\centering \begin{tikzpicture}
+	\draw  (-3,0) ellipse (2 and 2);
+	\draw  (3,0) ellipse (2 and 2);
+	
+	\draw  [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,1.25) (0,2.25) (3,1.25)};
+	\node at (-3,1) {$x$};
+	\node at (3,1) {$\tilde{y}$};
+	\node at (0,2.5) {$fl(A(fl(x))$};
+	
+	\draw  [->] plot[smooth, tension=1.1] 
+	   coordinates {(-3,-0.75) (0,-1.25) (3,-0.75)};
+	\node at (-3,-0.5) {$\tilde{x} = fl(x)$};
+	\node at (3,-0.5) {$P(\tilde{x})$};
+\end{tikzpicture}\par}
 
 \begin{defi}[Polityczna poprawność]\end{defi}
 

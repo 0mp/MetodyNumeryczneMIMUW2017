@@ -67,12 +67,11 @@ Ocena: $max(K + L + C + E, 2 \cdot E - 5)$
 
 I termin: $K + L + C > 20p$
 
-G. Stewart "Afternotes on numerical analysis"
+G. Stewart ``Afternotes on numerical analysis"
 
 \chapter{Arytmetyka komputerowa}
 
-\section{Liczby zmiennopozycyjne i arytmetyka}
-
+\section{Wstęp}
 \[
 	\underbrace{6,63}_{mantysa} \cdot \underbrace{10^{\overbrace{-34}^{wykładnik}}}_{\textrm{rząd wielkości}}
 \]
@@ -87,21 +86,19 @@ $e - \textrm{wykładnik, liczba całkowita taka, że } 0 > e_{min} \leq e \leq e
 
 Charakterystyka zestawu: $(\beta, \underbrace{e_{min}, e_{max}}_{zakres}, \underbrace{p}_{precyzja})$
 
-\subsection{Liczby znormalizowane}
-
+\textbf{Liczby znormalizowane}:
 \[
 	x = (-1)^s \cdot m \cdot 2^e
 \]
 
 ale zakładamy, że m jest postaci (a więc $1 \leq m < 2)$
-
 \[
 	m = (1.f_1,f_2,f_3,...)
 \]
 
 To daje jednoznaczną reprezentację liczb niezerowych. Dodatkowo $f_0$ nie trzeba pamiętać w pamięci komputera.
 
-\subsection{Standard arytmetyki zmiennopozycyjnej}
+\section{Standard arytmetyki zmiennopozycyjnej}
 
 $\underbrace{\textrm{IEEE-754}}_{Kahan} \rightarrow \textrm{IEEE-854} \rightarrow \underbrace{\textrm{IEEE-754-R}}_{e_{min} = 1 - e_{max}}$
 
@@ -153,7 +150,7 @@ W pamięci komputera przechowujemy:
 
 np. $\frac{0}{0} = \infty - \infty = NaN$
 
-\subsection{Zabawkowy system fl (floating point)}
+\subsection{Zabawkowy system floating point}
 
 (bez biasu)
 
@@ -182,13 +179,11 @@ $x = (1.f_1f_2)_2 \cdot 2^{e}$
 
 
 Aby wypełnić pustkę wokół zera uzupełnia się system o liczby subnormalizowane:
-
 \[
 	(0.f_1f_2...f_{p-1})_2 \cdot 2^{e_{min}}
 \]
 
 Reprezentacja liczb rzeczywistych w arytmetyce fl:
-
 \[
 	x \in \mathbb{R} \rightarrow fl(x) : \textrm{jego numeryczna reprezentacja (l. masyznowa odpowiadjąca x)}
 \]
@@ -196,21 +191,20 @@ Reprezentacja liczb rzeczywistych w arytmetyce fl:
 Gdy x - liczba maszynowa, fl(x) = x.
 
 Jeśli nie, to
-
 \[
-	fl(x) = Round(x)
+	fl(x) = \texttt{Round(x)}
 \]
 
-Gdzie $Round(x)$ może być wybrany na jeden ze sposobów:
+Gdzie \texttt{Round(x)} może być wybrany na jeden ze sposobów:
 
 \begin{enumerate}
-	\item $RN(x)$ - zaokrąglenie do najbliższej liczby maszynowej (domyślne)
-	\item $RD(x)$ - zaokrąglenie w dół (tzn. w stronę $-\infty$
-	\item $RU(x)$ - zaokrąglenie w górę (tzn. w stronę $\infty$)
-	\item $RZ(x)$ - zaokrąglenie w stronę zera
+	\item \texttt{RN(x)} - zaokrąglenie do najbliższej liczby maszynowej (domyślne)
+	\item \texttt{RD(x)} - zaokrąglenie w dół (tzn. w stronę $-\infty$)
+	\item \texttt{RU(x)} - zaokrąglenie w górę (tzn. w stronę $\infty$)
+	\item \texttt{RZ(x)} - zaokrąglenie w stronę zera
 \end{enumerate}
 
-Dalej zakładamy, że $fl(x) = RN(x)$. Wtedy łatwo pokazać, że 
+Dalej zakładamy, że $fl(x) = \texttt{RN(x)}$. Wtedy łatwo pokazać, że 
 \[
 	\frac{|fl(x) - x|}{|x|} \leq 2^{-p} = \nu \leftarrow \textrm{ preycja arytmetyki}
 \]
@@ -218,19 +212,16 @@ Dalej zakładamy, że $fl(x) = RN(x)$. Wtedy łatwo pokazać, że
 (o ile nie ma undeflow/overflow)
 
 Inaczej mówiąc:
-
 \[
 	fl(x) = x(1 + \varepsilon), |\varepsilon| \leq \nu
 \]
 
 ---
-
 \[
 	a\ \square\ b\ \textrm{jest równy} fl(a\ \square\ b)\textrm{, gdzie }\square \in \{+, -, \times, :\}
 \]
 
 co zapisujemy
-
 \[
 	\underbrace{fl(a\ \square\ b)}_{\textrm{wynik w fl}} = \underbrace{fl(a\ \square\ b)}_{\textrm{reprezentacja} a \square b \textrm{ w fl}}
 \]
@@ -238,14 +229,13 @@ co zapisujemy
 (o ile brak underflow/overfow/NaN)
 
 Ponadto tak też ma być dla $\sqrt{}$ i dla
-
 \[
 	\underbrace{FMA(a, b, c)}_{\textrm{fast multiply add}} := a \cdot b + c
 \]
 
 $fl(FMA(a, b, c) = fl(a \cdot b + c)$
 
-\subsection{Problemy arytmetyki fl}
+\section{Problemy arytmetyki fl}
 
 Źródła błędu algorytmu rozwiązującego zadanie:
 \begin{itemize}
@@ -255,7 +245,7 @@ $fl(FMA(a, b, c) = fl(a \cdot b + c)$
 \end{itemize}
 
 
-\subsubsection{Redukcja cyfr przy odejmowaniu}
+\subsection{Redukcja cyfr przy odejmowaniu}
 
 Dane: $x, y \in \RR$. Obliczamy
 \[
@@ -272,7 +262,6 @@ Dane: $x, y \in \RR$. Obliczamy
 \end{enumerate}
 
 Jaki jest błąd?
-
 \[
 	\cfrac{|\tilde{s} - s|}{|s|} = \cfrac{|x + (\varepsilon_x + \varepsilon)\cdot x + y + (\varepsilon_y + \varepsilon)\cdot y + \textrm{małe }\nu^2|}{|x + y|} \leq \cfrac{}{} \leq 2 \cdot \cfrac{|x|+|y|}{|x+y|} \cdot \nu
 \]
@@ -283,7 +272,7 @@ Zatem
 
 - jeśli $x, y$ - tego samego znaku, to $2 \cfrac{|x|+|y|}{|x+y|} = 2 \cfrac{|x+y|}{|x+y|} = 2$. Czyli błąd względny na poziomie $\nu$.
 
-\subsubsection{Błędy w obliczeniach numerycznych}
+\subsection{Błędy w obliczeniach numerycznych}
 
 Zadanie obliczeniowe: $P: \RR^n \supset D \ra \RR^n$. Mając dane $x \in D$ (dziedzina), wyznaczyć $y = P(x)$.
 
@@ -299,7 +288,7 @@ Dane:
 \end{enumerate}
 
 
-\subsection{Numeryczna poprawność}
+\section{Numeryczna poprawność}
 
 Pożądane jest, aby algorytm dawał "dobry" wynik zarówno w arytmetyce idealnej, jak i w arytmetyce $fl$u. Niestety, jak zobaczymy, nie zawsze jest to możliwe. Nawet jeśli algorytm jest dokładny, to w wyniku jego realizacji w $fl$ możemy otrzymać wynik $fl(ALG(x))$ daleko odbiegający od $P(x)$. W szczególności, prawie zawsze mamy
 \[P(x) \neq fl(ALG(x))\]
@@ -382,7 +371,7 @@ Niech:
 
 \begin{defi}[Polityczna poprawność]\end{defi}
 
-\subsection{Uwarunkowanie zadania (czułość zadania na zaburzenia)}
+\section{Uwarunkowanie zadania (czułość zadania na zaburzenia)}
 Jak zobaczyliśmy w poprzednich przykładach, dane, jakimi dysponujemy wykonując zadanie obliczeniowe, są z natury rzeczy wartościami zaburzonymi. Okazuje się, że powszechna intuicja, że małe zaburzenia danych powinny dawać małe zaburzenia wyniku, nie znajduje potwierdzenia nawet w bardzo prostych przypadkach. Z drugiej strony, umiejętność oceny jakościowego wpływu zaburzenia danych na wynik jest kapitalna w świecie obliczeń numerycznych w ogólności, a w szczególności - inżynierskich.
 
 Pytanie: jak dobrym przybliżeniem $P(x)$ jest y? 
@@ -422,7 +411,6 @@ Lub bezwzględny (błąd bezwzględny wyniku)
 \end{defi}
 
 \textbf{IDEALIZACJA}: uwarunkowanie w punkcie (tzn. gdy $\delta \ra 0$):
-
 \[\def\arraystretch{3.4}
 	\begin{array}{ll}
 		cond_{abs}(P, x) & := \lim_{\norm{\delta} \ra 0} \cfrac{\norm{P(x + \delta) - P(x)}}{\norm{\delta}} \\
@@ -446,16 +434,14 @@ Wtedy małe zaburzenie danych może spowodować duży błąd wyniku. W przeciwny
 
 \begin{wniosek} Algorytm NP w zadaniu dobrze uwarunkowanym musi dawać wynik obarczony małym błędem. \end{wniosek}
 
-\subsubsection{Numeryczne kryterium NP}
+\section{Numeryczne kryterium NP}
 
 Mamy jakieś $\tilde{x}$ - przybliżone (?) rozwiązanie $Ax = b$. Pytanie czy spełnia rozwiązanie
-
 \[
 	(A + \Delta)\tilde{x} = b + \delta
 \]
 
 i jak duże jest $\varepsilon$ t. że:
-
 \[
 	\frac{\norm{\Delta}}{\norm{A}}, \frac{\norm{\delta}}{\norm{b}} \leq \varepsilon
 \]
@@ -491,7 +477,6 @@ $x \in \RR^N$
 $A \in \RR^{N,N}, \textrm{nieosobliwa}$
 
 $b \in \RR^N$
-
 \[
 	A \cdot x = b
 \]
@@ -514,7 +499,6 @@ $
 $x_n = \cfrac{1}{a_{nk}}(b_k - \sum_{j=1}^{k-1} a_{kj}x_j)$
 
 Gdy macierz układu ma formę trójkątną, to koszt wyznaczenia rozwiązania:
-
 \[
 	\left[
 		\begin{array}{ccccc}
@@ -629,7 +613,6 @@ $\arraycolsep=1em\def\arraystretch{2}
 $
 
 gdzie A, B, C, E to macierze, układy z A potrafimy ``łatwo" rozwiązać.
-
 \[
 	\left\{ \begin{array}{l}
 	A_1x + Ey = f\\
@@ -643,7 +626,6 @@ gdzie A, B, C, E to macierze, układy z A potrafimy ``łatwo" rozwiązać.
 	Bx + Cy = g
 	\end{array} \right.
 \]
-
 
 \[
 	\left\{ \begin{array}{l}
@@ -682,7 +664,6 @@ $B_1 \cdot \underbrace{ B_2 \cdot x}_{y} = b$
 \subsubsection{}
 
 Zauważmy, że na ten algorytm można popatrzeć jak na rozkład na "łatwiejsze" macierze
-
 \[\arraycolsep=1em\def\arraystretch{2}
 	\left[
 		\begin{array}{c|c}
@@ -709,7 +690,6 @@ Gdzie $S = C - FG = C - FA^{-1}E$
 
 
 \textbf{Pomysł}: znaleźć rozkład macierzy A na iloczyn macierzy dolnej i górnej trójkątnej.
-
 \[
 	A = \underbrace{\left[
 			\begin{array}{cc}
@@ -726,7 +706,6 @@ Gdzie $S = C - FG = C - FA^{-1}E$
 \]
 
 Spróbujmy blokowo:
-
 \[\arraycolsep=0.7em\def\arraystretch{1.4}
 	\left[
 		\begin{array}{c|c}
@@ -761,7 +740,6 @@ $
 $
 
 Mamy rekurencyjny algorytm rozkładu $LU$, ale w klasycznym przypadku biorąc podział blokowy można uniknąć rekurencji.
-
 \[\arraycolsep=0.7em\def\arraystretch{1.4}
 	\begin{array}{l}
 		\updownarrow 1   \\ \\
@@ -797,7 +775,7 @@ $\underbrace{\tilde{A}_{22} - L_{21}U_{12}^T}_{\textrm{wystarczy rozłożyć tak
 
 Można na to patrzeć jako na sekwencję przejść A prowadzącą do macierzy U. A to jest tak naprawdę eliminacja Gaussa.
 
-\subsection{Algorytm eliminacji Gaussa}
+\section{Algorytm eliminacji Gaussa}
 
 Ten algorytm nie zadziała jeśli w trakcie będziemy dzielić przez 0, np.
 
@@ -816,7 +794,6 @@ Aby algorytm eliminacji Gaussa zadziałał zawsze (o ile tylko A - nieosobliwa),
 
 
 \begin{wniosek} Algorytm eliminacji Gaussa z wyborem elementu głównego w kolumnie prowadzi do rozkładu
-	
 	\[
 		P \cdot A = L \cdot U
 	\]
@@ -836,7 +813,7 @@ Koszt rozkładu:
 
 $2*(n-1)^2 + 2(n-2)^2 + ... + 2 + O(n^2) = 2 \cdot \underbrace{((n-1)^2 + (n-2)^2 + ... + 1^2)}_{\frac{1}{3}n^2}$
 
-\subsubsection{Uwarunkowanie układu równań liniowych}
+\subsection{Uwarunkowanie układu równań liniowych}
 
 
 $x = A^{-1}b, Ax = b$
@@ -845,11 +822,9 @@ $\tilde{x} = A^{-1}(b + \delta) = A\tilde{x} = b + \delta$, $\frac{pl x - \tilde
 
 
 $\frac{\norm{\delta}}{\norm{b}} \leq \varepsilon$
-
 \[
 	\norm{x - \tilde{x}} = \norm{A^{-1}b - A^{-1}(b + \delta)} = \norm{A^{-1}b - A^{-1}b - A^{-1}\delta} \leq \pl A
 \]
-
 
 \[
 	\frac{\norm{x - \tilde{x}}}{\norm{x}} \leq \frac{\norm{A^{-1}} \cdot \norm{\delta}}{\norm{x}} = \frac{\norm{A^{-1}} \cdot \norm{\delta} \cdot \norm{b}}{\norm{x} \cdot \norm{b}} \leq \frac{\norm{A^{-1}} \cdot \norm{b}}{\norm{x}} \cdot \varepsilon = \frac{\norm{A^{-1}} \cdot \norm{Ax}}{\norm{x}} \cdot \varepsilon \leq \underbrace{\norm{A} \cdot \norm{A^{-1}}}_{cond(A)} \cdot \varepsilon
@@ -862,13 +837,11 @@ $Ax = b$, $(a + \Delta)\tilde{x} = b + \delta$, gdzie
 $\frac{\norm{\Delta}}{\norm{A}} \leq \varepsilon$, $\frac{\delta}{b} \leq \varepsilon$
 
 Okazuje się, że jeśli:
-
 \[
 	\varepsilon \norm{A} \cdot \norm{A^{-1}} \leq \frac{1}{2}
 \]
 
 to
-
 \[
 	\frac{\norm{x - \tilde{x}}}{\norm{x}} \leq 4 \cdot cond(A) \cdot \varepsilon
 \]
@@ -893,21 +866,16 @@ $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A 
 
 \begin{proof}
 	Gdyby była osobliwa, to $\exists x \neq 0$
-	    
 	\[
 		(I + B)x = 0
 	\]
-	    
 	\[
 		x + Bx = 0
 	\]
-	    
 	$\norm{x} = \norm{-Bx} = \norm{Bx} \leq \norm{B} \cdot \norm{x}$
-	    
 	\[
 		1 \leq \norm{B}
 	\]
-	    
 	sprzeczność.
 \end{proof}
 
@@ -919,26 +887,22 @@ $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A 
 	$A + \Delta  A(I + A^{-1} \Delta)$
 	
 	Zatem
-	
 	\[
 		\norm{\tilde{x} - x} \leq \frac{\norm{A^{-1}}}{1 - \varepsilon \norm{A^{-1}} \cdot \norm{A}} \leq ... \leq \frac{2 \cdot \norm{A^{-1}} \cdot \norm{A}}{1 - \varepsilon \norm{A^{-1}} \cdot \norm{A}} \cdot \norm{x} \cdot \varepsilon
 	\]
 \end{wniosek}
 
 \begin{fakt} Algorytm rozwiązywania układu $Ax = b \in \RR^n$ przez rozkład LU z wyborem w kolumnie (eliminacja Gaussa z wyborem w kolumnie) produkuje w fl rozwiązanie $\tilde{x}$ takie, że $\tilde{x}$ spełnia (dokładnie) rozwiązanie:
-	
 	\[
 		(A + \Delta)\tilde{x} = b
 	\]
 	
 	gdzie
-	
 	\[
 		\frac{\norm{\Delta}_\infty}{\norm{A}_\infty} \leq \underbrace{K}_{\textrm{nieduża stała}} \cdot N^3 \cdot \overbrace{\rho_N}^{\textrm{wskaźnik wzrostu}} \cdot \underbrace{\nu}_{\textrm{precyzja fl}}
 	\]
 	
 	gdzie
-	
 	\[
 		\rho_N = \frac{max_{i, j, k} |a_{i, j}^{(k)}|}{max_{i, j}|a_{i,j}|}
 	\]
@@ -981,7 +945,7 @@ Chcemy przechowywać niezerowe wartości.
 \end{enumerate}
 
 
-\subsection{Metody stacjonarne}
+\section{Metody stacjonarne rozwiązywania układów równań liniowych}
 
 Zmiast poszukiwać dokładnej wartości $x$, takiej że $Ax=b$, znajdźmy jego przybliżenie! Będziemy używać metod iteracyjnych, których podstawowym składnikiem będzie operacja $A \cdot w$, która kosztuje $O(N)$, jeśli $\overbrace{nnz}^{\textrm{non zero}}(A) = O(N)$.
 
@@ -1067,7 +1031,7 @@ D - macierz Jacobiego, może być wolno zbieżna.
 \end{twierdz}
  
 
-\subsubsection{Metoda Gaussa-Seidla} 
+\subsection{Metoda Gaussa-Seidla} 
 \[
 	\begin{array}{ll}
 		a_{11}x_1^{(k+1)} & = b_1 - a_{12}x_2^{(k)} - ... - a_{1N}x_N^{(k)}                     \\
@@ -1082,7 +1046,7 @@ Istnieje wiele innych ``prostych" metod iteracyjnych dla układów równań z ma
 
 $\quad$ \say{Czy można wymyślić nieproste zadanie o iteracji prostej? Można}
 
-\subsubsection{Metody przestrzeni Kryłowa}
+\subsection{Metody przestrzeni Kryłowa}
 k - ta iteracja jest zdefinowana jako
 \[
 	x_k \in x_0 + K_k
@@ -1161,7 +1125,6 @@ Analizę algorytmu iteracyjnego poprawiania przeprowadzimy w modelowej sytuacji,
 4. $\ x_{i+1} = x_i + e_i$
 	
 Hej, a gdzie tu uproszczenie? Krok 2 i 4 przeprowadzimy dokładnie (jedynie krok 3 w pojedynczym flu). Załóżmy, że nasz algorytm rozwiązywania równań $Ax = b$ w fl jest numerycznie poprawny. To znaczy, że zamiast wyznaczyć dokładną wartość $e_i$, wyznacza jakieś jego przybliżenie $\tilde{e_i}$ takie że jest ono dokładnym rozwiązaniem zadania zaburzonego:
-
 \[
 	(A + H)\tilde{e_i} = r_i \ \ \ \textrm{(dokładnie)}
 \]
@@ -1186,13 +1149,11 @@ Zatem
 \end{align*}
 
 Jeśli $\norm{A^{-1}H} < 1$ to $(I - B)$ - odwracalne i na mocy wcześniejszego lematu:
-
 \[
 	\norm{(I - B)^{-1}} \leq \cfrac{1}{1 - \norm{B}}
 \]
 
 Zatem
-
 \[
 	\norm{e_n} \leq \cfrac{\norm{B}}{\underbrace{1 - \norm{B}}_{\gamma}} \cdot \norm{e_n}
 \]
@@ -1200,7 +1161,6 @@ Zatem
 Jeśli $\gamma < 1$, to $\norm{e_n} \ra 0$ (liniowo)!.
 
 Na czym polega ukulele $\norm{B}$ - dostatecznie małe?
-
 \[
 	\norm{B} = \norm{A^{-1} H} \leq \norm{A^{-1}} \cdot \norm{H} \leq c \cdot \norm{A^{-1}} \cdot \norm{A} \cdot \nu = c \cdot cond(A) \nu
 \]
@@ -1347,7 +1307,6 @@ Zatem $H = I - \cfrac{2}{\norm{v}_2^2} vv^T$, gdzie $v = a \pm \norm{a}_2^2 \cdo
 \textbf{Jaki znak wybrać?} Zgodny ze znakiem $a_1$, aby uniknąć (...)?
 
 W praktyce nigdy nie obliczamy jawnie macierzy Q mnożąc przez siebie macierze $H_1, ..., H_n$. Jedyne co potrzebujemy, to mnożenie przez Q (lub $Q^T$) jakiegoś wektora:
-
 \[
 	Q \cdot z = H_1(H_2(...(H_{n-1}z)))
 \]
@@ -1361,7 +1320,6 @@ for i = m-1 downto 1:
 $\ \ y = H_iy$
 
 Jak tanio mnożyć $H_i y$?
-
 \[
 	H_i y = (I - \gamma vv^T)y = y - \gamma v^Tyv
 \]
@@ -1369,7 +1327,6 @@ Jak tanio mnożyć $H_i y$?
 koszt O(n).
 
 Koszt rozkładu QR metodą Householdera. Trzeba rozłożyć macierz $n \times n$ przy użyciu tej metody
-
 \[
 	\underbrace{T(n, n)}_{\textrm{koszt rozkładu QR macierzy }n \times n} = T(n-1, n-1) + \underbrace{\textrm{koszt wyznaczenia v}}_{O(n)} + \underbrace{\textrm{koszt update (HA)}}_{4(n+1)n flopów?}
 \]
@@ -1417,7 +1374,6 @@ Po rachunkach $T(n, m) = 2m^2n - \cfrac{2}{3}m^3$ (plus wyrazy niższego rzędu)
 	\node at (8.25,0) {$m$};
 	\node at (9.5,1.25) {$m$};
 \end{tikzpicture}
-
 \[
 	A = U_1 \cdot \Sigma_1 \cdot V^T 
 \]
@@ -1427,7 +1383,6 @@ Dla każdej macierzy $A \in \RR^{n, m}$ istnieje rozkład:
   \item $U_1^TU_1 = \eye$ (kolumny $U_1$ są ortogonalne)
   \item $V^TV = I$
 \end{itemize}
-
 \[
 \Sigma_1 = \left[\begin{array}{cccc} \sigma_1 & & & \text{\huge 0} \\
  & \sigma_2 & & \\ & & \ddots & \\ \text{\huge 0} & & & \sigma_n \end{array}\right]
@@ -1510,7 +1465,6 @@ Niech $A \in \RR^{m \times n}$, $n \geq m$, ale $rank(A) < m$.
 Wtedy LZNK ma niejednoznaczne rozwiązanie.
 
 Jeśli x minializuje $\norm{b - Ax}_2$, to $x+v$ też, o ile $v \in ker(A)$:
-
 \[
 	\norm{b - A(x + v)}_2 = \norm{b - Ax - \underbrace{Av}_{=0}}_2 = \norm{b - Ax}_2
 \]
@@ -1533,14 +1487,12 @@ Ponieważ A jest rzędu $k<m$, to
 $\sigma_1 \geq \cdots \geq \sigma_k > 0$.
 
 Zatem
-
 \[\arraycolsep=1em\def\arraystretch{2}
 	\left[\begin{array}{c} \\ A \\ \ \end{array}\right] =
 	\left[\begin{array}{c|c|c} & &\ \\ \tilde{U}_1 & \hat{U}_1 & \tilde{U} \\ & & \ \end{array}\right] \cdot \left[ \begin{array}{c} \begin{array}{c|c} \tilde{\Sigma}_1 & 0 \\ \hline 0 & 0 \end{array} \\ \hline 0\end{array}\right] \cdot \left[ \begin{array}{c} \tilde{V}_1^t \\ \hline \tilde{V}_2^T \end{array}\right] = \tilde{U}_1 \tilde{\Sigma}_1 \tilde{V}_1^T
 \]
 
 Postępując analogicznie jak w 4.
-
 \[\arraycolsep=1em\def\arraystretch{2}
 \norm{b - Ax}_2^2 = \norm{\left[ \begin{array}{c}
 \tilde{U}_1^T \\ \hline
@@ -1567,11 +1519,9 @@ $x^Tv = (\tilde{V_1} \cdot cos)^T) (\tilde{V}_2z) = cos^T \cdot \underbrace{\til
 $A \in \RR^{n,m}$, $n \gg m$, $rank(A) = m$, $r$ - rozwiązanie LZNK $\norm{b - Ax}_2 \ra min!$
 
 Rozważmy zadanie zaburzone
-
 \[\norm{\tilde{b} - \tilde{A}\tilde{x}}_2 \ra min\]
 
 Załóżmy, że
-
 \[
 	\varepsilon := max \left\{ \cfrac{\norm{A - \tilde{A}}_2}{\norm{A} _2}, \cfrac{\norm{b - \tilde{b}}_2}{\norm{b}_2} \right\}
 \]
@@ -1579,7 +1529,6 @@ Załóżmy, że
 jest na tyle małe, że $cond_2(A) \cdot \varepsilon < 1$, gdzie $cond_2(A) := \cfrac{\sigma_{max}(A)}{\sigma_{min}(A)}$.
 
 Wtedy zadanie zauburzone ma jednoznaczne rozwiązanie oraz $cond_{LZNK}(A, b)$:
-
 \[
 	\cfrac{\norm{x - \tilde{x}}_2}{\norm{x}_2} \leq \varepsilon \cdot \underbrace{\left[ \cfrac{2 cond_2(A)}{\cos{\Theta}} + \tan{\Theta}(cond_2(A))^2 \right]}_{cond_{LZNK}(A, b)} + O(\varepsilon^2)
 \]
@@ -1598,7 +1547,6 @@ Zatem:
 
 \section{Zagadnienie własne}
 Jednym z podstawowych problemów algebry liniowej jest rozwiązanie zadania własnego, tzn. określeni wartości własnych $\lambda_k$ i wektorów własnych $v$ ($\neq 0$), takich że $Av_k = \lambda_k v_k$. Jeśli $A = A^T$, to wszystkie wartości własne i wektory własne są rzeczywiste i tworzą bazę ortogonalną:
-
 \[
 	Q^TAQ = \Lambda = \left[\begin{array}{ccc}
 	\lambda_1 &  & \\ 
@@ -1608,7 +1556,6 @@ Jednym z podstawowych problemów algebry liniowej jest rozwiązanie zadania wła
 \]
 
 gdzie
-
 \[
 	Q = \left[ \begin{array}{c|c|c|c} & & & \\ v_1 & v_2 & \cdots & v_n \\ & & & \end{array} \right]
 \]
@@ -1627,7 +1574,6 @@ Zadanie wyznaczania wartości własnych i wektorów własnych macierzy ma bardzo
 Czyli wyznaczanie wektora własnego odpowiadające dominującej wartości własnej
 
 Niech wartości własne A spełniają:
-
 \[
 	|\lambda_1| \underbrace{>}_{\textrm{tak, tu ostra}} |\lambda_2| \geq |\lambda_3| \geq \cdots \geq |\lambda_n|
 \]
@@ -1643,23 +1589,18 @@ $x_{k+1} = \cfrac{x_{k+1}}{\norm{x_{k+1}}_2^2}$
 end
  
 Działanie tej metody przeanalizujemy dla A, która jet diagonalizowalna:
- 
 \[
 	X^{-1} A X = \Lambda = \begin{bmatrix} \lambda_1 &  & \\  &  \ddots & \\ &  & \lambda_n \end{bmatrix}
 \]
- 
 Innymi słowy:
- 
 \[
 	AX = X \Lambda
 \]
- 
 czyli kolumny $v_i$, macierzy X:
  
 $X = \left[ \begin{array}{c|c|c|c} &&& \\ v_1 & v_2 & \cdots & v_n \\ &&& \end{array} \right]$ są wektorami własnymi odpowiadającymi $\lambda_i$.
  
 Zapisując $x_0 = \sum_{i=1}^{n} \alpha_i v_i$ mamy kolejno:
- 
 \begin{align*}
 	x_1 & = A \cdot x_0 = A \sum \alpha_iv_i = \sum \alpha_i Av_i = \sum \alpha_i \lambda_i v_i \\
 	x_2 & = Ax_1 = A(\sum(\alpha_i\lambda_i)\cdot v_i) = \sum \alpha_i \lambda_i^2 v_i \\
@@ -1680,14 +1621,12 @@ Szybkość zbieżności $x_k$ do kierunku wektora $v_1$ jest proporcjonalna do $
 
 \begin{fakt}
 	Jeśli $\lambda$ - w. własna macierzy A, to $(\lambda - \nu)$ - w. własny macierzy $(A - \nu I)$
-	 
 	\[
 		(A - \nu I)v \overbrace{=}^{v\textrm{ - wektor własny odpowiadający }\lambda} = Av - \lambda v = \lambda v - \nu v = (\lambda - \nu)v
 	\]
 \end{fakt} 
 
-\begin{fakt} Jeśli $\lambda$ - wartość własna A oraz A - nieosobliwa, to $\cfrac{1}{\lambda}$ jest wartością własną $A^{-1}$.
-	
+\begin{fakt} Jeśli $\lambda$ - wartość własna A oraz A - nieosobliwa, to $\frac{1}{\lambda}$ jest wartością własną $A^{-1}$.
 	\begin{equation}
 		\begin{aligned}
 			A^{-1}| Av           & = \lambda v                                  \\
@@ -1695,16 +1634,13 @@ Szybkość zbieżności $x_k$ do kierunku wektora $v_1$ jest proporcjonalna do $
 			\cfrac{1}{\lambda} v & = A^{-1}v                                    
 		\end{aligned}
 	\end{equation}
-	
 \end{fakt}
 
-\begin{fakt} Jeśli $\lambda$ - wartość własna A oraz $(A - \nu I)$ - nieosobliwa, to $\cfrac{1}{\lambda - \nu}$ jest wartością własną $(A - \nu I)^{-1}$
+\begin{fakt} Jeśli $\lambda$ - wartość własna A oraz $(A - \nu I)$ - nieosobliwa, to $\frac{1}{\lambda - \nu}$ jest wartością własną $(A - \nu I)^{-1}$
 \end{fakt}
 
 \begin{wniosek} Metoda potęgowa zastosowana do $(A - \nu I)^{-1}$ będzie zbieżna do wartości własnej A, $\lambda_i$, najbliższej $\nu$ (jeśli taka jedyna $\lambda_i$ istnieje). Rzeczywiście, wartość własna $(A - \nu I)^{-1}$ to $\cfrac{1}{\lambda - \nu}$, jeśli zachodzi $\cfrac{1}{|\lambda_i - \nu|} > \cfrac{1}{|\lambda_j - \nu|}$ dla $j \neq i$, to $\cfrac{1}{|\lambda_i - \nu|}$ jest dominująca.
 \end{wniosek}
-
-[dotąd ma być kolos]
 
 \subsection{Odwrotna metoda potęgowa}
 
@@ -1734,7 +1670,6 @@ $O(N^3) \ra $ Rozłóż macierz na czynniki, np. $P(A-\nu I) = LU$ (albo $A - \n
 ---
 
 Znając przybliżenie $x_k$ wektora własnego, możemy wykonać najlepsze (w sensie średniokwadratowym) przybliżenie wartości własnej:
-
 \[
 	\lambda_k = \underbrace{\cfrac{x^T_k A x_k}{x_k^T x_k}}_{\textrm{iloraz Rayleigh}}
 \]
@@ -1766,7 +1701,6 @@ $\underbrace{\sigma(A)}_{\textrm{spektrum, czyli zbiór wartości własnych A}} 
 Rzeczywiście $\lambda$ jest wartością własną $A$ $\iff det(A -\lambda I) = 0$.
 
 No dobrze, ale ile wynosi wyznacznik?
-
 \begin{equation}
 	\begin{aligned}
 		det(A - \lambda I) & = det\left( \left[\begin{array}{c|c}A_{11} & A_{12} \\ \hline 0 & A_{22}\end{array}\right] - \lambda  \left[\begin{array}{c|c}I & 0 \\ \hline 0 & I\end{array}\right] \right) \\
@@ -1824,7 +1758,6 @@ No dobrze, ale ile wynosi wyznacznik?
 \end{twierdz}
 
 Niech $\tilde{\lambda}$ - w. własna macierzy zaburzonej $\tilde{A} = A + \Delta$. Wtedy
-
 \[
 	min_{\lambda \in \sigma(A)} |\lambda - \tilde{\lambda} \leq \underbrace{\norm{X} _2 \cdot \norm{X^{-1}}_2}_{cond_2(X)} \cdot \norm{\Delta}_2
 \]
@@ -1885,13 +1818,13 @@ Teraz ten algorytm jest niepraktyczny. Ile kosztuje rozkład QR? Jak macierz jes
 
 \chapter{Funkcje nieliniowe}
 
-\section{Funkcje nieliniowe}
+\section{Wstęp}
 
-W życiu numeryka często trzeba wyliczać wartości funkcji. Fajnie byłoby zastępować funkcje skomplikowane na funkcje proste. Ale jakie funkcje właściwie są proste? Matematyk powie, że trygonometryczne, ja powiem, że wielomiany. Dlaczego wielomiany?
+W życiu numeryka często trzeba wyliczać wartości funkcji. Fajnie byłoby zastępować funkcje skomplikowane funkcjami prostymi, ale jakie funkcje właściwie są proste? Matematyk powie, że trygonometryczne, numeryk powie, że wielomiany. Dlaczego wielomiany?
 \[
 p(x) = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n
 \]
-Wielomiany są fajne, bo żeby je wyliczyć wystarczy umieć dodawać i mnożyć, a to potrafi sprzęt (a jak ktoś ma dobre oko to nawet zauważy tutaj FMA.
+Wielomiany są przyjemne, bodo ich wyliczenia wystarczy dodawanie i mnożenie, a to potrafi sprzęt (a jak ktoś ma dobre oko to nawet zauważy tutaj FMA - ``fused multiply-add").
 
 \subsection{Algorytm Hornera}
 Algorytm Hornera służy do szybkiego wyznaczania wartości $w = p(x)$. On polega na tym, aby w odpowiednim miejscu powstawiać nawiasy.
@@ -1985,7 +1918,7 @@ w(x_i) = y_i \quad dla\ i = 0, \cdots n
 \]
 Innymi słowy taki wielomian jest jednoznacznie wyznaczony.
 \end{twierdz}
-Dowód:
+\textbf{Dowód:}
 
 Weżmy dowolną bazę przestrzeni wielomianów stopnia $\leq n$, $\{\phi_0, \cdots, \phi_n\}$. Wtedy $w(x) = \sum_{i=0}^{n} \alpha_i \phi_i(x)$ i warunki interpolacji dają:
 \[
@@ -2225,7 +2158,7 @@ Rzeczywiście:
 	p_n(x_0) &= q(x_0) + \cfrac{x_0-x_n}{x_n-x_0}(q(x_0) - p_{n-1}(x_0)) = f(x_0)
 \end{align*}
 
-Co można powiedzieć gdy mam reprezentacje takich dwóch wielomianów? W wielomianie $p_n(x)$ (albo $p_1$??) współczynnik przy $x^n$ jest równy $b_n = f[x_0, \cdots, x_n]$. Natomiast współczynnik przy $x^n$ w wielomianie po drugiej stronie $(\star\star): q(x) + \cfrac{x-x_n}{x_n-x_0}(q(x) - p_n(x))$, rozpisując $q$ i $p_{n-1}$ w bazie Newtona:
+Co można powiedzieć gdy mam reprezentacje takich dwóch wielomianów? W wielomianie $p_n(x)$ (albo $p_1$??) współczynnik przy $x^n$ jest równy $b_n = f[x_0, \cdots, x_n]$. Natomiast współczynnik przy $x^n$ w wielomianie po drugiej stronie $(\star\star): q(x) + \frac{x-x_n}{x_n-x_0}(q(x) - p_n(x))$, rozpisując $q$ i $p_{n-1}$ w bazie Newtona:
 \begin{align*}
 	q(x) &= \sum_{i} q(x-x_1)\cdot \cdots \cdot (x-x_i) \\
 	p_{n-1}(x) &= \sum_{i} b_i(x-x_1)\cdot \cdots \cdot(x-x_i)
@@ -2254,7 +2187,7 @@ Niech $f \in C^{n+1}[a, b]$ (zbiór funkcji na przedziale [a, b] (n+1) razy ró�
 gdzie $w_n(x) = (x-x_0) \cdots (x-x_n)$ (gdzie $w(x_i) = f(x_i)$ dla $i = 0, \cdots, n$). (Dowód był)
 \end{twierdz}
 
-Interpolacja Hermite'a
+\subsection{Interpolacja Hermite'a}
 
 Znaleźć wielomian $H_n(x)$ stopnia $\leq n$ tkie, że
 \[

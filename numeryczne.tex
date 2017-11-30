@@ -1,4 +1,4 @@
-\documentclass[hidelinks,a4paper,fleqn]{article}
+\documentclass[hidelinks,a4paper,fleqn]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[hmargin=2.4cm,vmargin=2.4cm]{geometry}
 \usepackage{amsfonts}
@@ -42,6 +42,7 @@
 \newtheorem{fakt}{Fakt}
 \newtheorem{lemat}{Lemat}
 \newtheorem{twierdz}{Twierdzenie}
+\newtheorem{obserw}{Obserwacja}
 
 \usepackage{dirtytalk}
 
@@ -68,358 +69,7 @@ I termin: $K + L + C > 20p$
 
 G. Stewart "Afternotes on numerical analysis"
 
-\section{Układy równań liniowych}
-
-$x \in \RR^N$
-
-$A \in \RR^{N,N}, \textrm{nieosobliwa}$
-
-$b \in \RR^N$
-
-\[
-	A \cdot x = b
-\]
-
-\subsection{Proste układy równań}
-
-\subsubsection{Macierze trójkątne}
-
-$
-\left\{
-\begin{array}{ll}
-	a_{11}x_1                                  & = b_1 \implies x_1 = \cfrac{b_1}{a_{11}}                \\
-	a_{21}x_1 + a_{22}x_2                      & = b_2 \implies x_2 = \cfrac{1}{a_{22}}(b_2 - a_{11}x_1) \\
-	\vdots \\
-	a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n & = b_n                                                   
-\end{array}
-\right.
-$
-
-$x_n = \cfrac{1}{a_{nk}}(b_k - \sum_{j=1}^{k-1} a_{kj}x_j)$
-
-Gdy macierz układu ma formę trójkątną, to koszt wyznaczenia rozwiązania:
-
-\[
-	\left[
-		\begin{array}{ccccc}
-			a_{0,0} \\
-			a_{0,1} & a_{1,1}  &   & \text{\huge0}\\
-			a_{0,2}  & a_{1,2} & a_{2,2} \\
-			\vdots  & \vdots & \vdots & \ddots \\
-			a_{0,n} & a_{1,n} & \cdots & a_{n-1,n} & a_{n,n} 
-		\end{array}
-	\right]
-	\cdot
-	\left [
-		\begin{array}{c}
-			x_1 \\  \vdots \\  \vdots \\ x_n
-		\end{array}
-	\right]
-	=
-	\left [
-		\begin{array}{c}
-			b_1 \\ \vdots \\ \vdots \\ b_n
-		\end{array}
-	\right]
-\]
-
-to
-
-\begin{align*}
-	x_0 & = \frac{b_0}{a_{0,0}}                                & \text{(jedna operacja)}    \\
-	x_1 & = \frac{b_1 - a_{0,1} x_0}{a_{1,1}}                  & \text{(trzy operacje)}     \\
-	&\vdots \\
-	x_n & = \frac{b_n - \sum_{i=0}^{n-1} a_{i,n} x_i}{a_{n,n}} & \text{($2n + 1$ operacji)} 
-\end{align*}
-
-A koszt rozwiązania jest następujący:
-$1+3+5+...+2(k-1)+1+... = \sum_{k=1}^{n} 2k - \sum 1 = O(2n^2)$
-
-Jest to metoda podstawienia w przód/tył. Rozmiar danych jest rzędu $O(n^2)$, więc widać, że to jest optymalna metoda.
-
-\subsubsection{Macierze ortogonalne}
-
-Gdy mamy macierz ortogonalną, tzn.
-
-$Q^T \cdot Q = I$, gdzie $Q \in \RR^{N, N}$
-
-$\arraycolsep=0.6em\def\arraystretch{1.8}
-\left[
-	\begin{array}{c}
-		\quad _1^T \quad   \\ \hline
-		\quad q_2^T \quad  \\ \hline
-		\quad \vdots \quad \\ \hline
-		\quad q_n^T \quad  
-	\end{array}
-\right]
-\cdot
-\left[
-	\begin{array}{c|c|c|c}
-		    &     &        &     \\
-		q_1 & q_2 & \cdots & q_n \\
-		    &     &        &     
-	\end{array}
-\right]
-=
-\left[
-	\begin{array}{cccc}
-		1 &   &        & 0 \\
-		  & 1 &        &   \\
-		  &   & \ddots &   \\
-		0 &   &        & 1 
-	\end{array}
-\right]	
-$
-
-Jej kolumny są wzajemnie prostopadłe o normie euklidesowej równej $1$. Nietrudno zauważyć, że zachodzi też $Q \cdot Q^T = \eye$.
-
-Układ $Q \cdot x = b$ ma rozwiązanie:
-\begin{equation}
-	\begin{aligned}
-		Q \cdot x           & = b           \\
-		Q^T \cdot Q \cdot x & = Q^T b       \\
-		x                   & = Q^T \cdot b \\
-	\end{aligned}
-\end{equation}
-
-koszt to koszt wymnożenia macierzy, zatem  $O(n^2)$.
-
-
-\subsection{W miarę proste układy równań}
-
-\subsubsection{Układ z łatwym blokiem}
-
-Przypuśćmy, że nasz układ jest postaci blokowej
-
-$\arraycolsep=1em\def\arraystretch{2}
-\left[
-	\begin{array}{c|c}
-		A_1 & E \\ \hline
-		B   & C 
-	\end{array}
-\right] \cdot
-\left[
-	\begin{array}{c}
-		x \\ \hline
-		y 
-	\end{array}
-\right] = 
-\left[
-	\begin{array}{c}
-		f \\ \hline
-		g 
-	\end{array}
-\right]
-$
-
-gdzie A, B, C, E to macierze, układy z A potrafimy ``łatwo" rozwiązać.
-
-\[
-	\left\{ \begin{array}{l}
-	A_1x + Ey = f\\
-	Bx + Cy = g
-	\end{array} \right.
-\]
-
-\[
-	\left\{ \begin{array}{l}
-	A_1x = f - Ey\\
-	Bx + Cy = g
-	\end{array} \right.
-\]
-
-
-\[
-	\left\{ \begin{array}{l}
-	x = A_1^{-1}(f - Ey)\\
-	Bx + Cy = g
-	\end{array} \right.
-\]
-
-\[
-	B \cdot A_1^{-1} (f - Ey) + Cy = g \implies (C - BA_1^{-1}E)y = g - B\cdot A_1^{-1}f
-\]
-
-\textbf{Algorytm}:
-
-\begin{enumerate}
-	\item Rozwiąż układ równań $A_1w = f$
-	\item Rozwiąż układ $A_1 \cdot G = E$
-	\item Rozwiąż $(C-FG)y = y - Fw$ (jeśli potrafisz)
-	\item $x = w - Gy$
-\end{enumerate}
-
-
-\subsubsection{Układy ze znanym rozkładem macierzy}
-
-Załóżmy, że $A = B_1 \cdot B_2$, gdzie macierze $B_1$, $B_2$ są "łatwe". Wtedy układ $A\cdot x = b$ też jest łatwy.
-
-$B_1 \cdot \underbrace{ B_2 \cdot x}_{y} = b$
-
-\textbf{Algorytm}:
-
-\begin{enumerate}
-	\item Rozwiąż $B_1 y = b$
-	\item Rozwiąż $B_2 x = y$
-\end{enumerate}
-
-\subsubsection{}
-
-Zauważmy, że na ten algorytm można popatrzeć jak na rozkład na "łatwiejsze" macierze
-
-\[\arraycolsep=1em\def\arraystretch{2}
-	\left[
-		\begin{array}{c|c}
-			A_1 & E \\ \hline
-			F   & C 
-		\end{array}
-	\right] =
-	\left[
-		\begin{array}{c|c}
-			\eye     & 0 \\ \hline
-			F A^{-1} & I 
-		\end{array}
-	\right]
-	\cdot 
-	\left[
-		\begin{array}{c|c}
-			A_1 & E \\ \hline
-			0   & S 
-		\end{array}
-	\right]
-\]
-
-Gdzie $S = C - FG = C - FA^{-1}E$
-
-
-\textbf{Pomysł}: znaleźć rozkład macierzy A na iloczyn macierzy dolnej i górnej trójkątnej.
-
-\[
-	A = \underbrace{\left[
-			\begin{array}{cc}
-				      & 0 \\
-				\star &   
-			\end{array}
-		\right]}_{L} \cdot
-	\underbrace{\left[
-			\begin{array}{cc}
-				  & \star \\
-				0 &       
-			\end{array}
-		\right]}_{U}
-\]
-
-Spróbujmy blokowo:
-
-\[\arraycolsep=0.7em\def\arraystretch{1.4}
-	\left[
-		\begin{array}{c|c}
-			A_{11} & A_{12} \\ \hline
-			A_{21} & A_{22} 
-		\end{array}
-	\right] =
-	\left[
-		\begin{array}{c|c}
-			L_{11} & 0      \\ \hline
-			L_{21} & L_{22} 
-		\end{array}
-	\right]
-	\cdot 
-	\left[
-		\begin{array}{c|c}
-			L_{11} & L_{12} \\ \hline
-			0      & L_{22} 
-		\end{array}
-	\right]
-\]
-
-Mnożąc dostajemy:
-
-$
-\begin{array}{ll}
-	A_{1,1} & = L_{1,1} \cdot U_{1,1}                                                                           \\
-	A_{2,1} & = L_{2,1} \cdot U_{1,1} \implies L_{2,1} = A_{2,1}U_{11}^{-1}                                     \\
-	A_{1,2} & = L_{1,1} \cdot U_{1,2}  \implies U_{1,2} = L^{-1}_{1,1} A_{1,2}                                  \\
-	A_{2,2} & = L_{2,1} \cdot U_{1,2} + L_{1,2} \cdot A_{2,2} \implies A_{22} - L_{2,1}U_{1,2} = L_{2,2}U_{2,2} 
-\end{array}
-$
-
-Mamy rekurencyjny algorytm rozkładu $LU$, ale w klasycznym przypadku biorąc podział blokowy można uniknąć rekurencji.
-
-\[\arraycolsep=0.7em\def\arraystretch{1.4}
-	\begin{array}{l}
-		\updownarrow 1   \\ \\
-		\updownarrow N-1 \\ \ 
-	\end{array}
-	\left[
-		\begin{array}{c|c}
-			a_{11} & \quad a_{12}^T \quad \\ \hline & \\
-			a_{21} & A_{22}               \\ &
-		\end{array}
-	\right] =
-	\left[
-		\begin{array}{c|c}
-			q      & \quad 0^T \quad \\ \hline & \\
-			l_{21} & L_{22}          \\ &
-		\end{array}
-	\right]
-	\cdot 
-	\left[
-		\begin{array}{c|c}
-			u_{11} & \quad u_{12}^T \quad \\ \hline & \\
-			0      & U_{22}               \\ &
-		\end{array}
-	\right]
-\]
-
-$L_{1,1} = 1$, $u_{1,1} = a_{1,1}$
-
-$L_{2,1} = \frac{1}{a_{1,1}} \cdot a_{?}$
-
-$\underbrace{\tilde{A}_{22} - L_{21}U_{12}^T}_{\textrm{wystarczy rozłożyć taką macierz - stąd algorytm iteracyjny}} = L_{22} \cdot U_{22}$
-
-
-Można na to patrzeć jako na sekwencję przejść A prowadzącą do macierzy U. A to jest tak naprawdę eliminacja Gaussa.
-
-\subsection{Algorytm eliminacji Gaussa}
-
-Ten algorytm nie zadziała jeśli w trakcie będziemy dzielić przez 0, np.
-
-$A = \left[
-	\begin{array}{cc}
-		0 & 1 \\
-		1 & 0 
-\end{array}\right]$ (nieosobliwa)
-    
-Aby algorytm eliminacji Gaussa zadziałał zawsze (o ile tylko A - nieosobliwa), uzupełnimy go o procedurę \uwave{wyboru elementu głównego} (osiowania). 
-
-\begin{enumerate}
-	\item Szukamy w kolumnie, w której prowadzimy eliminację, elementu  największym module (niezerowy, bo A nieosobliwa)
-	\item "Zamieniam"\footnote{Zamiana wierszy - mnożenie macierzy przez macierz permutacji} wiersz, w którym jest znaleziony element z wierszem wyżej 
-\end{enumerate}
-
-
-\begin{wniosek} Algorytm eliminacji Gaussa z wyborem elementu głównego w kolumnie prowadzi do rozkładu
-	
-	\[
-		P \cdot A = L \cdot U
-	\]
-	gdzie $P$ to macierz permutacji, $L$ - dolna trójkątna, $U$ - górna trójkątna.
-	
-\end{wniosek}
-
-Stąd algorytm rozwiązywania układów równań:
-
-\begin{enumerate}
-	\item Rozłóż $PA = LU$
-	\item Rozwiąż $Ly= Pb$ $\quad\quad O(n^2)$
-	\item Rozwiąż $Ux = y$ $\quad\quad O(n^2)$
-\end{enumerate}
-
-Koszt rozkładu:
-
-$2*(n-1)^2 + 2(n-2)^2 + ... + 2 + O(n^2) = 2 \cdot \underbrace{((n-1)^2 + (n-2)^2 + ... + 1^2)}_{\frac{1}{3}n^2}$
-
+\chapter{Arytmetyka komputerowa}
 
 \section{Liczby zmiennopozycyjne i arytmetyka}
 
@@ -796,6 +446,396 @@ Wtedy małe zaburzenie danych może spowodować duży błąd wyniku. W przeciwny
 
 \begin{wniosek} Algorytm NP w zadaniu dobrze uwarunkowanym musi dawać wynik obarczony małym błędem. \end{wniosek}
 
+\subsubsection{Numeryczne kryterium NP}
+
+Mamy jakieś $\tilde{x}$ - przybliżone (?) rozwiązanie $Ax = b$. Pytanie czy spełnia rozwiązanie
+
+\[
+	(A + \Delta)\tilde{x} = b + \delta
+\]
+
+i jak duże jest $\varepsilon$ t. że:
+
+\[
+	\frac{\norm{\Delta}}{\norm{A}}, \frac{\norm{\delta}}{\norm{b}} \leq \varepsilon
+\]
+
+Odpowiedź: tak, dla pewnych $\Delta$, $\delta$ i 
+
+\[
+	\varepsilon = \frac{\norm{b - A\tilde{x}}}{\norm{A} \cdot \norm{\tilde{x}} + \norm{b}} \la \textrm{łatwo obliczyć!}
+\]
+
+Przykłady (na uwarunkowanie)
+
+\begin{itemize}
+	\item dodawanie $a+b$:
+	      \begin{itemize}
+	      	\item dobre uwarunkowanie, gdy $a, b$ -  tego samego znaku,
+	      	\item źle uwarunkowane, gdy $a \simeq b$
+	      \end{itemize}
+	\item układy równań mogą być źle uwarunkowane: np. macierz Hilberta $H_{i,j} = \frac{1}{i+j-1}$
+	\item mnożenie, dzielenie, dodawanie są NP (w standardowym IEEE-754) (o ile brak under/overflow)
+	\item rozwiązywanie układów trójkątnych standardowym algorytmem jest NP $\tilde{x}$ spełnia:
+	      \[
+	      	(U+\Delta)\tilde{x} = b, \cfrac{|\Delta_{i, j}|}{|U_{i, j}|} \leq N \cdot \nu
+	      \]
+\end{itemize}
+
+\chapter{Układy równań liniowych}
+
+\section{Wprowadzenie}
+
+$x \in \RR^N$
+
+$A \in \RR^{N,N}, \textrm{nieosobliwa}$
+
+$b \in \RR^N$
+
+\[
+	A \cdot x = b
+\]
+
+\subsection{Proste układy równań}
+
+\subsubsection{Macierze trójkątne}
+
+$
+\left\{
+\begin{array}{ll}
+	a_{11}x_1                                  & = b_1 \implies x_1 = \cfrac{b_1}{a_{11}}                \\
+	a_{21}x_1 + a_{22}x_2                      & = b_2 \implies x_2 = \cfrac{1}{a_{22}}(b_2 - a_{11}x_1) \\
+	\vdots \\
+	a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n & = b_n                                                   
+\end{array}
+\right.
+$
+
+$x_n = \cfrac{1}{a_{nk}}(b_k - \sum_{j=1}^{k-1} a_{kj}x_j)$
+
+Gdy macierz układu ma formę trójkątną, to koszt wyznaczenia rozwiązania:
+
+\[
+	\left[
+		\begin{array}{ccccc}
+			a_{0,0} \\
+			a_{0,1} & a_{1,1}  &   & \text{\huge0}\\
+			a_{0,2}  & a_{1,2} & a_{2,2} \\
+			\vdots  & \vdots & \vdots & \ddots \\
+			a_{0,n} & a_{1,n} & \cdots & a_{n-1,n} & a_{n,n} 
+		\end{array}
+	\right]
+	\cdot
+	\left [
+		\begin{array}{c}
+			x_1 \\  \vdots \\  \vdots \\ x_n
+		\end{array}
+	\right]
+	=
+	\left [
+		\begin{array}{c}
+			b_1 \\ \vdots \\ \vdots \\ b_n
+		\end{array}
+	\right]
+\]
+
+to
+
+\begin{align*}
+	x_0 & = \frac{b_0}{a_{0,0}}                                & \text{(jedna operacja)}    \\
+	x_1 & = \frac{b_1 - a_{0,1} x_0}{a_{1,1}}                  & \text{(trzy operacje)}     \\
+	&\vdots \\
+	x_n & = \frac{b_n - \sum_{i=0}^{n-1} a_{i,n} x_i}{a_{n,n}} & \text{($2n + 1$ operacji)} 
+\end{align*}
+
+A koszt rozwiązania jest następujący:
+$1+3+5+...+2(k-1)+1+... = \sum_{k=1}^{n} 2k - \sum 1 = O(2n^2)$
+
+Jest to metoda podstawienia w przód/tył. Rozmiar danych jest rzędu $O(n^2)$, więc widać, że to jest optymalna metoda.
+
+\subsubsection{Macierze ortogonalne}
+
+Gdy mamy macierz ortogonalną, tzn.
+
+$Q^T \cdot Q = I$, gdzie $Q \in \RR^{N, N}$
+
+$\arraycolsep=0.6em\def\arraystretch{1.8}
+\left[
+	\begin{array}{c}
+		\quad _1^T \quad   \\ \hline
+		\quad q_2^T \quad  \\ \hline
+		\quad \vdots \quad \\ \hline
+		\quad q_n^T \quad  
+	\end{array}
+\right]
+\cdot
+\left[
+	\begin{array}{c|c|c|c}
+		    &     &        &     \\
+		q_1 & q_2 & \cdots & q_n \\
+		    &     &        &     
+	\end{array}
+\right]
+=
+\left[
+	\begin{array}{cccc}
+		1 &   &        & 0 \\
+		  & 1 &        &   \\
+		  &   & \ddots &   \\
+		0 &   &        & 1 
+	\end{array}
+\right]	
+$
+
+Jej kolumny są wzajemnie prostopadłe o normie euklidesowej równej $1$. Nietrudno zauważyć, że zachodzi też $Q \cdot Q^T = \eye$.
+
+Układ $Q \cdot x = b$ ma rozwiązanie:
+\begin{equation}
+	\begin{aligned}
+		Q \cdot x           & = b           \\
+		Q^T \cdot Q \cdot x & = Q^T b       \\
+		x                   & = Q^T \cdot b \\
+	\end{aligned}
+\end{equation}
+
+koszt to koszt wymnożenia macierzy, zatem  $O(n^2)$.
+
+
+\subsection{W miarę proste układy równań}
+
+\subsubsection{Układ z łatwym blokiem}
+
+Przypuśćmy, że nasz układ jest postaci blokowej
+
+$\arraycolsep=1em\def\arraystretch{2}
+\left[
+	\begin{array}{c|c}
+		A_1 & E \\ \hline
+		B   & C 
+	\end{array}
+\right] \cdot
+\left[
+	\begin{array}{c}
+		x \\ \hline
+		y 
+	\end{array}
+\right] = 
+\left[
+	\begin{array}{c}
+		f \\ \hline
+		g 
+	\end{array}
+\right]
+$
+
+gdzie A, B, C, E to macierze, układy z A potrafimy ``łatwo" rozwiązać.
+
+\[
+	\left\{ \begin{array}{l}
+	A_1x + Ey = f\\
+	Bx + Cy = g
+	\end{array} \right.
+\]
+
+\[
+	\left\{ \begin{array}{l}
+	A_1x = f - Ey\\
+	Bx + Cy = g
+	\end{array} \right.
+\]
+
+
+\[
+	\left\{ \begin{array}{l}
+	x = A_1^{-1}(f - Ey)\\
+	Bx + Cy = g
+	\end{array} \right.
+\]
+
+\[
+	B \cdot A_1^{-1} (f - Ey) + Cy = g \implies (C - BA_1^{-1}E)y = g - B\cdot A_1^{-1}f
+\]
+
+\textbf{Algorytm}:
+
+\begin{enumerate}
+	\item Rozwiąż układ równań $A_1w = f$
+	\item Rozwiąż układ $A_1 \cdot G = E$
+	\item Rozwiąż $(C-FG)y = y - Fw$ (jeśli potrafisz)
+	\item $x = w - Gy$
+\end{enumerate}
+
+
+\subsubsection{Układy ze znanym rozkładem macierzy}
+
+Załóżmy, że $A = B_1 \cdot B_2$, gdzie macierze $B_1$, $B_2$ są "łatwe". Wtedy układ $A\cdot x = b$ też jest łatwy.
+
+$B_1 \cdot \underbrace{ B_2 \cdot x}_{y} = b$
+
+\textbf{Algorytm}:
+
+\begin{enumerate}
+	\item Rozwiąż $B_1 y = b$
+	\item Rozwiąż $B_2 x = y$
+\end{enumerate}
+
+\subsubsection{}
+
+Zauważmy, że na ten algorytm można popatrzeć jak na rozkład na "łatwiejsze" macierze
+
+\[\arraycolsep=1em\def\arraystretch{2}
+	\left[
+		\begin{array}{c|c}
+			A_1 & E \\ \hline
+			F   & C 
+		\end{array}
+	\right] =
+	\left[
+		\begin{array}{c|c}
+			\eye     & 0 \\ \hline
+			F A^{-1} & I 
+		\end{array}
+	\right]
+	\cdot 
+	\left[
+		\begin{array}{c|c}
+			A_1 & E \\ \hline
+			0   & S 
+		\end{array}
+	\right]
+\]
+
+Gdzie $S = C - FG = C - FA^{-1}E$
+
+
+\textbf{Pomysł}: znaleźć rozkład macierzy A na iloczyn macierzy dolnej i górnej trójkątnej.
+
+\[
+	A = \underbrace{\left[
+			\begin{array}{cc}
+				      & 0 \\
+				\star &   
+			\end{array}
+		\right]}_{L} \cdot
+	\underbrace{\left[
+			\begin{array}{cc}
+				  & \star \\
+				0 &       
+			\end{array}
+		\right]}_{U}
+\]
+
+Spróbujmy blokowo:
+
+\[\arraycolsep=0.7em\def\arraystretch{1.4}
+	\left[
+		\begin{array}{c|c}
+			A_{11} & A_{12} \\ \hline
+			A_{21} & A_{22} 
+		\end{array}
+	\right] =
+	\left[
+		\begin{array}{c|c}
+			L_{11} & 0      \\ \hline
+			L_{21} & L_{22} 
+		\end{array}
+	\right]
+	\cdot 
+	\left[
+		\begin{array}{c|c}
+			L_{11} & L_{12} \\ \hline
+			0      & L_{22} 
+		\end{array}
+	\right]
+\]
+
+Mnożąc dostajemy:
+
+$
+\begin{array}{ll}
+	A_{1,1} & = L_{1,1} \cdot U_{1,1}                                                                           \\
+	A_{2,1} & = L_{2,1} \cdot U_{1,1} \implies L_{2,1} = A_{2,1}U_{11}^{-1}                                     \\
+	A_{1,2} & = L_{1,1} \cdot U_{1,2}  \implies U_{1,2} = L^{-1}_{1,1} A_{1,2}                                  \\
+	A_{2,2} & = L_{2,1} \cdot U_{1,2} + L_{1,2} \cdot A_{2,2} \implies A_{22} - L_{2,1}U_{1,2} = L_{2,2}U_{2,2} 
+\end{array}
+$
+
+Mamy rekurencyjny algorytm rozkładu $LU$, ale w klasycznym przypadku biorąc podział blokowy można uniknąć rekurencji.
+
+\[\arraycolsep=0.7em\def\arraystretch{1.4}
+	\begin{array}{l}
+		\updownarrow 1   \\ \\
+		\updownarrow N-1 \\ \ 
+	\end{array}
+	\left[
+		\begin{array}{c|c}
+			a_{11} & \quad a_{12}^T \quad \\ \hline & \\
+			a_{21} & A_{22}               \\ &
+		\end{array}
+	\right] =
+	\left[
+		\begin{array}{c|c}
+			q      & \quad 0^T \quad \\ \hline & \\
+			l_{21} & L_{22}          \\ &
+		\end{array}
+	\right]
+	\cdot 
+	\left[
+		\begin{array}{c|c}
+			u_{11} & \quad u_{12}^T \quad \\ \hline & \\
+			0      & U_{22}               \\ &
+		\end{array}
+	\right]
+\]
+
+$L_{1,1} = 1$, $u_{1,1} = a_{1,1}$
+
+$L_{2,1} = \frac{1}{a_{1,1}} \cdot a_{?}$
+
+$\underbrace{\tilde{A}_{22} - L_{21}U_{12}^T}_{\textrm{wystarczy rozłożyć taką macierz - stąd algorytm iteracyjny}} = L_{22} \cdot U_{22}$
+
+
+Można na to patrzeć jako na sekwencję przejść A prowadzącą do macierzy U. A to jest tak naprawdę eliminacja Gaussa.
+
+\subsection{Algorytm eliminacji Gaussa}
+
+Ten algorytm nie zadziała jeśli w trakcie będziemy dzielić przez 0, np.
+
+$A = \left[
+	\begin{array}{cc}
+		0 & 1 \\
+		1 & 0 
+\end{array}\right]$ (nieosobliwa)
+    
+Aby algorytm eliminacji Gaussa zadziałał zawsze (o ile tylko A - nieosobliwa), uzupełnimy go o procedurę \uwave{wyboru elementu głównego} (osiowania). 
+
+\begin{enumerate}
+	\item Szukamy w kolumnie, w której prowadzimy eliminację, elementu  największym module (niezerowy, bo A nieosobliwa)
+	\item "Zamieniam"\footnote{Zamiana wierszy - mnożenie macierzy przez macierz permutacji} wiersz, w którym jest znaleziony element z wierszem wyżej 
+\end{enumerate}
+
+
+\begin{wniosek} Algorytm eliminacji Gaussa z wyborem elementu głównego w kolumnie prowadzi do rozkładu
+	
+	\[
+		P \cdot A = L \cdot U
+	\]
+	gdzie $P$ to macierz permutacji, $L$ - dolna trójkątna, $U$ - górna trójkątna.
+	
+\end{wniosek}
+
+Stąd algorytm rozwiązywania układów równań:
+
+\begin{enumerate}
+	\item Rozłóż $PA = LU$
+	\item Rozwiąż $Ly= Pb$ $\quad\quad O(n^2)$
+	\item Rozwiąż $Ux = y$ $\quad\quad O(n^2)$
+\end{enumerate}
+
+Koszt rozkładu:
+
+$2*(n-1)^2 + 2(n-2)^2 + ... + 2 + O(n^2) = 2 \cdot \underbrace{((n-1)^2 + (n-2)^2 + ... + 1^2)}_{\frac{1}{3}n^2}$
+
 \subsubsection{Uwarunkowanie układu równań liniowych}
 
 
@@ -905,42 +945,6 @@ $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A 
 \end{fakt}
 
 Niestety $\rho_N \leq 2^{N-1}$ i istnieją macierze, na których jest osiągnane. Jednak prawie wszystkie spotykane w życiu macierze mają niewielki wskaźnik wzrostu.
-
-\subsubsection{Numeryczne kryterium NP}
-
-Mamy jakieś $\tilde{x}$ - przybliżone (?) rozwiązanie $Ax = b$. Pytanie czy spełnia rozwiązanie
-
-\[
-	(A + \Delta)\tilde{x} = b + \delta
-\]
-
-i jak duże jest $\varepsilon$ t. że:
-
-\[
-	\frac{\norm{\Delta}}{\norm{A}}, \frac{\norm{\delta}}{\norm{b}} \leq \varepsilon
-\]
-
-Odpowiedź: tak, dla pewnych $\Delta$, $\delta$ i 
-
-\[
-	\varepsilon = \frac{\norm{b - A\tilde{x}}}{\norm{A} \cdot \norm{\tilde{x}} + \norm{b}} \la \textrm{łatwo obliczyć!}
-\]
-
-Przykłady (na uwarunkowanie)
-
-\begin{itemize}
-	\item dodawanie $a+b$:
-	      \begin{itemize}
-	      	\item dobre uwarunkowanie, gdy $a, b$ -  tego samego znaku,
-	      	\item źle uwarunkowane, gdy $a \simeq b$
-	      \end{itemize}
-	\item układy równań mogą być źle uwarunkowane: np. macierz Hilberta $H_{i,j} = \frac{1}{i+j-1}$
-	\item mnożenie, dzielenie, dodawanie są NP (w standardowym IEEE-754) (o ile brak under/overflow)
-	\item rozwiązywanie układów trójkątnych standardowym algorytmem jest NP $\tilde{x}$ spełnia:
-	      \[
-	      	(U+\Delta)\tilde{x} = b, \cfrac{|\Delta_{i, j}|}{|U_{i, j}|} \leq N \cdot \nu
-	      \]
-\end{itemize}
 
 \section{Układy równań z macierzami rozrzedzonymi}
 
@@ -1877,6 +1881,396 @@ $\quad A_{k+1} := R_kQ_k + \sigma_k I$ (przemnoż go w drugą stronę i przesuń
 
 \textbf{Praktyczne QR:}
 
-Teraz ten algorytm jest niepraktyczny. Ile kosztuje rozkład QR? Jak macierz jest jakakolwiek, to oczywiście $O(N^3)$. Co zrobić żeby ten algorytm był praktyczny? Przed rozpoczęciem iteracji należy sprowadzić macierz przekształceniami ortogoalnymi do postaci Hessenberga: $\left[ \begin{array}{cccc} \star & \cdots & \star \\ \star & \ddots & \vdots \\ 0 & \ddots \\  \end{array} \right]$, a gdy A jest symetryczna, tzn. $A=A^T$, to do postaci symetrycznej Hessenberga (trójdiagonalnej). Ostatecznie dobrze zaimplementowana metoda QR kosztuje $O(N^3)$.
+Teraz ten algorytm jest niepraktyczny. Ile kosztuje rozkład QR? Jak macierz jest jakakolwiek, to oczywiście $O(N^3)$. Co zrobić żeby ten algorytm był praktyczny? Przed rozpoczęciem iteracji należy sprowadzić macierz przekształceniami ortogonalnymi do postaci Hessenberga: $\left[ \begin{array}{cccc} \star & \cdots & \star \\ \star & \ddots & \vdots \\ 0 & \ddots \\  \end{array} \right]$, a gdy A jest symetryczna, tzn. $A=A^T$, to do postaci symetrycznej Hessenberga (trójdiagonalnej). Ostatecznie dobrze zaimplementowana metoda QR kosztuje $O(N^3)$.
 
+\chapter{Funkcje nieliniowe}
+
+\section{Funkcje nieliniowe}
+
+W życiu numeryka często trzeba wyliczać wartości funkcji. Fajnie byłoby zastępować funkcje skomplikowane na funkcje proste. Ale jakie funkcje właściwie są proste? Matematyk powie, że trygonometryczne, ja powiem, że wielomiany. Dlaczego wielomiany?
+\[
+p(x) = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n
+\]
+Wielomiany są fajne, bo żeby je wyliczyć wystarczy umieć dodawać i mnożyć, a to potrafi sprzęt (a jak ktoś ma dobre oko to nawet zauważy tutaj FMA.
+
+\subsection{Algorytm Hornera}
+Algorytm Hornera służy do szybkiego wyznaczania wartości $w = p(x)$. On polega na tym, aby w odpowiednim miejscu powstawiać nawiasy.
+\begin{align*}
+	p(x) & = a_0 + x(a_1 + a_2x + \cdots + a_nx^{n-1}) \\
+	& = a_0 + x (a_1 + x(a_2 + a_3 x + \cdots + a_nx^{n-2})) \\
+	& = \cdots
+\end{align*}
+Implementujemy przez interacje, zatem koszt $O(n)$. Zatem nie tylko korzystam z podstawowych operacji arytmetycznych, ale nawet robię to tanio. 
+
+\subsection{Interpolacja wielomianowa}
+No dobrze, ale co właściwie mogę robić z wielomianem? Przy użyciu wielomianu mogę przykładowo szacować inne funkcje. Zanim jednak przejdziemy do takich rzeczy zastanówmy się nad następującym problemem: ``przez zadane węzły $(x_i, y_i)$, $i: 0...n$ poprowadzić wielomian $w$ taki, że $w(x_i) = y_i$ (interpolacja Lagrange'a)"
+
+\begin{tikzpicture}
+
+\node (v1) at (-0.5,0) {};
+\node (v2) at (4,0) {};
+\node (v3) at (0,4) {};
+\node (v4) at (0,-0.5) {};
+
+\draw [->] (v1) edge (v2);
+\draw [<-] (v3) edge (v4);
+
+\draw (1, 0.1) edge (1, -0.1);
+\draw (2, 0.1) edge (2, -0.1);
+\draw (3, 0.1) edge (3, -0.1);
+
+\draw (-0.1, 1) edge (0.1, 1);
+\draw (-0.1, 2) edge (0.1, 2);
+\draw (-0.1, 3) edge (0.1, 3);
+
+\node at (1, -0.4) {$x_1$};
+\node at (2, -0.4) {$x_2$};
+\node at (3, -0.4) {$x_3$};
+
+\node at (-0.3, 1) {$y_1$};
+\node at (-0.3, 2) {$y_2$};
+\node at (-0.3, 3) {$y_3$};
+
+\node[circle,fill,inner sep=1pt] at (1, 2) {};
+\node[circle,fill,inner sep=1pt] at (2, 1) {};
+\node[circle,fill,inner sep=1pt] at (3, 3) {};
+
+\draw  plot[smooth, tension=.5] coordinates {(0.5,2.8) (2,1) (3.3,3.85)};
+\end{tikzpicture}
+
+Ten problem można uogólnić następująco: ``przez zadane węzły $(x_i, y_i)$, $i: 0...n$ poprowadzić wielomian $w$ taki, żeby $\underbrace{w^{(k)}}_{\textrm{k-ta pochodna}}(x_i) = y_i^{(k)}$" (interpolacja Hermite'a).
+
+\begin{tikzpicture}
+
+\node (v1) at (-0.5,1) {};
+\node (v2) at (4,1) {};
+\node (v3) at (0,3) {};
+\node (v4) at (0,0.5) {};
+
+\draw [->] (v1) edge (v2);
+\draw [<-] (v3) edge (v4);
+
+\draw (1, 0.9) edge (1, 1.1);
+\draw (2, 0.9) edge (2, 1.1);
+\draw (3, 0.9) edge (3, 1.1);
+
+\node at (1, 0.7) {$x_1$};
+\node at (2, 0.7) {$x_2$};
+\node at (3, 0.7) {$x_3$};
+
+\node[circle,fill,inner sep=1pt] at (1, 2) {};
+\node[circle,fill,inner sep=1pt] at (2, 1.4) {};
+\node[circle,fill,inner sep=1pt] at (3, 2.3) {};
+
+\node (t1) at (0.5, 2.1) {}; 
+\node (d1) at (1.5, 1.9) {}; 
+
+\node (t2) at (1.5, 1.3) {};
+\node (d2) at (2.5, 1.5) {};
+
+\node (t3) at (2.5, 2.0) {};
+\node (d3) at (3.5, 2.6) {};
+
+\draw (t1) edge (d1);
+\draw (t2) edge (d2);
+\draw (t3) edge (d3);
+
+\draw  plot[smooth, tension=.5] coordinates {(0.5, 1.5) (1, 2) (2, 1.4) (3, 2.3) (3.5, 2)};
+\end{tikzpicture}
+
+\begin{twierdz}
+Niech będą dane węzły interpolacji $a = x_0 < x_1 < x_2 < \cdots < x_n = b$ oraz wartości $y_0, y_1, \cdots, y_n$. Wtedy istnieje dokładnie jeden $w$, stopnia co najmniej $n$ taki, że
+\[
+w(x_i) = y_i \quad dla\ i = 0, \cdots n
+\]
+Innymi słowy taki wielomian jest jednoznacznie wyznaczony.
+\end{twierdz}
+Dowód:
+
+Weżmy dowolną bazę przestrzeni wielomianów stopnia $\leq n$, $\{\phi_0, \cdots, \phi_n\}$. Wtedy $w(x) = \sum_{i=0}^{n} \alpha_i \phi_i(x)$ i warunki interpolacji dają:
+\[
+w(x_j) = \sum_{i=1}^{n} \alpha_i\phi_i(x_j) = y_i
+\]
+układ (n+1) równań liniowych z (n+1) niewiadomymi (układ $\star$):
+\[
+\left[
+	\begin{array}{ccc}
+		\phi_0(x_0) & \cdots & \phi_0(x_n) \\
+		\vdots & & \vdots \\
+		\phi_n(x_0) & \cdots & \phi_n(x_n)
+	\end{array}
+\right]
+\cdot
+\left[
+	\begin{array}{c}
+		\alpha_0 \\
+		\alpha_1 \\
+		\vdots \\
+		\alpha_n
+
+	\end{array}
+\right]
+=
+\left[
+	\begin{array}{c}
+		y_0 \\
+		y_1 \\
+		\vdots \\
+		y_n
+	\end{array}
+\right]
+\]
+Ma jednoznaczne rozwiązanie $\iff$ jego macierz jest $\neq 0$ $\iff$ rozwiązanie z zerową prawą stroną ma tylko rozwiązanie $=0$. Jeśli więc $y_i = 0$, dla $i = 0, \cdots, n$ to $w(x_i) = 0$ dla $i = 0, \cdots n$. Zatem $w(\cdot)$ ma $(n+1)$ zer więc $w \equiv 0$, bo jest wielomianem stopnia $\leq n$.
+
+Uwagi:
+\begin{itemize}
+	\item Wystarczy rozwiązanie układu równań $(\star)$
+	\item Postać tego układu zależy od wyboru bazy. Np jeśli $\{\phi_i\}$ - baza naturalna $\phi_0(x) = 1$, $\phi_1(x) = x$, ..., $\phi_j(x) = x^j$ to wtedy nasza macierz jest postaci:
+\[
+\left[
+	\begin{array}{ccccc}
+		1 & x_0 & x_0^2 & \cdots & x_0 ^ n \\
+		1 & x_1 & x_1^2 & \cdots & x_1 ^ n \\
+		\vdots & \vdots & \vdots & \ddots & \vdots \\
+		1 & x_n & x_n^2 & \cdots & x_n ^ n \\
+	\end{array}
+\right]
+\]
+(macierz Vandermonde'a). Cechy tej macierzy: gęsta, niesymetryczna. Więc wydawałoby się, że przy elimnacji Gaussa będę musiał zużyć mniej więcej $O(n^3)$ flopów.
+\end{itemize}
+
+Czy da się dokonać taniej elimnacji Gaussa dla macierzy Vandermonde'a? Spróbumy wybrać inną bazę.
+
+\begin{obserw}
+Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n, a$. $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_i(x_i) - w_{n-i}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x{n-1})}_{\phi_n(x)}$. Czyli
+\[
+	w_n(x) = w_{n-1})x_ + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
+\]
+gdzie $\phi_n(x) = 1$, $\phi_j(x) = (x-x_0) \cdot \cdots \cdot (x - x_{j-1})$, $j=1, \cdots, n$ (baza Newtona). W tej bazie układ równań znajdujący wielomian interpolacyjny Lagrange'a ma taką postać:
+\[
+\left[
+	\begin{array}{ccc}
+		\phi_0(x_0) & \cdots & \phi_0(x_n) \\
+		\vdots & & \vdots \\
+		\phi_n(x_0) & \cdots & \phi_n(x_n)
+	\end{array}
+\right]
+\cdot
+\left[
+	\begin{array}{c}
+		b_0 \\
+		b_1 \\
+		\vdots \\
+		b_n
+	\end{array}
+\right]
+=
+\left[
+	\begin{array}{c}
+		y_0 \\
+		y_1 \\
+		\vdots \\
+		y_n
+	\end{array}
+\right]
+\]
+\[
+\left[
+\begin{array}{ccccc}
+1 & 0 & 0 & \cdots & 0 \\
+1 & (x_1 - x_0) & 0 & \cdots & 0 \\
+\vdots & \vdots & (x_2 - x_3)(x_2 - x_1) & \cdots & 0 \\
+1 & (x_n - x_0) & \cdots & \cdots & \ddots
+\end{array}
+\right]
+\]
+(macierz dolna trójkątna)
+\end{obserw}
+
+Jak widać coraz bardziej upraszczamy to zadanie. Pokażemy algorym wyznaczania $b_0, \cdots, b_n$ - współczynników wielomiany interpolacyjnego Lagrange'a w bazie Newtona, który nie wymaga jawnej konstrukcji macierzy. Zauważmy, że $b_i$ zależy tylko od $y_0, \cdots, y_i$ co oznacza:
+\[
+	b_i = f[x_0, \cdots, x_i]
+\]
+\begin{twierdz}[o różnicach dzielonych]
+Oznaczmy dla wygody $y_i = f(x_i)$, $i = 0, \cdots, n$.
+	\begin{align*}
+		f[x_0] & = f(x_0) \\
+		f[x_0, x_1] & = \cfrac{f(x_1) - f(x_0)}{x_1 - x_0} = \cfrac{f[x_1] - f[x_0]}{x_1 - x_0} \\
+		\vdots & \\
+		f[x_0, x_1, \cdots, x_k] & = \cfrac{f[x_1, \cdots, x_k] - f[x_0, \cdots, x_{k-1}]}{x_k - x_0}
+	\end{align*}
+\end{twierdz}
+
+\begin{wniosek}[o różnicach dzielonych]
+$\\$
+
+\begin{tikzpicture}
+
+\node at (-0.5, 5.5) {$x_0$};
+\node at (-0.5, 4.5) {$x_1$};
+\node at (-0.5, 3.5) {$x_2$};
+\node at (-0.5, 2) {$\vdots$};
+\node at (-0.5, 0.5) {$x_n$};
+
+\draw (0, 6) edge (0,0);
+
+\node (v1) at (0.5,5.5) {$f[x_0]$};
+\node at (0.5, 4.5) {$f[x_1]$};
+\node at (0.5, 3.5) {$f[x_2]$};
+\node at (0.5, 2) {$\vdots$};
+\node at (0.5, 0.5) {$f[x_n]$};
+
+
+\node (v2) at (3,4.5) {$f[x_0, x_1]$};
+\node at (3, 3.5) {$f[x_1, x_2]$};
+\node at (3, 2.5) {$f[x_2, x_3]$};
+\node at (3, 0.5) {$f[x_{n-1}, x_n]$};
+
+
+\node (v3) at (6,3.5) {$f[x_0, x_1, x_2]$};
+\node at (6, 2.5) {$f[x_1, x_2, x_3]$};
+
+\node (v4) at (9.5,2.5) {$f[x_0, x_1, x_2, x_3]$};
+
+\node at (14.5, 0.5) {$f[x_0, \cdots, x_n]$};
+
+
+\node at (11.8, 1.8) {$\ddots$};
+
+\node (fx0) at (1,5.5) {};
+\node (fx1) at (1,4.5) {};
+\node (fx2) at (1,3.5) {};
+\node (fx3) at (1,2.5) {};
+\node (fxn1) at (1,1.5) {};
+\node (fxn) at (1,0.5) {};
+
+\node (fx01l) at (2.4,4.5) {};
+\node (fx12l) at (2.4,3.5) {};
+\node (fx23l) at (2.4,2.5) {};
+\node (fxnnl) at (2.2,0.5) {};
+
+\node (fx01r) at (3.8, 4.5) {};
+\node (fx12r) at (3.8, 3.5) {};
+\node (fx23r) at (3.8, 2.5) {};
+\node (fxnnr) at (4, 0.5) {};
+
+\node (fx012l) at (5, 3.5) {};
+\node (fx123l) at (5, 2.5) {};
+
+\node (fx012r) at (7, 3.5) {};
+\node (fx123r) at (7, 2.5) {};
+
+\node (fx0123l) at (8.2, 2.5) {};
+\node (fx0123r) at (10.7, 2.5) {};
+\node (fx01234l) at (11.5, 1.9) {};
+
+\node (fx0nl) at (13.2,0.5) {};
+\node (fx0n1r) at (12, 0.5) {};
+\node (fx0n2r) at (12, 1.5) {};
+
+\draw [->] (fx0) edge (fx01l);
+\draw [->] (fx1) edge (fx01l);
+
+\draw [->] (fx1) edge (fx12l);
+\draw [->] (fx2) edge (fx12l);
+
+\draw [->] (fx2) edge (fx23l);
+\draw [->] (fx3) edge (fx23l);
+
+\draw [->] (fxn1) edge (fxnnl);
+\draw [->] (fxn) edge (fxnnl);
+
+\draw [->] (fx01r) edge (fx012l);
+\draw [->] (fx12r) edge (fx012l);
+
+\draw [->] (fx12r) edge (fx123l);
+\draw [->] (fx23r) edge (fx123l);
+
+\draw [->] (fx012r) edge (fx0123l);
+\draw [->] (fx123r) edge (fx0123l);
+
+\draw [->] (fx0123r) edge (fx01234l);
+
+\draw [->] (fx0n1r) edge (fx0nl);
+\draw [->] (fx0n2r) edge (fx0nl);
+
+\node at (7, 0.5) {$\cdots$};
+
+\draw  (v1) ellipse (0.45 and 0.45);
+\draw  (v2) ellipse (0.7 and 0.5);
+\draw  (v3) ellipse (1 and 0.5);
+\draw  (v4) ellipse (1.3 and 0.4982);
+\draw  (14.5,0.5) ellipse (1.2452 and 0.5176);
+\node [rotate=30] at (1.3,6) {$=b_0$};
+\node [rotate=30] at (4.3,5) {$=b_1$};
+\node [rotate=30] at (7.3,4) {$=b_2$};
+\node [rotate=30] at (11,3) {$=b_3$};
+\node [rotate=30] at (16,1) {$=b_n$};
+\end{tikzpicture}
+
+Ten algorytm można wykonywać in situ\footnote{(łac.) w miejscu}.
+\end{wniosek}
+
+Dowód:
+
+Wystarczy pokazać, że jeśli jest to prawda dla $k = n-1$, to też dla $k=n$. Niech $p_k$ - wielomian interpolujący Lagrange'a (stopnia $\leq k$) interpolujący $f$ w węzłach $x_0, \cdots, x_k$. Niech $q$ - wielomian interpolacyjny Lagrange'a (stopnia $\leq n-1$) dla węzłów $x_1, \cdots, x_n$. Wtedy:
+\[
+	p_n(x) = q(x) + \cfrac{x - x_n}{x_n - x_0}(q(x) - p_{n-1}(x))
+\]
+Rzeczywiście:
+\begin{align*}
+	p_n(x_n) &= q(x_n) = f(x_n) \\
+	p_n(x_i) &= \underbrace{q(x_i)}_{=f(x_i)} + \cfrac{x_i - x_n}{x_n - x_0}(\underbrace{q(x_i)}_{=f(x_i)} - \underbrace{p_{n-1}(x_i)}_{=f(x_i)}) \\
+	\vdots & \\
+	p_n(x_0) &= q(x_0) + \cfrac{x_0-x_n}{x_n-x_0}(q(x_0) - p_{n-1}(x_0)) = f(x_0)
+\end{align*}
+
+Co można powiedzieć gdy mam reprezentacje takich dwóch wielomianów? W wielomianie $p_n(x)$ (albo $p_1$??) współczynnik przy $x^n$ jest równy $b_n = f[x_0, \cdots, x_n]$. Natomiast współczynnik przy $x^n$ w wielomianie po drugiej stronie $(\star\star): q(x) + \cfrac{x-x_n}{x_n-x_0}(q(x) - p_n(x))$, rozpisując $q$ i $p_{n-1}$ w bazie Newtona:
+\begin{align*}
+	q(x) &= \sum_{i} q(x-x_1)\cdot \cdots \cdot (x-x_i) \\
+	p_{n-1}(x) &= \sum_{i} b_i(x-x_1)\cdot \cdots \cdot(x-x_i)
+\end{align*}
+Wyraz przy najwyższej potędze $x^{n-1}$ to:
+\begin{align*}
+	q_{n-1} &= f[x_1, \cdots, x_n] \\
+	b_{n-1} &= f[x_0, \cdots, x_{n-1}]
+\end{align*}
+Stąd współczynnik przy $x^n$ w $(\star\star)$ to
+\[
+\cfrac{1}{x_n-x_0}(f[x_1, \cdots, x_n] - f[x_0, \cdots, x_{n-1}])
+\]
+
+Aby wyznaczyć wartość wielomiany interpolacyjnego Lagrange'a w bazie Newtona:
+\[
+	w(x) = \sum_{i=0}^{n} b_i(x-x_0)\cdot \cdots \cdot (x-x_{i-1})
+\]
+okazuje sie, ze można użyć do tego zmodyfikowanego algorytmu Hornera w koszcie liniowym.
+
+\begin{twierdz}[o błędzie interpolacji]
+Niech $f \in C^{n+1}[a, b]$ (zbiór funkcji na przedziale [a, b] (n+1) razy różniczkowalne), $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w_n(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
+\[
+	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)} f(x) - w_n(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(w_n(x))
+\]
+gdzie $w_n(x) = (x-x_0) \cdots (x-x_n)$ (gdzie $w(x_i) = f(x_i)$ dla $i = 0, \cdots, n$). (Dowód był)
+\end{twierdz}
+
+Interpolacja Hermite'a
+
+Znaleźć wielomian $H_n(x)$ stopnia $\leq n$ tkie, że
+\[
+	H_n^{(j)}(x_i) = f^{(j)}(x_i) \quad i = 0, \cdots, n \quad j = 0, \cdots, n
+\] 
+\[
+	m = (\sum m_i - 1)
+\]
+To zadanie ma dokładnie jedno rozwiązanie.
+
+Błąd interpolacji:
+\[
+f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
+\]
+\[
+	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
+\]
+Dla wyznaczenia wielomiany interpolacyjnego Hermite w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych.
 \end{document}

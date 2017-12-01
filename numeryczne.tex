@@ -5,6 +5,7 @@
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{polski}
 \usepackage{ulem}
+\usepackage{makeidx}
 
 \usepackage[cache=false]{minted}
 
@@ -46,6 +47,9 @@
 
 \usepackage{dirtytalk}
 
+\makeindex
+\usepackage[nottoc]{tocbibind}
+
 \begin{document}
 \linespread{1.0}
 \maketitle
@@ -86,7 +90,7 @@ $e - \textrm{wykładnik, liczba całkowita taka, że } 0 > e_{min} \leq e \leq e
 
 Charakterystyka zestawu: $(\beta, \underbrace{e_{min}, e_{max}}_{zakres}, \underbrace{p}_{precyzja})$
 
-\textbf{Liczby znormalizowane}:
+\textbf{Liczby znormalizowane}\index{liczba znormalizowana}:
 \[
 	x = (-1)^s \cdot m \cdot 2^e
 \]
@@ -101,7 +105,7 @@ To daje jednoznaczną reprezentację liczb niezerowych. Dodatkowo $f_0$ nie trze
 \section{Standard arytmetyki zmiennopozycyjnej}
 
 $\underbrace{\textrm{IEEE-754}}_{Kahan} \rightarrow \textrm{IEEE-854} \rightarrow \underbrace{\textrm{IEEE-754-R}}_{e_{min} = 1 - e_{max}}$
-
+\index{IEEE-754}
 W pamięci komputera przechowujemy:
 
 \begin{tabular}{|c|c|l|l|l|c|c|c|l|c|}
@@ -178,7 +182,7 @@ $x = (1.f_1f_2)_2 \cdot 2^{e}$
 \end{tikzpicture}
 
 
-Aby wypełnić pustkę wokół zera uzupełnia się system o liczby subnormalizowane:
+Aby wypełnić pustkę wokół zera uzupełnia się system o liczby subnormalizowane\index{liczba subnormalizowana}:
 \[
 	(0.f_1f_2...f_{p-1})_2 \cdot 2^{e_{min}}
 \]
@@ -340,11 +344,11 @@ Niech:
 	   coordinates {(-3,0.75) (0,-.25) (2.75,-0.55)};
 \end{tikzpicture}\par}
 
-\begin{defi}[Silnie numeryczna poprawność]
+\begin{defi}[Silnie numeryczna poprawność]\index{numeryczna poprawność!silnie NP}
 	Algorytm A jest \textbf{silnie numerycznie poprawny (NP)} jeśli $\tilde{y} = P(\tilde{x})$ - dokładny wynik dla trochę zaburzonych danych, gdzie $\frac{\parallel \tilde{x} - x\parallel}{\parallel x \parallel} \leq \underbrace{k}_{\textrm{nieduża stała}} \cdot \nu$
 \end{defi}
 
-\begin{defi}[Numeryczna poprawność]
+\begin{defi}[Numeryczna poprawność]\index{numeryczna poprawność}
 	Algorytm m jest \textbf{numerycznie poprawny}, jeśli jego wynik możemy zinterpretować jako prawie dokładne rozwiązanie na prawie dokładnych danych.
 	
 	$c\frac{\parallel \tilde{x} - x \parallel}{\parallel x + y \parallel} \leq k \cdot \nu$ (prawie dokładne dane)
@@ -390,7 +394,7 @@ Zamiast iksa biorę iks zaburzony. Pytanie jaki jest błąd (względny):
 Lub bezwzględny (błąd bezwzględny wyniku)
 
 
-\begin{defi}
+\begin{defi}\index{uwarunkowanie}
 	Wskaźnik (współczynnik) uwarunkowania zadania P w punkcie x
 	\[
 		cond_{abs}(P, x) := sup_{\delta\textrm{ dost. małe}}\left(\frac{\norm{P(x + \delta) - P(x)}}{\norm{\delta}}\right)
@@ -434,7 +438,7 @@ Wtedy małe zaburzenie danych może spowodować duży błąd wyniku. W przeciwny
 
 \begin{wniosek} Algorytm NP w zadaniu dobrze uwarunkowanym musi dawać wynik obarczony małym błędem. \end{wniosek}
 
-\section{Numeryczne kryterium NP}
+\section{Numeryczne kryterium NP}\index{numeryczne kryterium NP}
 
 Mamy jakieś $\tilde{x}$ - przybliżone (?) rozwiązanie $Ax = b$. Pytanie czy spełnia rozwiązanie
 \[
@@ -739,7 +743,7 @@ $
 \end{array}
 $
 
-Mamy rekurencyjny algorytm rozkładu $LU$, ale w klasycznym przypadku biorąc podział blokowy można uniknąć rekurencji.
+Mamy rekurencyjny algorytm rozkładu $LU$, ale w klasycznym przypadku biorąc podział blokowy można uniknąć rekurencji. \index{rozkład!LU}
 \[\arraycolsep=0.7em\def\arraystretch{1.4}
 	\begin{array}{l}
 		\updownarrow 1   \\ \\
@@ -776,7 +780,7 @@ $\underbrace{\tilde{A}_{22} - L_{21}U_{12}^T}_{\textrm{wystarczy rozłożyć tak
 Można na to patrzeć jako na sekwencję przejść A prowadzącą do macierzy U. A to jest tak naprawdę eliminacja Gaussa.
 
 \section{Algorytm eliminacji Gaussa}
-
+\index{eliminacje Gaussa}
 Ten algorytm nie zadziała jeśli w trakcie będziemy dzielić przez 0, np.
 
 $A = \left[
@@ -815,7 +819,7 @@ $2*(n-1)^2 + 2(n-2)^2 + ... + 2 + O(n^2) = 2 \cdot \underbrace{((n-1)^2 + (n-2)^
 
 \subsection{Uwarunkowanie układu równań liniowych}
 
-
+\index{uwarunkowanie!układu równań liniowych}
 $x = A^{-1}b, Ax = b$
 
 $\tilde{x} = A^{-1}(b + \delta) = A\tilde{x} = b + \delta$, $\frac{pl x - \tilde{x} \norm{}{} x pl} \leq ?$
@@ -946,8 +950,8 @@ Chcemy przechowywać niezerowe wartości.
 
 
 \section{Metody stacjonarne rozwiązywania układów równań liniowych}
-
-Zmiast poszukiwać dokładnej wartości $x$, takiej że $Ax=b$, znajdźmy jego przybliżenie! Będziemy używać metod iteracyjnych, których podstawowym składnikiem będzie operacja $A \cdot w$, która kosztuje $O(N)$, jeśli $\overbrace{nnz}^{\textrm{non zero}}(A) = O(N)$.
+\index{metody stacjonarne}
+Zamiast poszukiwać dokładnej wartości $x$, takiej że $Ax=b$, znajdźmy jego przybliżenie! Będziemy używać metod iteracyjnych, których podstawowym składnikiem będzie operacja $A \cdot w$, która kosztuje $O(N)$, jeśli $\overbrace{nnz}^{\textrm{non zero}}(A) = O(N)$.
 
 
 Najprostsze metody i metody stacjonarne:
@@ -1031,7 +1035,7 @@ D - macierz Jacobiego, może być wolno zbieżna.
 \end{twierdz}
  
 
-\subsection{Metoda Gaussa-Seidla} 
+\subsection{Metoda Gaussa-Seidla} \index{metody stacjonarne!Gaussa-Seidla}
 \[
 	\begin{array}{ll}
 		a_{11}x_1^{(k+1)} & = b_1 - a_{12}x_2^{(k)} - ... - a_{1N}x_N^{(k)}                     \\
@@ -1046,7 +1050,7 @@ Istnieje wiele innych ``prostych" metod iteracyjnych dla układów równań z ma
 
 $\quad$ \say{Czy można wymyślić nieproste zadanie o iteracji prostej? Można}
 
-\subsection{Metody przestrzeni Kryłowa}
+\subsection{Metody przestrzeni Kryłowa}\index{metody stacjonarne!przestrzeni Kryłowa}
 k - ta iteracja jest zdefinowana jako
 \[
 	x_k \in x_0 + K_k
@@ -1065,8 +1069,8 @@ gdzie $K_{k, i} = \{r_0, Ar_0, ..., A^{k-1}r_0\}$, gdzie $r_0 = b - Ax_0$.
 	      \]
 \end{itemize}
 	
-\textbf{Przykład}: metoda gradientów sprzeżonych (CG):
-
+\textbf{Przykład}: metoda gradientów sprzężonych (CG):
+\index{metody stacjonarne!gradientów sprzężonych (CG)}
 Zakładamy, że $A = A^T > 0$. Wyznaczmy $x_k \in x_0 + K_k$ takie, żeby:
 \[
 	\norm{x_k - x^\star} \leq \norm{x - x^\star}_A \forall_{x \in x_0 + K_k}
@@ -1167,7 +1171,7 @@ Na czym polega ukulele $\norm{B}$ - dostatecznie małe?
 
 Jeśli więc $cond(A)$ jest niezbyt duże względem $\cfrac{1}{\nu}$ to algorytm IR (modelowy) jest zbieżny.
 
-\section{Liniowe zadania najmniejszych kwadratów (LZNK)}
+\section{Liniowe zadania najmniejszych kwadratów (LZNK)} \index{LZNK}
 Zajmiemy się zadaniem wygładzania liniowego, nazywanym też liniowym zadaniem najmniejszych kwadratów. Jest ono uogólnieniem zadania rozwiązywania kwadratowych układów równań liniowych do przypadku, gdy układ jest nadokreślony - to znaczy, jest więcej równań niż niewiadomych. W takim przypadku nie należy liczyć na to, że uda się nam wskazać rozwiązanie spełniające wszystkie równania (jest ich za dużo!), dlatego będziemy szukać rozwiązania $x$, które minimalizuje resztę:
 \[\norm{|b-Ax}_2\]
 Jest to praktycznie bardzo często pojawiające się zadanie, a autorem pierwszego rozwiązania był nie kto inny jak sam wielki Gauss.
@@ -1218,7 +1222,7 @@ $\sum_{i}(\sum_{j} a_{ij} x_{j} - b_{i})^2 \ra \textrm{min}$!
 
 Jak to rozwiązać? Przyda nam się jeszcze jeden rozkład.
 
-\subsection{Rozkład QR macierzy prostokątnej}
+\subsection{Rozkład QR macierzy prostokątnej} \index{rozkład!QR}
 
 Algorytm rozwiązaywania LZNK przez rozkład QR
 
@@ -1325,7 +1329,7 @@ Jak tanio mnożyć $H_i y$?
 \]
 
 koszt O(n).
-
+ \index{metoda Householdera}
 Koszt rozkładu QR metodą Householdera. Trzeba rozłożyć macierz $n \times n$ przy użyciu tej metody
 \[
 	\underbrace{T(n, n)}_{\textrm{koszt rozkładu QR macierzy }n \times n} = T(n-1, n-1) + \underbrace{\textrm{koszt wyznaczenia v}}_{O(n)} + \underbrace{\textrm{koszt update (HA)}}_{4(n+1)n flopów?}
@@ -1333,7 +1337,7 @@ Koszt rozkładu QR metodą Householdera. Trzeba rozłożyć macierz $n \times n$
 
 Po rachunkach $T(n, m) = 2m^2n - \cfrac{2}{3}m^3$ (plus wyrazy niższego rzędu). W szczególności gdy $m = n$, to $T(n, m) = \cfrac{4}{3} n^3$.
 
-\subsection{Rozkład SVD macierzy}
+\subsection{Rozkład SVD macierzy} \index{rozkład!SVD}
 % przypomnienie z zeszłego tygodnia
 %LZNK: znaleźć $x \in \RR^m$:
 %
@@ -1515,7 +1519,7 @@ $\norm{x + v}_2^2 = \norm{x}_2^2 + \norm{v}_2^2$, gdyż $x \bot v$
 $x^Tv = (\tilde{V_1} \cdot cos)^T) (\tilde{V}_2z) = cos^T \cdot \underbrace{\tilde{V}_1^T\tilde{V}_2}_{=0}\cdot z = 0$, więc $\norm{x + v}_2$ najmniejsza gdy $v = 0$.
 
 \subsection{Uwarunkowanie LZNK}
-
+\index{uwarunkowanie!LZNK}
 $A \in \RR^{n,m}$, $n \gg m$, $rank(A) = m$, $r$ - rozwiązanie LZNK $\norm{b - Ax}_2 \ra min!$
 
 Rozważmy zadanie zaburzone
@@ -1528,7 +1532,7 @@ Załóżmy, że
 
 jest na tyle małe, że $cond_2(A) \cdot \varepsilon < 1$, gdzie $cond_2(A) := \cfrac{\sigma_{max}(A)}{\sigma_{min}(A)}$.
 
-Wtedy zadanie zauburzone ma jednoznaczne rozwiązanie oraz $cond_{LZNK}(A, b)$:
+Wtedy zadanie zaburzone ma jednoznaczne rozwiązanie oraz $cond_{LZNK}(A, b)$:
 \[
 	\cfrac{\norm{x - \tilde{x}}_2}{\norm{x}_2} \leq \varepsilon \cdot \underbrace{\left[ \cfrac{2 cond_2(A)}{\cos{\Theta}} + \tan{\Theta}(cond_2(A))^2 \right]}_{cond_{LZNK}(A, b)} + O(\varepsilon^2)
 \]
@@ -1571,6 +1575,7 @@ Zadanie wyznaczania wartości własnych i wektorów własnych macierzy ma bardzo
 \end{itemize}
 
 \subsection{Metoda potęgowa}
+\index{metoda potęgowa}
 Czyli wyznaczanie wektora własnego odpowiadające dominującej wartości własnej
 
 Niech wartości własne A spełniają:
@@ -1643,7 +1648,7 @@ Szybkość zbieżności $x_k$ do kierunku wektora $v_1$ jest proporcjonalna do $
 \end{wniosek}
 
 \subsection{Odwrotna metoda potęgowa}
-
+\index{metoda potęgowa!odwrotna}
 for k = 0, 1, 2...
  
 $x_{k+1} = (A - \nu I)^{-1}\cdot x_k$
@@ -1680,7 +1685,7 @@ Gdy $x_k = v$: $\cfrac{v^TAv}{v^Tv} = \cfrac{v^T \lambda v}{v^T v} = \lambda \cd
 
 
 \textbf{Metoda Rayleigh:}
-
+\index{metoda Rayleigh}
 for k = 0, 1, 2...
 
 Rozwiąż $(A - \nu_k I)x_{k+1} = x_k \quad \la O(N^3)$
@@ -1727,7 +1732,8 @@ No dobrze, ale ile wynosi wyznacznik?
 		
 \end{fakt}
 
-\begin{twierdz}[Goershgorina] $\sigma(A)$ jest zawarte w sumie teoriomnogościowej tzw. kół Gershgerina
+\index{koła Gerszgorina}
+\begin{twierdz}[Gerszgorina] $\sigma(A)$ jest zawarte w sumie teoriomnogościowej tzw. kół Gerszgorina
 	
 	\[
 		K_{i} := \left\{ z \in \CC: |z - a_{ii} | \leq \sum_{j \neq i} |a_{ij}| \right\}
@@ -1749,7 +1755,7 @@ No dobrze, ale ile wynosi wyznacznik?
 	
 \end{twierdz}
 
-\begin{twierdz}[o uwarunkowaniu zadania wyznaczania wartośći własnej macierzy diagonalizowalnej, twierdzenie B....?-Fike]
+\begin{twierdz}[o uwarunkowaniu zadania wyznaczania wartości własnej macierzy diagonalizowalnej, twierdzenie B....?-Fike]
 	Niech $A$ będzie diagonaliziwalna, tzn. istnieje $X$ nieosobliwa t. że
 	
 	\[
@@ -1820,116 +1826,81 @@ Teraz ten algorytm jest niepraktyczny. Ile kosztuje rozkład QR? Jak macierz jes
 
 \section{Wstęp}
 
-W życiu numeryka często trzeba wyliczać wartości funkcji. Fajnie byłoby zastępować funkcje skomplikowane funkcjami prostymi, ale jakie funkcje właściwie są proste? Matematyk powie, że trygonometryczne, numeryk powie, że wielomiany. Dlaczego wielomiany?
+W naszym życiu często musimy wyliczać wartości funkcji. Fajnie byłoby zastępować funkcje skomplikowane funkcjami prostymi. Ale jakie funkcje właściwie są proste? Matematyk powie, że trygonometryczne, numeryk powie, że wielomiany. Dlaczego wielomiany?
 \[
 p(x) = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n
 \]
-Wielomiany są przyjemne, bodo ich wyliczenia wystarczy dodawanie i mnożenie, a to potrafi sprzęt (a jak ktoś ma dobre oko to nawet zauważy tutaj FMA - ``fused multiply-add").
+Wielomiany są przyjemne, bo do ich wyliczenia wystarczy dodawanie i mnożenie, a to potrafi sprzęt (a jak ktoś ma dobre oko to nawet zauważy tutaj FMA - ``fused multiply-add").
 
-\subsection{Algorytm Hornera}
+\subsection{Algorytm Hornera} \index{Horner, algorytm}
 Algorytm Hornera służy do szybkiego wyznaczania wartości $w = p(x)$. On polega na tym, aby w odpowiednim miejscu powstawiać nawiasy.
 \begin{align*}
 	p(x) & = a_0 + x(a_1 + a_2x + \cdots + a_nx^{n-1}) \\
 	& = a_0 + x (a_1 + x(a_2 + a_3 x + \cdots + a_nx^{n-2})) \\
 	& = \cdots
 \end{align*}
-Implementujemy przez interacje, zatem koszt $O(n)$. Zatem nie tylko korzystam z podstawowych operacji arytmetycznych, ale nawet robię to tanio. 
+Implementujemy przez iteracje, zatem koszt $O(n)$. Zatem nie tylko korzystamy z podstawowych operacji arytmetycznych, ale nawet robimy to tanio. 
 
-\subsection{Interpolacja wielomianowa}
-No dobrze, ale co właściwie mogę robić z wielomianem? Przy użyciu wielomianu mogę przykładowo szacować inne funkcje. Zanim jednak przejdziemy do takich rzeczy zastanówmy się nad następującym problemem: ``przez zadane węzły $(x_i, y_i)$, $i: 0...n$ poprowadzić wielomian $w$ taki, że $w(x_i) = y_i$ (interpolacja Lagrange'a)"
+\section{Interpolacja wielomianowa}
+No dobrze, ale co właściwie mogę robić z wielomianem? Przy użyciu wielomianu mogę przykładowo szacować inne funkcje.
 
-\begin{tikzpicture}
+\subsection{Interpolacja Lagrange'a}
+Zanim jednak przejdziemy do takich rzeczy jak zamiana funkcji skomplikowanych na proste, zastanówmy się nad następującym problemem: ``jak przez zadane węzły $(x_i, y_i)$, $i: 0...n$ poprowadzić wielomian $w$ taki, że $w(x_i) = y_i$". Zadanie znalezienia wielomianu interpolującego zadane wartości nazywamy zadaniem interpolacji Lagrange'a\index{interpolacja!Lagrange'a}. Jeśli wartości $y_i$ to wartości pewnej funkcji $f$, to taki wielomian nazywamy \textit{wielomianem interpolującym funkcję f}.
+\begin{center}
+    \begin{tikzpicture}
+    
+    \node (v1) at (-0.5,0) {};
+    \node (v2) at (4,0) {};
+    \node (v3) at (0,4) {};
+    \node (v4) at (0,-0.5) {};
+    
+    \draw [->] (v1) edge (v2);
+    \draw [<-] (v3) edge (v4);
+    
+    \draw (1, 0.1) edge (1, -0.1);
+    \draw (2, 0.1) edge (2, -0.1);
+    \draw (3, 0.1) edge (3, -0.1);
+    
+    \draw (-0.1, 1) edge (0.1, 1);
+    \draw (-0.1, 2) edge (0.1, 2);
+    \draw (-0.1, 3) edge (0.1, 3);
+    
+    \node at (1, -0.4) {$x_1$};
+    \node at (2, -0.4) {$x_2$};
+    \node at (3, -0.4) {$x_3$};
+    
+    \node at (-0.3, 1) {$y_1$};
+    \node at (-0.3, 2) {$y_2$};
+    \node at (-0.3, 3) {$y_3$};
+    
+    \node[circle,fill,inner sep=1pt] at (1, 2) {};
+    \node[circle,fill,inner sep=1pt] at (2, 1) {};
+    \node[circle,fill,inner sep=1pt] at (3, 3) {};
+    
+    \draw  plot[smooth, tension=.5] coordinates {(0.5,2.8) (2,1) (3.3,3.85)};
+    \end{tikzpicture}
+\end{center}
 
-\node (v1) at (-0.5,0) {};
-\node (v2) at (4,0) {};
-\node (v3) at (0,4) {};
-\node (v4) at (0,-0.5) {};
-
-\draw [->] (v1) edge (v2);
-\draw [<-] (v3) edge (v4);
-
-\draw (1, 0.1) edge (1, -0.1);
-\draw (2, 0.1) edge (2, -0.1);
-\draw (3, 0.1) edge (3, -0.1);
-
-\draw (-0.1, 1) edge (0.1, 1);
-\draw (-0.1, 2) edge (0.1, 2);
-\draw (-0.1, 3) edge (0.1, 3);
-
-\node at (1, -0.4) {$x_1$};
-\node at (2, -0.4) {$x_2$};
-\node at (3, -0.4) {$x_3$};
-
-\node at (-0.3, 1) {$y_1$};
-\node at (-0.3, 2) {$y_2$};
-\node at (-0.3, 3) {$y_3$};
-
-\node[circle,fill,inner sep=1pt] at (1, 2) {};
-\node[circle,fill,inner sep=1pt] at (2, 1) {};
-\node[circle,fill,inner sep=1pt] at (3, 3) {};
-
-\draw  plot[smooth, tension=.5] coordinates {(0.5,2.8) (2,1) (3.3,3.85)};
-\end{tikzpicture}
-
-Ten problem można uogólnić następująco: ``przez zadane węzły $(x_i, y_i)$, $i: 0...n$ poprowadzić wielomian $w$ taki, żeby $\underbrace{w^{(k)}}_{\textrm{k-ta pochodna}}(x_i) = y_i^{(k)}$" (interpolacja Hermite'a).
-
-\begin{tikzpicture}
-
-\node (v1) at (-0.5,1) {};
-\node (v2) at (4,1) {};
-\node (v3) at (0,3) {};
-\node (v4) at (0,0.5) {};
-
-\draw [->] (v1) edge (v2);
-\draw [<-] (v3) edge (v4);
-
-\draw (1, 0.9) edge (1, 1.1);
-\draw (2, 0.9) edge (2, 1.1);
-\draw (3, 0.9) edge (3, 1.1);
-
-\node at (1, 0.7) {$x_1$};
-\node at (2, 0.7) {$x_2$};
-\node at (3, 0.7) {$x_3$};
-
-\node[circle,fill,inner sep=1pt] at (1, 2) {};
-\node[circle,fill,inner sep=1pt] at (2, 1.4) {};
-\node[circle,fill,inner sep=1pt] at (3, 2.3) {};
-
-\node (t1) at (0.5, 2.1) {}; 
-\node (d1) at (1.5, 1.9) {}; 
-
-\node (t2) at (1.5, 1.3) {};
-\node (d2) at (2.5, 1.5) {};
-
-\node (t3) at (2.5, 2.0) {};
-\node (d3) at (3.5, 2.6) {};
-
-\draw (t1) edge (d1);
-\draw (t2) edge (d2);
-\draw (t3) edge (d3);
-
-\draw  plot[smooth, tension=.5] coordinates {(0.5, 1.5) (1, 2) (2, 1.4) (3, 2.3) (3.5, 2)};
-\end{tikzpicture}
-
+Taki wielomian jest jednoznacznie wyznaczony.
 \begin{twierdz}
 Niech będą dane węzły interpolacji $a = x_0 < x_1 < x_2 < \cdots < x_n = b$ oraz wartości $y_0, y_1, \cdots, y_n$. Wtedy istnieje dokładnie jeden $w$, stopnia co najmniej $n$ taki, że
 \[
-w(x_i) = y_i \quad dla\ i = 0, \cdots n
+w(x_i) = y_i \quad dla\ i = 0, \cdots, n
 \]
-Innymi słowy taki wielomian jest jednoznacznie wyznaczony.
 \end{twierdz}
 \textbf{Dowód:}
 
-Weżmy dowolną bazę przestrzeni wielomianów stopnia $\leq n$, $\{\phi_0, \cdots, \phi_n\}$. Wtedy $w(x) = \sum_{i=0}^{n} \alpha_i \phi_i(x)$ i warunki interpolacji dają:
+Weżmy dowolną bazę przestrzeni wielomianów stopnia $\leq n$ - $\{\phi_0, \cdots, \phi_n\}$. Wtedy $w(x) = \sum_{i=0}^{n} \alpha_i \phi_i(x)$ i warunki interpolacji dają:
 \[
-w(x_j) = \sum_{i=1}^{n} \alpha_i\phi_i(x_j) = y_i
+w(x_j) = \sum\limits_{i=1}^{n} \alpha_i\phi_i(x_j) = y_i
 \]
 układ (n+1) równań liniowych z (n+1) niewiadomymi (układ $\star$):
 \[
 \left[
 	\begin{array}{ccc}
 		\phi_0(x_0) & \cdots & \phi_0(x_n) \\
-		\vdots & & \vdots \\
+		\phi_1(x_0) & \cdots & \phi_1(x_n) \\
+		\vdots & \ddots & \vdots \\
 		\phi_n(x_0) & \cdots & \phi_n(x_n)
 	\end{array}
 \right]
@@ -1953,12 +1924,12 @@ układ (n+1) równań liniowych z (n+1) niewiadomymi (układ $\star$):
 	\end{array}
 \right]
 \]
-Ma jednoznaczne rozwiązanie $\iff$ jego macierz jest $\neq 0$ $\iff$ rozwiązanie z zerową prawą stroną ma tylko rozwiązanie $=0$. Jeśli więc $y_i = 0$, dla $i = 0, \cdots, n$ to $w(x_i) = 0$ dla $i = 0, \cdots n$. Zatem $w(\cdot)$ ma $(n+1)$ zer więc $w \equiv 0$, bo jest wielomianem stopnia $\leq n$.
+Aby wykazać, że układ ten ma jednoznaczne rozwiązanie wystarczy, aby wektor zerowy był jedynym rozwiązaniem układu jednorodnego. Jeśli więc $y_i = 0$, dla $i = 0, \cdots, n$ to $w(x_i) = 0$ dla $i = 0, \cdots, n$. Zatem $w(\cdot)$ ma $(n+1)$ zer więc $w \equiv 0$, bo jest wielomianem stopnia $\leq n$.
 
 Uwagi:
 \begin{itemize}
 	\item Wystarczy rozwiązanie układu równań $(\star)$
-	\item Postać tego układu zależy od wyboru bazy. Np jeśli $\{\phi_i\}$ - baza naturalna $\phi_0(x) = 1$, $\phi_1(x) = x$, ..., $\phi_j(x) = x^j$ to wtedy nasza macierz jest postaci:
+	\item Postać tego układu zależy od wyboru bazy. Np jeśli $\{\phi_i\}$ - baza naturalna, tzn $\phi_0(x) = 1$, $\phi_1(x) = x$, ..., $\phi_j(x) = x^j$ to wtedy nasza macierz jest postaci:
 \[
 \left[
 	\begin{array}{ccccc}
@@ -1969,21 +1940,27 @@ Uwagi:
 	\end{array}
 \right]
 \]
-(macierz Vandermonde'a). Cechy tej macierzy: gęsta, niesymetryczna. Więc wydawałoby się, że przy elimnacji Gaussa będę musiał zużyć mniej więcej $O(n^3)$ flopów.
+(macierz Vandermonde'a). Cechy tej macierzy: gęsta, niesymetryczna. Więc wydawałoby się, że przy eliminacji Gaussa będę musiał zużyć mniej więcej $O(n^3)$ flopów.
 \end{itemize}
 
-Czy da się dokonać taniej elimnacji Gaussa dla macierzy Vandermonde'a? Spróbumy wybrać inną bazę.
+Czy da się dokonać taniej eliminacji Gaussa dla macierzy Vandermonde'a? Spróbujmy wybrać inną bazę.
 
 \begin{obserw}
-Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n, a$. $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_i(x_i) - w_{n-i}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x{n-1})}_{\phi_n(x)}$. Czyli
+Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n$, natomiast $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_i(x_i) - w_{n-1}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x_{n-1})}_{\phi_n(x)}$. Czyli
 \[
-	w_n(x) = w_{n-1})x_ + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
+	w_n(x) = w_{n-1}x + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
 \]
-gdzie $\phi_n(x) = 1$, $\phi_j(x) = (x-x_0) \cdot \cdots \cdot (x - x_{j-1})$, $j=1, \cdots, n$ (baza Newtona). W tej bazie układ równań znajdujący wielomian interpolacyjny Lagrange'a ma taką postać:
+gdzie 
+\begin{align*}
+    \phi_0(x) & = 1\\
+    \phi_j(x) & = (x-x_0) \cdot (x-x_1) \cdot \cdots \cdot (x - x_{j-1}) \quad j=1, \cdots, n
+\end{align*}
+(baza Newtona)\index{baza Newtona}. W tej bazie układ równań znajdujący wielomian interpolacyjny Lagrange'a ma taką postać:
 \[
 \left[
 	\begin{array}{ccc}
 		\phi_0(x_0) & \cdots & \phi_0(x_n) \\
+		\phi_1(x_0) & \cdots & \phi_n(x_n) \\
 		\vdots & & \vdots \\
 		\phi_n(x_0) & \cdots & \phi_n(x_n)
 	\end{array}
@@ -2020,7 +1997,7 @@ gdzie $\phi_n(x) = 1$, $\phi_j(x) = (x-x_0) \cdot \cdots \cdot (x - x_{j-1})$, $
 (macierz dolna trójkątna)
 \end{obserw}
 
-Jak widać coraz bardziej upraszczamy to zadanie. Pokażemy algorym wyznaczania $b_0, \cdots, b_n$ - współczynników wielomiany interpolacyjnego Lagrange'a w bazie Newtona, który nie wymaga jawnej konstrukcji macierzy. Zauważmy, że $b_i$ zależy tylko od $y_0, \cdots, y_i$ co oznacza:
+Jak widać udało nam się uprościć to zadanie. Teraz pokażemy algorytm wyznaczania $b_0, \cdots, b_n$ - tj. współczynników wielomianu interpolacyjnego Lagrange'a w bazie Newtona, który nie wymaga jawnej konstrukcji macierzy. Zauważmy, że $b_i$ zależy tylko od $y_0, \cdots, y_i$ co oznacza:
 \[
 	b_i = f[x_0, \cdots, x_i]
 \]
@@ -2144,9 +2121,9 @@ $\\$
 Ten algorytm można wykonywać in situ\footnote{(łac.) w miejscu}.
 \end{wniosek}
 
-Dowód:
+\textbf{Dowód:}
 
-Wystarczy pokazać, że jeśli jest to prawda dla $k = n-1$, to też dla $k=n$. Niech $p_k$ - wielomian interpolujący Lagrange'a (stopnia $\leq k$) interpolujący $f$ w węzłach $x_0, \cdots, x_k$. Niech $q$ - wielomian interpolacyjny Lagrange'a (stopnia $\leq n-1$) dla węzłów $x_1, \cdots, x_n$. Wtedy:
+Przez indukcję - wystarczy pokazać, że jeśli jest to prawda dla $k = n-1$, to też dla $k=n$. Niech $p_k$ - wielomian interpolujący Lagrange'a (stopnia $\leq k$) interpolujący $f$ w węzłach $x_0, \cdots, x_k$. Niech $q$ - wielomian interpolacyjny Lagrange'a (stopnia $\leq n-1$) dla węzłów $x_1, \cdots, x_n$. Wtedy:
 \[
 	p_n(x) = q(x) + \cfrac{x - x_n}{x_n - x_0}(q(x) - p_{n-1}(x))
 \]
@@ -2158,7 +2135,7 @@ Rzeczywiście:
 	p_n(x_0) &= q(x_0) + \cfrac{x_0-x_n}{x_n-x_0}(q(x_0) - p_{n-1}(x_0)) = f(x_0)
 \end{align*}
 
-Co można powiedzieć gdy mam reprezentacje takich dwóch wielomianów? W wielomianie $p_n(x)$ (albo $p_1$??) współczynnik przy $x^n$ jest równy $b_n = f[x_0, \cdots, x_n]$. Natomiast współczynnik przy $x^n$ w wielomianie po drugiej stronie $(\star\star): q(x) + \frac{x-x_n}{x_n-x_0}(q(x) - p_n(x))$, rozpisując $q$ i $p_{n-1}$ w bazie Newtona:
+Co można powiedzieć gdy mam reprezentacje takich dwóch wielomianów? W wielomianie $p_n(x)$ (albo $p_1$??) współczynnik przy $x^n$ jest równy $b_n = f[x_0, \cdots, x_n]$. Natomiast współczynnik przy $x^n$ w wielomianie po drugiej stronie $(\star\star): q(x) + \frac{x-x_n}{x_n-x_0}(q(x) - p_n(x))$. Rozpisując $q$ i $p_{n-1}$ w bazie Newtona:
 \begin{align*}
 	q(x) &= \sum_{i} q(x-x_1)\cdot \cdots \cdot (x-x_i) \\
 	p_{n-1}(x) &= \sum_{i} b_i(x-x_1)\cdot \cdots \cdot(x-x_i)
@@ -2173,37 +2150,87 @@ Stąd współczynnik przy $x^n$ w $(\star\star)$ to
 \cfrac{1}{x_n-x_0}(f[x_1, \cdots, x_n] - f[x_0, \cdots, x_{n-1}])
 \]
 
-Aby wyznaczyć wartość wielomiany interpolacyjnego Lagrange'a w bazie Newtona:
+Aby wyznaczyć wartość wielomianu interpolacyjnego Lagrange'a w bazie Newtona:
 \[
 	w(x) = \sum_{i=0}^{n} b_i(x-x_0)\cdot \cdots \cdot (x-x_{i-1})
 \]
-okazuje sie, ze można użyć do tego zmodyfikowanego algorytmu Hornera w koszcie liniowym.
+okazuje się, ze można użyć do tego zmodyfikowanego algorytmu Hornera w koszcie liniowym.
 
-\begin{twierdz}[o błędzie interpolacji]
-Niech $f \in C^{n+1}[a, b]$ (zbiór funkcji na przedziale [a, b] (n+1) razy różniczkowalne), $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w_n(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
+\subsection{Błąd interpolacji}
+
+Gdy mamy do czynienia z funkcją, która jest ``skomplikowana", często dobrze jest zastąpić ją funkcją ``prostszą". Mówimy wtedy o aproksymacji funkcji. Funkcję musimy również aproksymować wtedy, gdy nie jesteśmy w stanie uzyskać pełnej o niej informacji. Na przykład, gdy funkcja reprezentuje pewien proces fizyczny, często zdarza się, że dysponujemy jedynie ciągiem próbek, czyli wartościami tej funkcji w pewnych punktach. Jasne jest, że chcielibyśmy przy tym, aby błąd aproksymacji był możliwie mały.
+
+Podobnie ma się sprawa w przypadku implementacji funkcji elementarnych ($\sin$, $\exp$, ...) w bibliotece funkcji matematycznych, czy wręcz w procesorze. Tam również najchętniej poszukiwalibyśmy sposobu taniego przybliżenia wartości dokładnej funkcji. I rzeczywiście, często w tym celu stosuje się m.in. specjalnie konstruowaną aproksymację wielomianową.
+
+Z tego punktu widzenia, interpolacja wielomianowa może być traktowana jako jeden ze sposobów aproksymacji funkcji, opartym na próbkowaniu. Naturalnym staje się więc pytanie o błąd takiej aproksymacji.
+
+\begin{twierdz}[o najgorszym błędzie interpolacji]
+Niech $f \in C^{n+1}[a, b]$\footnote{zbiór funkcji na przedziale $[a, b]$, $(n+1)$-krotnie różniczkowalnych}, $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w_n(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
 \[
-	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)} f(x) - w_n(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(w_n(x))
+	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)}\ f(x) - w_n(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(\omega_n(x))
 \]
-gdzie $w_n(x) = (x-x_0) \cdots (x-x_n)$ (gdzie $w(x_i) = f(x_i)$ dla $i = 0, \cdots, n$). (Dowód był)
+gdzie $\omega_n(x) = (x-x_0) \cdots (x-x_n)$ (gdzie $\omega(x_i) = f(x_i)$ dla $i = 0, \cdots, n$). (Dowód był)
 \end{twierdz}
 
 \subsection{Interpolacja Hermite'a}
 
-Znaleźć wielomian $H_n(x)$ stopnia $\leq n$ tkie, że
+Uogólnieniem rozpatrzonego zadania interpolacji jest zadanie interpolacji Hermite'a\index{interpolacja!Hermite'a}: ``przez zadane węzły $(x_i, y_i)$, $i: 0...n$ poprowadzić wielomian $w$ taki, żeby $w^{(k)}\footnote{\textrm{k-ta pochodna}}(x_i) = y_i^{(k)}$".
+
+\begin{tikzpicture}
+
+\node (v1) at (-0.5,1) {};
+\node (v2) at (4,1) {};
+\node (v3) at (0,3) {};
+\node (v4) at (0,0.5) {};
+
+\draw [->] (v1) edge (v2);
+\draw [<-] (v3) edge (v4);
+
+\draw (1, 0.9) edge (1, 1.1);
+\draw (2, 0.9) edge (2, 1.1);
+\draw (3, 0.9) edge (3, 1.1);
+
+\node at (1, 0.7) {$x_1$};
+\node at (2, 0.7) {$x_2$};
+\node at (3, 0.7) {$x_3$};
+
+\node[circle,fill,inner sep=1pt] at (1, 2) {};
+\node[circle,fill,inner sep=1pt] at (2, 1.4) {};
+\node[circle,fill,inner sep=1pt] at (3, 2.3) {};
+
+\node (t1) at (0.5, 2.1) {}; 
+\node (d1) at (1.5, 1.9) {}; 
+
+\node (t2) at (1.5, 1.3) {};
+\node (d2) at (2.5, 1.5) {};
+
+\node (t3) at (2.5, 2.0) {};
+\node (d3) at (3.5, 2.6) {};
+
+\draw (t1) edge (d1);
+\draw (t2) edge (d2);
+\draw (t3) edge (d3);
+
+\draw  plot[smooth, tension=.5] coordinates {(0.5, 1.5) (1, 2) (2, 1.4) (3, 2.3) (3.5, 2)};
+\end{tikzpicture}
+
+Znaleźć wielomian $H_n(x)$ stopnia $\leq n$ taki, że
 \[
 	H_n^{(j)}(x_i) = f^{(j)}(x_i) \quad i = 0, \cdots, n \quad j = 0, \cdots, n
 \] 
 \[
 	m = (\sum m_i - 1)
 \]
-To zadanie ma dokładnie jedno rozwiązanie.
+To zadanie także ma dokładnie jedno rozwiązanie.
 
-Błąd interpolacji:
+\textbf{Błąd interpolacji:}
 \[
 f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
 \]
 \[
 	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
 \]
-Dla wyznaczenia wielomiany interpolacyjnego Hermite w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych.
+Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych.
+
+\printindex
 \end{document}

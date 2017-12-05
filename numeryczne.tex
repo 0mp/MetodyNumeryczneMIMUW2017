@@ -7,7 +7,7 @@
 \usepackage{ulem}
 \usepackage{makeidx}
 
-\usepackage[cache=false]{minted}
+\usepackage{minted}
 
 \setminted[python]{
     breaklines=true,
@@ -15,6 +15,12 @@
     escapeinside=||,
     encoding=utf8
 }
+
+% minted workaround
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
 
 \usepackage{tikz}
 \usetikzlibrary{snakes}
@@ -1107,27 +1113,21 @@ $r = b-Ax_0$ - reziduum obliczone w podwójnej prezycji
 Gdybym więc rozwiązał układ rozwiązania taki: $Ae = r$, to dostałbym poprawkę, ktora przyłożona do $x_0$ dałaby poprawne rozwiązanie $x = x_0 + e$. Ale poniważ $Ae = r$ policzę w pojedynczej precyzji to policzę to niedokładnie, ale miejmy nadzieję, że to nam i tak poprawi wynik. Zatem teraz w podwónej precyzji policzę $x = x_0 + e$. Mogę tak robić iteracyjnie:
 
 $x_0$ - rozwiązanie w pojedynczej
-
-for i = 0, 1, 2, ...
-
-$\ r = B-Ax_i$ - podwójna
-
-$\ Ae_i = r$ - pojedyncza
-
-$\ x_{i+1} = x_i + e_i$ - podwójna
-	
+\begin{minted}[linenos]{python}
+for i = 0, 1, 2, ...:
+    r = B - |$Ax_i$|     # podwójna
+    |$Ae_i$| = r         # pojedyncza
+    |$x_{i+1}$| = |$x_i$| + |$e_i$|   # podwójna
+\end{minted}
 
 
 Analizę algorytmu iteracyjnego poprawiania przeprowadzimy w modelowej sytuacji, tzn:
-
-1. for i = 0, 1, 2:
-
-2. $\ r_i = b - Ax_i$
-
-3. $\ Ae_n = r_i$
-
-4. $\ x_{i+1} = x_i + e_i$
-	
+\begin{minted}[linenos]{python}
+for i = 0, 1, 2, ...:
+    |$r_i = b - Ax_i$|
+    |$Ae_n = r_i$|
+    |$x_{i+1} = x_i + e_i$|
+\end{minted}
 Hej, a gdzie tu uproszczenie? Krok 2 i 4 przeprowadzimy dokładnie (jedynie krok 3 w pojedynczym flu). Załóżmy, że nasz algorytm rozwiązywania równań $Ax = b$ w fl jest numerycznie poprawny. To znaczy, że zamiast wyznaczyć dokładną wartość $e_i$, wyznacza jakieś jego przybliżenie $\tilde{e_i}$ takie że jest ono dokładnym rozwiązaniem zadania zaburzonego:
 \[
 	(A + H)\tilde{e_i} = r_i \ \ \ \textrm{(dokładnie)}
@@ -1227,9 +1227,9 @@ Jak to rozwiązać? Przyda nam się jeszcze jeden rozkład.
 Algorytm rozwiązaywania LZNK przez rozkład QR
 
 
-krok 1: Wyznacz rozkład $A = QR$
+\texttt{krok 1: Wyznacz rozkład $A = QR$}
 
-krok 2: Mnimalizuj \begin{align*}
+\texttt{krok 2: Mnimalizuj }\begin{align*}
 \norm{b - Ax}_2^2 &= \norm{b - QRx}^2_2 \\
 & = \norm{Q(Q^Tb - Rx)}_2^2 \\
 & \stackrel{\norm{Q y}_2 = \norm{y}_2}{=} \norm{Q^Tb - Rx}_2^2 \\
@@ -1243,7 +1243,7 @@ Rozwiązaniem jest $x \in R^n$, spełniający układ $m$ równań z macierzą tr
 \[
 	R_1x = Q_1^Tb
 \]
-Rozwiąanie to dostajemy kosztem $O(m^2)$. Obliczenie $Q_1^Tb$ kosztuje $O(n \cdot m)$ flopów. \textbf{Uwaga: }rozkład QR można też wykorzystać do rozwiązanie układu $Ax=b$ gdy $A$ jest kwadratowa, nieosobliwa.
+Rozwiązanie to dostajemy kosztem $O(m^2)$. Obliczenie $Q_1^Tb$ kosztuje $O(n \cdot m)$ flopów. \textbf{Uwaga: }rozkład QR można też wykorzystać do rozwiązanie układu $Ax=b$ gdy $A$ jest kwadratowa, nieosobliwa.
 
 \subsubsection{Wyznaczanie rozkładu QR macierzy $A$ metodą Householdera}
 
@@ -1316,12 +1316,11 @@ W praktyce nigdy nie obliczamy jawnie macierzy Q mnożąc przez siebie macierze 
 \]
 
 $y = Qz$ obliczamy:
-
-$y=z$;
-
-for i = m-1 downto 1:
-
-$\ \ y = H_iy$
+\begin{minted}[linenos]{python}
+y = z
+for i = m - 1 downto 1:
+    y = |$H_i$|y
+\end{minted}
 
 Jak tanio mnożyć $H_i y$?
 \[
@@ -1584,15 +1583,11 @@ Niech wartości własne A spełniają:
 \]
 
 Algorytm:
-
-for k = 0, 1, ...
- 
-$x_{k+1} = A \cdot x_k$
-
-$x_{k+1} = \cfrac{x_{k+1}}{\norm{x_{k+1}}_2^2}$
-
-end
- 
+\begin{minted}[linenos]{python}
+for k = 0, 1, 2, ...:
+    |$x_{k+1}$| = A * |$x_k$|
+    |$x_{k+1} = \frac{x_{k+1}}{\norm{x_{k+1}}_2^2}$|
+\end{minted}
 Działanie tej metody przeanalizujemy dla A, która jet diagonalizowalna:
 \[
 	X^{-1} A X = \Lambda = \begin{bmatrix} \lambda_1 &  & \\  &  \ddots & \\ &  & \lambda_n \end{bmatrix}
@@ -1649,31 +1644,20 @@ Szybkość zbieżności $x_k$ do kierunku wektora $v_1$ jest proporcjonalna do $
 
 \subsection{Odwrotna metoda potęgowa}
 \index{metoda potęgowa!odwrotna}
-for k = 0, 1, 2...
- 
-$x_{k+1} = (A - \nu I)^{-1}\cdot x_k$
- 
-$x_{k+1} = \cfrac{x_{k+1}}{\norm{x_{k+1}}}$
-
-
+\begin{minted}[linenos]{python}
+for k = 0, 1, 2, ...
+    |$x_{k+1}$| = |$(A - \nu I)^{-1}\cdot x_k$|
+    |$x_{k+1}$| = |$\frac{x_{k+1}}{\norm{x_{k+1}}}$|
+\end{minted}
 Ten algorytm w praktyce oczywiście implementujemy inaczej.
 
 $O(N^3) \ra $ Rozłóż macierz na czynniki, np. $P(A-\nu I) = LU$ (albo $A - \nu I = QR$)
-
-1. for k = 0, 1, 2, ... 
-
-2. rozwiąż układ $Ly = (Px_k)$
-
-3. rozwiąż układ $U x_{k+1} = y$
-
-4. $x_{k+1} = \cfrac{x_{k+1}}{\norm{x_{k+1}}}$
-
----
-
-(2 i 3 - $O(n^2)$)
-
----
-
+\begin{minted}[linenos]{python}
+for k = 0, 1, 2, ...
+   rozwiąż układ |$Ly = (Px_k)$|         # O(|$n^2$|)
+   rozwiąż układ |$U x_{k+1} = y$|          # O(|$n^2$|)
+   |$x_{k+1} = \frac{x_{k+1}}{\norm{x_{k+1}}}$|
+\end{minted}
 Znając przybliżenie $x_k$ wektora własnego, możemy wykonać najlepsze (w sensie średniokwadratowym) przybliżenie wartości własnej:
 \[
 	\lambda_k = \underbrace{\cfrac{x^T_k A x_k}{x_k^T x_k}}_{\textrm{iloraz Rayleigh}}
@@ -1778,21 +1762,16 @@ Niech $\tilde{\lambda}$ - w. własna macierzy zaburzonej $\tilde{A} = A + \Delta
 \end{wniosek}
 
 \subsection{Metoda QR wyznaczania wszystkich wartości własnych macierzy}
-
 Algorytm w wersji najprostszej:
-
-$A_1 = A$
-
-for k = 1, 2, ....
-
-$\quad A_k =: Q_kR_k$ (wyznacz rozkład QR)
- 
-$\quad A_{k+1} := R_kQ_k$ (przemnoż go w drugą stronę)
-
+\begin{minted}[linenos]{python}
+|$A_1$| = A
+for k = 1, 2, ...:
+    |$A_k =: Q_kR_k$|     # (wyznacz rozkład QR)
+    |$A_{k+1} := R_kQ_k$|   # (przemnoż go w drugą stronę)
+\end{minted}
 I to już cała iteracja.
 
-Po pierwsze zauważmy, że $A_k$ mają to samo spektrum, co macier $A$. No rzeczywiście, bo 
-
+Po pierwsze zauważmy, że $A_k$ mają to samo spektrum, co macierz $A$. Faktycznie: 
 \begin{equation}
 	\begin{aligned}
 		A_{k+1} & = R_kQ_k                            \\
@@ -1807,16 +1786,13 @@ W ogólnym przypadku może wolno działać (nie być zbieżna, wolno zbieżna). 
 \textbf{Ulepszenia metody QR i przesunięcia}
 
 Najprostsze takie ulepszenie:
-
-$A_1 = A$
-
-for k = 1, 2, ....
-
-$\quad$ wybierz przesunięcie $\sigma_k$
-
-$\quad A_k =: Q_kR_k = A_k - \sigma_k I $ (wyznacz rozkład QR i przesuń)
- 
-$\quad A_{k+1} := R_kQ_k + \sigma_k I$ (przemnoż go w drugą stronę i przesuń)
+\begin{minted}[linenos]{python}
+|$A_1$| = A
+for k = 1, 2, ...:
+    wybierz przesunięcie |$\sigma_k$|
+    |$A_k =: Q_kR_k = A_k - \sigma_k I$|  # wyznacz rozkład QR i przesuń
+    |$A_{k+1} := R_kQ_k + \sigma_k I$|     # przemnoż go w drugą stronę i przesuń
+\end{minted}
 
 \textbf{Praktyczne QR:}
 

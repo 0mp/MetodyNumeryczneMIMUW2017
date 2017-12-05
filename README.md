@@ -7,5 +7,5 @@ Wersja live: https://www.sharelatex.com/project/59d606877ef26a08a8cf3c58
 ### todo:
 
  * poprawić niektóre macierze
- * ogarnąć pakiet `minted` do wpisywania kodów algorytmów
+ * rozdzielić na mniejsze pliki
  * poprawić błędy latexowe

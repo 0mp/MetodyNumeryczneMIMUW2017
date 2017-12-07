@@ -24,6 +24,7 @@
 
 \usepackage{tikz}
 \usetikzlibrary{snakes}
+\usetikzlibrary{decorations.pathreplacing,decorations}
 
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.4em}
@@ -2207,6 +2208,324 @@ f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
 	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
 \]
 Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych.
+
+\section{Interpolacja funkcjami sklejanymi (splajny)}
+Spójrzmy na interpolację wielomianową w węzłach równoodległych funkcji $f(x) = \cfrac{1}{1+x^2}$
+
+\begin{tikzpicture}
+
+\node (v1) at (-5.5, 0) {};
+\node (v2) at (5.5, 0) {};
+
+\draw [->] (v1) edge (v2);
+\draw [<-] (0, 5) edge (0, -0.5);
+
+\draw[domain=-2.5:2.5,smooth,scale=2,variable=\x,blue] plot ({\x},{2/(1+\x*\x)});
+
+\draw[red] plot[smooth, tension=.5] coordinates {(0.0, 4.0) (0.58, 3.68) (1.14, 3.1) (1.7, 2.22) (2.28, 1.8) (2.9, 1.14) (3.42, 1.4) (3.8, -1)};
+
+\node at (5, 1.2) {$f(x) = \cfrac{1}{1+x^2}$};
+
+\end{tikzpicture}
+
+Jak widać interpolacja wielomianu wysokiego stopnia w węzłach równoodległych może dawać duży błąd, dlatego potrzebujemy innego sposobu przybliżania skomplikowanych funkcji.
+
+W przeciwieństwie do metody interpolacji Lagrange'a, gdzie stosowaliśmy jeden globalny wielomian dla całego przedziału interpolacji, w metodzie splajnów stosowane są funkcje zdefiniowane jako wielomiany niskiego stopnia osobno dla każdego odcinka pomiędzy sąsiednimi węzłami interpolacyjnymi. Te lokalne wielomiany są jednak tak dobrane, aby - oprócz warunków interpolacji - spełniać warunki sklejenia w taki sposób, aby cały splajn był funkcją o odpowiedniej regularności. Skoncentrujemy się przede wszystkim na zagadnieniu interpolacji za pomocą \texttt{splajnu kubicznego}, tj. funkcji ciągłej wraz z pochodnymi do rzędu drugiego włącznie i zbudowanej z wielomianów 3-ego stopnia. 
+
+\begin{defi}[Splajn] Niech będą dane węzły $a = x_0 < x_1 < \cdots < x_n = b$. Funkcja $s$ jest splajnem stopnia $l$ na $[a, b]$ wtw. \begin{itemize}
+\item $s \in C^{l-1}[a, b]$
+\item $s|_{[x_i, x_{i+1})}$ - wielomian stopnia $\leq l$
+\end{itemize}
+\end{defi}
+
+\textbf{Przykład:}
+
+Splajn stopnia 1:
+\begin{itemize}
+	\item $s \in C^{0}[a, b]$
+	\item $s|_{[x_i, x_{i+1})}$ - wielomian stopnia $\leq 1$ (funkcja liniowa)
+\end{itemize}
+
+\begin{tikzpicture}
+
+\node (v0) at (-0.5,0) {};
+\node (v1) at (7,0) {};
+\node (v2) at (0,-0.5) {};
+\node (v3) at (0,3) {};
+
+\draw [->] (v0) edge(v1);
+\draw [->] (v2) edge(v3);
+
+\draw (2, 0.2) edge (2, -0.2);
+\draw (3, 0.2) edge (3, -0.2);
+\draw (5, 0.2) edge (5, -0.2);
+\draw (6, 0.2) edge (6, -0.2);
+
+\node at (0.3, -0.5) {$x_0$};
+\node at (2, -0.5) {$x_1$};
+\node at (3, -0.5) {$x_2$};
+\node at (5, -0.5) {$x_3$};
+\node at (6, -0.5) {$x_4$};
+
+\node [circle,draw=black,fill=white,inner sep=1.5pt] (y1) at (0, 1) {};
+\node [circle,draw=black,fill=white,inner sep=1pt] (y2) at (2, 2) {};
+\node [circle,draw=black,fill=white,inner sep=1pt] (y3) at (3, 1.7) {};
+\node [circle,draw=black,fill=white,inner sep=1pt] (y4) at (5, 2.5) {};
+\node [circle,draw=black,fill=white,inner sep=1.5pt] (y5) at (6, 2.3) {};
+
+\draw[blue] (y1) -- (y2) -- (y3) -- (y4) -- (y5);
+\end{tikzpicture}
+
+\begin{fakt} Przestrzeń $S_l$ splajnów stopnia $l$ (na ustalonym zestawie węzłów) jest przestrzenią liniową, a jej bazą są funkcje: $\{p_0,p_1, \cdots, p_l, \phi_1, \cdots, \phi_{n-1}\}$, gdzie $p_i(x) = x^i$.
+\end{fakt}
+
+\begin{wniosek} Wymiar tej przestrzeni to $n+l$.\end{wniosek}
+
+\textbf{Przykład:}
+
+Funkcja $\phi_i(x) := (x-x_i)^l_+ := \left\{\begin{array}{lr}(x-x_i)^l & dla\ x \geq x_i \\ 0 & x<x_i\end{array}\right.$ też jest splajnem stopnia $l$.
+
+\begin{tikzpicture}
+
+\node (v1) at (-3.5, 0) {};
+\node (v2) at (2.5, 0) {};
+
+\draw [->] (v1) edge (v2);
+\draw [<-] (-1, 5) edge (-1, -0.5);
+
+\draw[domain=-6:3,smooth,scale=0.5,variable=\x,blue] plot ({\x},{2^(\x)});
+
+\node[rotate=70] at (1.7, 3) {$\phi_i(x)$};
+
+\end{tikzpicture}
+
+W zastosowaniach interpolacyjnych często używamy \texttt{splajnów kubicznych}, czyli $l=3$.
+
+\subsection{Zadanie interpolacji splajnowej} Dla zadanej funkcji $f$, znaleźć splajn $s \in S_l$ taki, że \[s(x_i) = f(x_i)\quad i=0, ..., n\]
+
+W przypadku interpolacji splajnem ``brakuje" jeszcze dwóch zależności, aby było tyle samo warunków co stponi swobody zadania.
+
+W ogólności, gdy rozważamy splajny interpolacyjne nieparzystego stopnia, $l=2m-1$ mamy swobodę doboru $2m-2$ dodatkowych warunków. Często są to na przykład:
+
+\begin{itemize}
+	\item \textbf{hermitowskie warunki brzegowe}
+	Żądam aby nie tylko wartości, ale też ich kolejne pochodne zgadzały się z tym co było powiedziane.
+	\[
+		s^{(k)}(a) = f^{(k)(a)} \quad k = 1, \cdots, m-1
+	\]
+	\[
+		s^{(k)}(b) = f^{(k)(b)} \quad k = 1, \cdots, m-1
+	\]
+	
+	\item \textbf{naturalne warunki brzegowe}
+	\[
+		s^{(k)}(a) = s^{(k)}(b) = 0 \quad k = 1, \cdots, m-1
+	\]
+	(Jak ktoś wie o co chodziło, proszę o uzupełnienie) Dlaczego naturalne warunki są naturalne? Splajny spełniają pewien specjalny warunek - splajn kubiczny minimalizuje kwadrat z drugiej pochodnej. No - co z tego można by powiedzieć. Dla nas nic, ale dla fizyka od razu coś, bo druga pochodna ma interpretację fizyczną. Krzywizna takiej krzywej jest minimalna pośród tej klasy o której myślimy. Splajn kubiczny jest najgładszy w tej klasie funkcji f. Stąd się bierze naturalny warunek brzegowy. Na krańcach funkcja jest liniowa, a jaka jest druga pochodna funkcji liniowej? Zerowa, stąd te warunki brzego nazywane są naturalnymi.
+	
+	\item \textbf{periodyczne warunki brzegowe}
+	\[
+		s^{(k)}(a) = s^{(k)}(b)
+	\]
+\end{itemize}
+
+Dla splajnów kubicznych mamy naturalne warunki brzegowe: $s''(a) = s''(b) = 0$
+
+\subsection{Konstrukcja splajnów}
+
+Zastanówmy się teraz w jaki sposób konstruować splajny.
+\subsubsection{Konstrukcja interpolacyjnych splajnów kubicznych}
+
+$s \in C^2[a, b], s|_{[x_i, x_{i+1})}$ - wielomian stopnia $\leq 3$
+
+
+$s_i := s|_{[x_i, x_{i+1})}$: 
+(obrazek)
+
+
+
+\begin{tikzpicture}
+\node (v0) at (0,0) {};
+\node (v1) at (7,0) {};
+
+\draw [->] (v0) edge(v1);
+
+\draw (0.5, 0.2) edge (0.5, -0.2);
+\draw (2, 0.2) edge (2, -0.2);
+\draw (3.5, 0.2) edge (3.5, -0.2);
+\draw (6, 0.2) edge (6, -0.2);
+
+\node at (0.5, -0.4) {$a=x_0$};
+\node at (2, -0.4) {$x_1$};
+\node at (3.5, -0.4) {$x_2$};
+\node at (6, -0.4) {$x_n=b$};
+
+\draw[decorate,decoration=brace] (0.5, 0.3) -- node[above=5pt] {$s_0$} (2, 0.3);
+\draw[decorate,decoration=brace] (2, 0.3) -- node[above=5pt] {$s_1$} (3.5, 0.3);
+\draw[decorate,decoration=brace] (3.5, 0.3) -- node[above=5pt] {$s_2$} (6, 0.3);
+
+\end{tikzpicture}
+\[
+	s_i(x) = a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3
+\]
+
+\textbf{Warunki narzucane na splajn}:
+\begin{enumerate}
+	\item interpolacja: $\underbrace{s_i(x_i)}_{a_i} = f(x_i)$ 
+	\item ciagłość II pochodnej:
+		\[
+			s_i''(x) = 2c_i + 6d_i(x-x_i)
+		\]
+		\[
+			s_i''(x) = s_{i+1}''(x_{i+1})
+		\]
+		Niech $h = x_{i+1}-x_i$. Jak to sobie rozpiszemy, mamy:
+		\begin{align*}
+			2c_i + 6d_i \cdot h & = 2c_{i+1} \\
+			\implies d_i &= \cfrac{c_{i+1}-c_i}{3h} \quad i=0, ..., n-2
+		\end{align*}
+		\item ciagłość splajnu w $x_{i+1}$
+		\[
+			s_i(x_{i+1}) = s_{i+1}(x{i+1})
+		\]
+		\[
+			y_i + b_ih + c_i \cdot h^2 + d_i\cdot h^3 = y_{i+1}
+		\]
+		Stąd
+		\[
+			b_i = \cfrac{y_{i+1}-y_i}{h} - \cfrac{h}{3}(c_{i+1} + 2c_i)
+		\]
+		\item ciągłosć pochodnej w $x_{i+1}$:
+		\begin{align*}
+			& s_i'(x) = b_i + 2c_i(x-x_i) + 3d_i(x-x_i)^2 \\
+			& s_i'(x_{i+1}) = s_{i+1}'(x_{i+1}) \\ 
+			(\star) \quad & b_i + 2c_ih + 3d_i\cdot h^2 = b_{i+1}
+		\end{align*}
+\end{enumerate}
+
+Ponieważ $d_i$ zostało wyliczone w zależności od $\{c_i\}$. Podobnie $b_i$ wyznaczone w zależności od $\{c_i\}$ orz $\{y_i\}$ (ale ten zbiór jest zadany - to po prostu zbiór wartości interpolacji $y_i = f(x_i)$) to podstawiając do $(\star)$ dostajemy zależności wyłącznie pomiędzy $\{c_i\}$ i $\{y_i\}$:
+\[
+	c_i + 4c_{i+1} + c_{i+2} = \cfrac{3}{h}\left(\cfrac{y_{i+2} - y_{i+1}}{h} - \cfrac{y_{i+1} - y_i}{h}\right) \quad i = 0, \cdots, n-2
+\]
+To już układ równań liniowych, tyle że ciągle niedookreślony, ponieważ mamy więej niewiadomych niż równań. To są te dwa brakujące wspomniane wcześniej. 
+
+Założenie, że $s''(x_0) = 0 = s''(x_n)$ oznacza, że $c_0 = c_n = 0$.
+
+Macierzowo:
+\[
+	\left[
+		\begin{array}{ccccc}
+		4 & 1 & 0 & \cdots & 0 \\
+		1 & \ddots & \ddots & \ddots & \vdots \\
+		0 & \ddots & \ddots & \ddots & 0 \\
+		\vdots & \ddots & \ddots & \ddots & 1 \\
+		0 & \cdots & 0 & 1 & 4
+		\end{array}
+	\right]
+	\cdot 
+	\left[
+		\begin{array}{c}
+		c_1 \\
+		\vdots \\
+		\vdots \\
+		\vdots \\
+		c_{n-1}
+		\end{array}
+	\right]	
+	=
+	\left[
+		\begin{array}{c}
+		g_1 \\
+		\vdots \\
+		\vdots \\
+		\vdots \\
+		g_{n-1}
+		\end{array}
+	\right]	
+\]
+
+To macierz symetryczna trójdiagonalna, z dominjącą diagonalą. To jest bardzo dobra wiadomość, bo to oznacza, że ten układ da się rozwiązać kosztem $O(n)$.
+
+\subsection{Błąd interpolacji splajnów} 
+
+\begin{defi}[przypomnienie z analizy]
+	$\norm{f}_\infty = sup_{x \in [a, b]}|f(x)|$
+\end{defi}
+
+\begin{twierdz}[o aproksymacji naturalnym splajnem kubicznym interpolującym f] Niech $f \in C^2[a, b]$. Niech $a = x_0 < x_1 < \cdots < x_n = b$ będą węzłami równoodległymi, $x_{i+1} - x_i = h$ (dla $i=0, ..., n)$. Wtedy
+\[
+	\norm{f-s}_\infty \leq C \cdot \norm{f''}_\infty \cdot h^2 = O(h^2)
+\]
+\end{twierdz}
+
+\textbf{Dowód:}
+
+Niech $x \in [x_i, x_{i+1})$. Podstawiając to co wiemy o $s_i$ ($s_i(x) = s|_{[x_i, x_{i+1})}$) do wzoru na $s_i(x)$:
+\begin{align*}
+	s_i(x) & = a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3 \\
+	& = f(x_i) + \cfrac{f(x_{i+1}) - f(x_i)}{h}(x-x_i) + \left( c_i(x-x_i)^2 - \cfrac{h}{3}(c_{i+1}) + 2c_i) \cdot (x-x_i) + \cfrac{c_{i+1} - c_i}{3h}(x-x_i)^3 \right)
+\end{align*}
+Zauważmy, że wyrażenie w nawiasie szacuje się przez:
+\[
+	\underbrace{C}_{\textrm{pewna stała}} \cdot \max\limits_{i}|c_i| \cdot h^2
+\]
+Zatem
+\begin{align*}
+	|s_i(x) = f(x)| & = |f(x_i) + \cfrac{f(x_{i+1}) - f(x_i)}{h}(x-x_i) + \left( \begin{array}{c}\\ \cdots \end{array} \right) - f(x)| \\
+	& \leq |f(x_i) - f(x) + \cfrac{f(x_{i+1}) - f(x_i)}{h}(x-x_i) + C \cdot \max\limits_{i}|c_i| \cdot h^2| \\
+	& \leq |\underbrace{f'(\xi) \cdot (x_i - x) - f'(\nu)\cdot(x_i-x)}_{(\underbrace{f'(\xi) - f'(\nu)}_{f''(\kappa) \cdot(\xi - \nu)})\cdot(x_i-x)}| + C \cdot \max\limits_i|c_i|\cdot h^2 \\
+	& \leq \underbrace{|f''(\kappa)|}_{\norm{f''}} \cdot h^2 + C \cdot \max\limits_i |c_i| \cdot h^2
+\end{align*}
+Wystarczy więc wykazać, że $\max\limits_i |c_i| \leq const\cdot \norm{f''}$. $c = [c_1, \cdots, c_{n-1}]^T$ spełnia układ równań:
+\[
+	A \cdot c = g
+\]
+gdzie $g_i = \cfrac{3}{h} \cdot \left(\underbrace{\underbrace{\cfrac{f(x{i+1}) - f(x_i)}{h}}_{f'(\hat{\xi})} - \underbrace{\cfrac{f(x_i) - f(x_{i-1})}{h}}
+_{f'(\hat{\nu})}}_{f''(\hat{\kappa}(\hat{\xi} - \hat{\nu})} \right)$
+
+Zatem $|g_i| \leq \cfrac{3}{h} \cdot |f''(\hat{\xi_i})| \cdot |\underbrace{\hat{\xi_i} - \hat{\nu_i}}_{\leq h}| \leq 3 \cdot |f''(\hat{\kappa_i})| \leq 3 \cdot \norm{f''}$. Ale
+\[
+	c = A^{-1}\cdot g
+\]
+więc
+\[
+	\max\limits_i|c_i| = \norm{c}_\infty = \norm{A^{-1}g}_\infty \leq \norm{A^{-1}}_\infty \cdot \norm{g}_\infty
+\]
+
+\[
+	A = \left[
+		\begin{array}{ccc}
+		4 & 1 & \\
+		1 & \ddots & \ddots \\
+		& \ddots & 4
+		\end{array}
+	\right]
+	 = 4 \cdot  \left[
+		\begin{array}{ccc}
+		1 & \frac{1}{4} & \\
+		\frac{1}{4} & \ddots & \ddots \\
+		& \ddots & 1
+		\end{array}
+	\right]
+	= 4(I + \underbrace{\left[
+		\begin{array}{ccc}
+		0 & \frac{1}{4} & \\
+		\frac{1}{4} & \ddots & \ddots \\
+		& \ddots & 0
+		\end{array}
+	\right]}_{M})
+\]
+\[
+	A^{-1} = \cfrac{1}{4} (I + M)^{-1}
+\]
+$(I + M)$ jest nieosobliwe o ile $\norm{M} < 1$. Ponadto $\norm{(I+M)^{-1}}_\infty \leq \cfrac{1}{1-\norm{M}_\infty}$
+\[
+	\norm{A^{-1}}_\infty = \cfrac{1}{4} \cdot \norm{(I+M)^{-1}}_\infty \leq \cfrac{1}{4} \cdot \cfrac{1}{1-\norm{M}_\infty} = \cfrac{1}{2}
+\]
+
+%\begin{twierdz}
+%	 zostanie uzupełnione na kolejnym wykladzie
+%\end{twierdz}
 
 \printindex
 \end{document}

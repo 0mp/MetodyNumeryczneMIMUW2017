@@ -1854,7 +1854,7 @@ Zanim jednak przejdziemy do takich rzeczy jak zamiana funkcji skomplikowanych na
     \node[circle,fill,inner sep=1pt] at (2, 1) {};
     \node[circle,fill,inner sep=1pt] at (3, 3) {};
     
-    \draw  plot[smooth, tension=.5] coordinates {(0.5,2.8) (2,1) (3.3,3.85)};
+    \draw[blue]  plot[smooth, tension=.5] coordinates {(0.5,2.8) (2,1) (3.3,3.85)};
     \end{tikzpicture}
 \end{center}
 
@@ -2055,31 +2055,31 @@ $\\$
 \node (fx0n1r) at (12, 0.5) {};
 \node (fx0n2r) at (12, 1.5) {};
 
-\draw [->] (fx0) edge (fx01l);
-\draw [->] (fx1) edge (fx01l);
+\draw[gray] [->] (fx0) edge (fx01l);
+\draw[gray] [->] (fx1) edge (fx01l);
 
-\draw [->] (fx1) edge (fx12l);
-\draw [->] (fx2) edge (fx12l);
+\draw[gray] [->] (fx1) edge (fx12l);
+\draw[gray] [->] (fx2) edge (fx12l);
 
-\draw [->] (fx2) edge (fx23l);
-\draw [->] (fx3) edge (fx23l);
+\draw[gray] [->] (fx2) edge (fx23l);
+\draw[gray] [->] (fx3) edge (fx23l);
 
-\draw [->] (fxn1) edge (fxnnl);
-\draw [->] (fxn) edge (fxnnl);
+\draw[gray] [->] (fxn1) edge (fxnnl);
+\draw[gray] [->] (fxn) edge (fxnnl);
 
-\draw [->] (fx01r) edge (fx012l);
-\draw [->] (fx12r) edge (fx012l);
+\draw[gray] [->] (fx01r) edge (fx012l);
+\draw[gray] [->] (fx12r) edge (fx012l);
 
-\draw [->] (fx12r) edge (fx123l);
-\draw [->] (fx23r) edge (fx123l);
+\draw[gray] [->] (fx12r) edge (fx123l);
+\draw[gray] [->] (fx23r) edge (fx123l);
 
-\draw [->] (fx012r) edge (fx0123l);
-\draw [->] (fx123r) edge (fx0123l);
+\draw[gray] [->] (fx012r) edge (fx0123l);
+\draw[gray] [->] (fx123r) edge (fx0123l);
 
-\draw [->] (fx0123r) edge (fx01234l);
+\draw[gray] [->] (fx0123r) edge (fx01234l);
 
-\draw [->] (fx0n1r) edge (fx0nl);
-\draw [->] (fx0n2r) edge (fx0nl);
+\draw[gray] [->] (fx0n1r) edge (fx0nl);
+\draw[gray] [->] (fx0n2r) edge (fx0nl);
 
 \node at (7, 0.5) {$\cdots$};
 
@@ -2188,7 +2188,7 @@ Uogólnieniem rozpatrzonego zadania interpolacji jest zadanie interpolacji Hermi
 \draw (t2) edge (d2);
 \draw (t3) edge (d3);
 
-\draw  plot[smooth, tension=.5] coordinates {(0.5, 1.5) (1, 2) (2, 1.4) (3, 2.3) (3.5, 2)};
+\draw [blue] plot[smooth, tension=.5] coordinates {(0.5, 1.5) (1, 2) (2, 1.4) (3, 2.3) (3.5, 2)};
 \end{tikzpicture}
 
 Znaleźć wielomian $H_n(x)$ stopnia $\leq n$ taki, że
@@ -2319,7 +2319,7 @@ W ogólności, gdy rozważamy splajny interpolacyjne nieparzystego stopnia, $l=2
 	
 	\item \textbf{naturalne warunki brzegowe}
 	\[
-		s^{(k)}(a) = s^{(k)}(b) = 0 \quad k = 1, \cdots, m-1
+		s^{(k)}(a) = s^{(k)}(b) = 0 \quad k = m-1
 	\]
 	(Jak ktoś wie o co chodziło, proszę o uzupełnienie) Dlaczego naturalne warunki są naturalne? Splajny spełniają pewien specjalny warunek - splajn kubiczny minimalizuje kwadrat z drugiej pochodnej. No - co z tego można by powiedzieć. Dla nas nic, ale dla fizyka od razu coś, bo druga pochodna ma interpretację fizyczną. Krzywizna takiej krzywej jest minimalna pośród tej klasy o której myślimy. Splajn kubiczny jest najgładszy w tej klasie funkcji f. Stąd się bierze naturalny warunek brzegowy. Na krańcach funkcja jest liniowa, a jaka jest druga pochodna funkcji liniowej? Zerowa, stąd te warunki brzego nazywane są naturalnymi.
 	
@@ -2340,9 +2340,6 @@ $s \in C^2[a, b], s|_{[x_i, x_{i+1})}$ - wielomian stopnia $\leq 3$
 
 
 $s_i := s|_{[x_i, x_{i+1})}$: 
-(obrazek)
-
-
 
 \begin{tikzpicture}
 \node (v0) at (0,0) {};

@@ -25,6 +25,7 @@
 \usepackage{tikz}
 \usetikzlibrary{snakes}
 \usetikzlibrary{decorations.pathreplacing,decorations}
+\usetikzlibrary{patterns}
 
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.4em}
@@ -2303,7 +2304,7 @@ W zastosowaniach interpolacyjnych często używamy \texttt{splajnów kubicznych}
 
 \subsection{Zadanie interpolacji splajnowej} Dla zadanej funkcji $f$, znaleźć splajn $s \in S_l$ taki, że \[s(x_i) = f(x_i)\quad i=0, ..., n\]
 
-W przypadku interpolacji splajnem ``brakuje" jeszcze dwóch zależności, aby było tyle samo warunków co stponi swobody zadania.
+Te warunki dają n+1 warunków, a w przypadku interpolacji splajnem ``brakuje" jeszcze dwóch zależności, aby było tyle samo warunków co stponi swobody zadania (bo stopni swobody jest $n+2m-1$).
 
 W ogólności, gdy rozważamy splajny interpolacyjne nieparzystego stopnia, $l=2m-1$ mamy swobodę doboru $2m-2$ dodatkowych warunków. Często są to na przykład:
 
@@ -2319,13 +2320,13 @@ W ogólności, gdy rozważamy splajny interpolacyjne nieparzystego stopnia, $l=2
 	
 	\item \textbf{naturalne warunki brzegowe}
 	\[
-		s^{(k)}(a) = s^{(k)}(b) = 0 \quad k = m-1
+		s^{(k)}(a) = s^{(k)}(b) = 0 \quad k = m, \cdots, 2m-2
 	\]
 	(Jak ktoś wie o co chodziło, proszę o uzupełnienie) Dlaczego naturalne warunki są naturalne? Splajny spełniają pewien specjalny warunek - splajn kubiczny minimalizuje kwadrat z drugiej pochodnej. No - co z tego można by powiedzieć. Dla nas nic, ale dla fizyka od razu coś, bo druga pochodna ma interpretację fizyczną. Krzywizna takiej krzywej jest minimalna pośród tej klasy o której myślimy. Splajn kubiczny jest najgładszy w tej klasie funkcji f. Stąd się bierze naturalny warunek brzegowy. Na krańcach funkcja jest liniowa, a jaka jest druga pochodna funkcji liniowej? Zerowa, stąd te warunki brzego nazywane są naturalnymi.
 	
 	\item \textbf{periodyczne warunki brzegowe}
 	\[
-		s^{(k)}(a) = s^{(k)}(b)
+		s^{(k)}(a) = s^{(k)}(b) \quad k=1, \cdots, 2m-2
 	\]
 \end{itemize}
 
@@ -2412,10 +2413,10 @@ Macierzowo:
 \[
 	\left[
 		\begin{array}{ccccc}
-		4 & 1 & 0 & \cdots & 0 \\
+		4 & 1 & 0 & \cdots & 0 \\ \hline
 		1 & \ddots & \ddots & \ddots & \vdots \\
 		0 & \ddots & \ddots & \ddots & 0 \\
-		\vdots & \ddots & \ddots & \ddots & 1 \\
+		\vdots & \ddots & \ddots & \ddots & 1 \\  \hline
 		0 & \cdots & 0 & 1 & 4
 		\end{array}
 	\right]
@@ -2520,9 +2521,436 @@ $(I + M)$ jest nieosobliwe o ile $\norm{M} < 1$. Ponadto $\norm{(I+M)^{-1}}_\inf
 	\norm{A^{-1}}_\infty = \cfrac{1}{4} \cdot \norm{(I+M)^{-1}}_\infty \leq \cfrac{1}{4} \cdot \cfrac{1}{1-\norm{M}_\infty} = \cfrac{1}{2}
 \]
 
-%\begin{twierdz}
-%	 zostanie uzupełnione na kolejnym wykladzie
-%\end{twierdz}
+\begin{twierdz}[o błędzie aproksymacji interpolacja splajnem kubicznym z Hermitowskimi warunkami brzegowymi]
+	Niech $s \in S_3[a, b]$ będzie splajnem interpolacyjnym kubicznym z Hermitowskimi warunkami brzegowymi, tzn: \[s(x_i) = f(x_i) \quad i=0, ..., n\] oraz \[s'(a) = f'(a) \quad s'(b) = f'(b)\] przy czym dla urposzczenia węzły są równoodległe ($h = x_{i+1}-x_i$). Wtedy jeśli $f \in C^4[a, b]$, to: 
+	\[ 
+		\norm{f-s}_\infty \leq \cfrac{5}{384} \cdot h^4 \cdot \norm{f^{(4)}}_\infty
+	\]
+	\[ 
+		\norm{f'-s'}_\infty \leq \cfrac{1}{24} \cdot h^3 \cdot \norm{f^{(4)}}_\infty
+	\]
+	\[ 
+		\norm{f''-s''}_\infty \leq \cfrac{3}{8} \cdot h^2 \cdot \norm{f^{(4)}}_\infty
+	\]
+\end{twierdz}
+
+\subsection{Krzywe B-splajne (B-spline)}
+
+Krzywa B-sklejana jest jedną z najczęściej stosowanych reprezentacji parametrycznych krzywych sklejanych. Angielska nazwa spline wzięła się z gwary kreślarzy i odnosiła do długiej elastycznej metalowej taśmy, której używano do rysowania samolotów, samochodów, statków itp. Zawieszając odpowiednio dobrane obciążniki można było uzyskać krzywą o ciągłości geometrycznej drugiego rodzaju. Angielska nazwa krzywych B-sklejanych – B-spline jest skrótem od basis spline function, co znaczy "funkcja bazowa splajnów". Chociaż biorąc pod uwagę wykres, który wygląda jak dzwon, można też uznać, że pochodzi to od słowa ``bell" :-).
+
+\begin{defi}[nośnik funkcji]
+Niech $f: \RR \ra \RR$, określamy nośnik funkcji jako:
+\[
+	supp(f) = \{x \in \RR: f(x) \neq 0\}
+\] 
+\end{defi}
+
+\textbf{Przykład}
+
+$S_0$ - funkcje kawałkami stałe:
+
+\begin{tikzpicture}	
+	\draw (-3, -1) -- (10, -1);
+	
+	\foreach \x in {-2, -1, 0, 1, 2, 3, 4, 5, 8, 9}
+	\draw (\x,-0.8) -- (\x,-1.2);
+	\foreach \x in {-2, -1, 0, 1, 2, 3, 4, 5}
+	\node at (\x, -1.5) {$x_{\x}$};
+	
+	
+	\node at (8, -1.5) {$x_{n}$};
+	\node at (9, -1.5) {$x_{n+1}$};
+	
+	\draw (0, 0) -- (1, 0);
+	\draw (1, -2) -- (2, -2);
+	\draw (2, 0.5) -- (8, 0.5);
+	
+	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (0, 0) {};
+	\node [circle,draw=black,fill=none,inner sep=1.5pt] at (1, 0) {};
+	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (1, -2) {};
+	\node [circle,draw=black,fill=none,inner sep=1.5pt] at (2, -2) {};
+	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (2, 0.5) {};
+	\node [circle,draw=black,fill=none,inner sep=1.5pt] at (8, 0.5) {};
+\end{tikzpicture}
+
+W tej przestrzeni mogę zdefiniować bazę $B_i^0(x)$:
+
+\begin{tikzpicture}
+\draw (0,0) -- (8, 0);
+\draw (2, 2) --(2, -0.25);
+\draw[line width=3,gray] (0, 0) -- (2, 0);
+\draw[line width=3,gray] (2, 1.5) -- (4, 1.5);
+\draw[line width=3,gray] (4,0) -- (8, 0);
+
+\node at (2, -0.55) {$x_i$};
+\node at (4, -0.55) {$x_{i+1}$};
+
+\node [circle,draw=black,fill=white,inner sep=1.5pt] at (2, 1.5) {};
+\node [circle,draw=black,fill=none,inner sep=1.5pt] at (4, 1.5) {};
+
+\node [circle,draw=black,fill=white,inner sep=1.5pt] at (4, 0) {};
+\node [circle,draw=black,fill=none,inner sep=1.5pt] at (2, 0) {};
+
+\node at (1.75, 1.5) {$1$};
+\end{tikzpicture}
+
+Zauważmy, że $S_0 = span\left\{B_i^0\right\}_{i=0}^{n-1}$.
+\[
+	supp(B_i^0(x)) = [x_i, x_{i+1}) \quad \la \textrm{nośnik funkcji}
+\]
+\[
+	B_i^0(x) \geq 0
+\]
+\[
+	\sum_{i=-\infty}^{\infty} B_i^0(x) = 1
+\]
+
+Suma wygląda na nieskończoną, ale tylko pozornie. Bowiem gdy ustalę wartość $x$, to ten $x$ wpada do konkretnego jednego przedziału i wtedy w tej sumie tylko jednen składnik jest niezerowy.
+
+\textbf{Przykład} $S_1$ - funkcje ciągłe, kawałkami liniowe:
+
+\begin{tikzpicture}	
+	\draw (-3, -1) -- (8, -1);
+	
+	\foreach \x in {-2, -1, 0, 1, 2, 6, 7}
+	\draw (\x,-0.8) -- (\x,-1.2);
+	\foreach \x in {-2, -1, 0, 1, 2}
+	\node at (\x, -1.5) {$x_{\x}$};
+	
+	\node at (6, -1.5) {$x_{n}$};
+	\node at (7, -1.5) {$x_{n+1}$};
+	
+	\draw (-2, 0.5) -- (-1, 1);
+	\draw (-1, 1) -- (0, 0.6);
+	\draw (0, 0.6) -- (1, 1.1);
+	\draw (1, 1.1) -- (2, 0.5);
+	\draw (2, 0.5) -- (3, 0.5);
+	\draw[dashed] (3, 0.5) -- (4, 0.5);
+	\draw (4, 0.5) -- (5, 0.5);
+	\draw (5, 0.5) -- (6, 1);
+	\draw (6, 1) -- (7, 0.5);
+\end{tikzpicture}
+
+Baza dla tej przestrzeni funkcji:
+
+\begin{tikzpicture}
+	\draw (0,0) -- (7, 0);
+	\draw[line width=3,gray] (0, 0) -- (2, 0);
+	\draw[line width=3,gray] (2, 0) -- (3, 1.5);
+	\draw[line width=3,gray] (3, 1.5) -- (4, 0);
+	\draw[line width=3,gray] (4,0) -- (7, 0);
+
+	\draw (3, 0.1) -- (3, -0.1);
+
+	\node at (2, -0.55) {$x_i$};
+	\node at (3, -0.55) {$x_{i+1}$};
+	\node at (4, -0.55) {$x_{i+2}$};
+
+	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (2, 0) {};
+	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (3, 1.5) {};
+	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (4, 0) {};
+\end{tikzpicture}
+
+Co więcej ta baza ma podobne właśniwości jak ta z poprzedniego przykładu! 
+\[
+	supp(B_i^1(x)) = (x_i, x_{i+2})
+\]
+\[
+	B_i^1(x) \geq 0
+\]
+\[
+	\sum_{i=-\infty}^{\infty} B_i^1(x) = 1
+\]
+
+Będziemy chcieli konstruować takie bazy, ktorych nośnik funkcji jest możliwie mały. Tak więc nasz cel: skontruować bazę przestrzeni splajnów $S_k$ składającą się z funkcji o ``małym" nośniku. Np. dla $S_3$ (przestrzeni splajnów kubicznych).
+
+\begin{tikzpicture}
+	\draw (0,0) -- (8, 0);
+	%\draw[line width=3,gray] (0, 0) -- (2, 0);
+	
+	\draw[line width=3,gray] (0, 0) -- (2, 0);
+	\draw[line width=3,gray] (6, 0) -- (8, 0);
+	\draw[line width=3,gray] plot[smooth, tension=.5] coordinates {(2, 0) (2.7, 0.2) (3.6, 1.45) (4.4, 1.45) (5.3,0.2) (6, 0)};
+
+	\foreach \x in {2, 3, 4, 5, 6}
+		\draw (\x, 0.1) -- (\x, -0.1);
+
+	\node at (2, -0.55) {$x_i$};
+	\node at (3, -0.55) {$x_{i+1}$};
+	\node at (4, -0.55) {$x_{i+2}$};
+	\node at (5, -0.55) {$x_{i+3}$};
+	\node at (6, -0.55) {$x_{i+4}$};
+
+\end{tikzpicture}
+
+
+\begin{defi}
+Niech:
+\[
+	B_i^k(x) := V_i^k(x) \cdot B_i^{k-1}(x) + (1-V_{i+1}^k(x)) \cdot B_{i+1}^{k-1}(x)
+\]
+gdzie
+\[
+	V_i^k(x) := \cfrac{x-x_i}{x_{i+k} - x_i}
+\]
+Zauważmy, że $B_i^k(x)$ jest na każdym przedziale $[x_i, x_{i+1})$ wielomianem stopnia $\leq k$.
+\end{defi}
+
+\subsubsection{Własności B-splajnów}
+\begin{itemize}
+	\item \textbf{Ograniczony nośnik:}
+	
+	Jeśli $x \not\in (x_i, x_{i+k+1}$, to $B_i^k(x) = 0$.
+	
+	\begin{tikzpicture}
+		\draw (0,0) -- (5, 0);
+		\draw[line width=1.5] (0,0) -- (1, 0);
+		\draw[line width=1.5] (4,0) -- (5, 0);
+
+		\draw plot[smooth, tension=.5] coordinates {(1,0) (1.7, 1) (2.5, 0.7) (3, 1.2) (4, 0)};
+
+		\draw (1, -0.1) -- (1, 0.1);
+		\draw (4, -0.1) -- (4, 0.1);
+		\node at (1, -0.3) {$x_i$};
+		\node at (4, -0.3) {$x_{i+k+1}$};
+	\end{tikzpicture}
+	
+	\textbf{Dowód}:
+	$k = 1 \implies$ prawda
+	
+	Załóżmy, że $k-1$ - prawdziwe, czy $k$ też prawda?
+	
+	Skoro tak, to $B_i^{k-1} = 0$ dla $x \not\in (x_i, x_{i+(k-1)+1}) = (x_i, x_{i+k})$.
+	
+	$B_{i+1}^{k-1}(x) = $ dla $x \not\in (x_{i+1}, x_{i+k+1})$.
+	
+	\begin{tikzpicture}
+		\draw [->] (0,0) -- (7, 0);
+		
+		\fill [pattern=north east lines, pattern color=black] (-1,0.8) rectangle (1,0);
+		\draw (-1,0.8) -- (1, 0.8);
+		\draw (1, 0.8) -- (1,-0.15);
+		
+		\draw (-0.8, 0.5) -- (2, 0.5);
+		\draw (2, 0.5) -- (2, -0.15);
+		
+		\fill [pattern=north east lines, pattern color=black] (8,0.8) rectangle (6,0);
+		\draw (8,0.8) -- (6, 0.8);
+		\draw (6, 0.8) -- (6,-0.15);
+		
+		\draw (5, 0.5) -- (7.5, 0.5);
+		\draw (5, 0.5) -- (5, -0.15);
+		
+		\node at (1, -0.3) {$x_i$};
+		\node at (2, -0.3) {$x_{i+1}$};
+		\node at (5, -0.3) {$x_{i+k}$};
+		\node at (6, -0.3) {$x_{i+k+1}$};
+	\end{tikzpicture}
+	
+	Więc ich kombinacja liniowa równa się $0$ dla $x \not\in (x_i, x_{i+k+1})$.
+	
+	\item Obliczanie wartości $\sum_{i=-\infty}^{\infty} c_i \cdot B_i^k(x)$ dla wskazanego $x$. Zwróćmy uwagę, że znów dzięki temu że funkcje bazowe mają ograniczony nośnik to dla ustalonego $x$ jest tylko skończona liczba funkcji, gdzie składnik sumy jest niezerowa. Dlatego nieskońćzona suma zredukuje się do skończonej sumy, bo pozostałe składniki są mnożone przez $0$.
+	
+	Zauważmy, że:
+	\[
+		\sum_{i=-\infty}^{\infty} c_i^k B_i^k(x) = \sum_{i=-\infty}^{\infty}(\underbrace{c_i^k V_i^k(x) + c_{i-1}^k(1-V_i^k(x))}_{c_i^{k-1}}) \cdot B_i^{k-1}(x)
+	\]
+%	Rzeczywiście:
+%	\[
+%		\sum c_i B_i^k(x) = \sum c_i(V_i^k \cdot )
+%	\]
+\end{itemize}
+
+\begin{wniosek}[Algorytm (de Boor'a) obliczania wartości s(x)]
+	\[
+		s(x) = \sum_{i=-\infty}^{+\infty} c_i^kB_i^k(x)
+	\]
+	Niech $c_i^{k-1} = c_i^k \cdot V_i^k(x) + c_{i-1}^k(1- V_i^k)$. Zatem
+	\[
+		S(x) = \sum c_i^k\cdot B_i^k(x) = \sum c_i^{k-1} \cdot B_i^{k-1}(x) = \cdots = \sum c_i^0 B_i^0(x)
+	\]
+	A $B_i^0$ już znamy. Jeśli więc $x \in [x_m, x_{m+1})$, to $\sum c_i^0 B_i^0(x) = c_m^0$. Algorytm:
+	
+	\begin{tikzpicture}
+		\node[anchor=west] at (0, 4) {$c_{m}^{k}$};
+		\node[anchor=west] at (0, 3) {$c_{m-1}^{k}$};
+		\node[anchor=west] at (0, 2) {$c_{m-2}^{k}$};
+		\node[anchor=west] at (0, 1) {$\ \ \vdots$};
+		\node[anchor=west] at (0, 0) {$c_{m-k}^{k}$};
+		
+		\node[anchor=west] at (2.5, 4) {$c_{m}^{k-1}$};
+		\node[anchor=west] at (2.5, 3) {$c_{m-1}^{k-1}$};
+		\node[anchor=west] at (2.5, 1) {$c_{m-k+1}^{k-1}$};
+		
+		
+		\node at (9, 4) {$c_{m}^{1}$};
+		\node at (9, 3) {$c_{m-1}^{1}$};
+		\node at (12, 4) {$c_{m}^{0}=s(x)$};
+		
+		\node (cmkr) at (1, 4) {};
+		\node (cm1kr) at (1, 3) {};
+		\node (cm2kr) at (1, 2) {};
+		\node (cm3kr) at (1, 1) {};
+		\node (cmkkr) at (1, 0) {};
+		
+		\node (cmk1l) at (2.6, 4) {};
+		\node (cm1k1l) at (2.6, 3) {};
+		\node (cm3k1l) at (2.6, 1) {};
+		
+		\node (cmk1r) at (3.7, 4) {};
+		\node (cm1k1r) at (3.7, 3) {};
+		\node (cm3k1r) at (3.7, 1) {};
+		
+		\node (cm1l) at (8.5, 4) {};
+		\node (cm11l) at (8.5, 3) {};
+		
+		\node (cm1r) at (9.5, 4) {};
+		\node (cm11r) at (9.5, 3) {};
+		\node (cm0l) at (11.2, 4) {};
+		
+		\draw [->] (cmkr) -- (cmk1l);
+		\draw [->] (cm1kr) -- (cmk1l);
+		\draw [->] (cm1kr) -- (cm1k1l);
+		\draw [->] (cm2kr) -- (cm1k1l);
+		\draw [->] (cm3kr) -- (cm3k1l);
+		\draw [->] (cmkkr) -- (cm3k1l);
+		
+		\draw [->] (cmk1r) -- (5, 4);
+		\draw [->] (cm1k1r) -- (5, 3.9);
+		\draw [->] (cm1k1r) -- (5, 3);
+		\draw [->] (cm3k1r) -- (5, 1.55);
+		
+		\draw [->] (cm1r) -- (cm0l);
+		\draw [->] (cm11r) -- (cm0l);
+		
+		\draw [->] (7, 4) -- (cm1l);
+		\draw [->] (7, 3.05) -- (cm1l);
+		\draw [->] (7, 3) -- (cm11l);
+		\draw [->] (7, 2.4) -- (cm11l);
+		
+		\draw [dashed] (5.3, 4) -- (6.7, 4);
+		\draw [dashed] (5.3, 3) -- (6.7, 3);
+		\draw [dashed] (5.3, 1.69) -- (6.7, 2.26);
+		
+	\end{tikzpicture}
+\end{wniosek}
+
+\subsubsection{Unormowanie B-splajnów}
+Unormowanie B-splajnów: 
+\[
+	\sum_{i=-\infty}^{\infty} B_i^k(x) \equiv 1
+\]
+
+\textbf{Dowód:}
+\[
+\sum 1 \cdot B_i^k(x) = \sum \underbrace{(1 \cdot V_i^k(x) + 1 \cdot (1-V_i^k(x))}_{=1} \cdot B_i^{k-1}(x) = \sum B_i^{k-1}(x)
+\]
+Dowód przez indukcję.
+
+\begin{fakt}[Pochodna B-splajnu]
+	\[
+		\cfrac{d}{dx} B_i^k(x) = k \cdot (\alpha_i^k \cdot B_i^{k-1}(x) - \alpha_{i+1}^k \cdot B_{i+1}^{k-1}(x))
+	\]
+	gdzie
+	\[
+		\alpha_i^k := \cfrac{d}{dx}V_i^k(x) = \cfrac{1}{x_{i+k} - x_i}
+	\]
+\end{fakt}
+\begin{wniosek}
+	\[
+		\cfrac{d}{dx}(\sum_{i=-\infty}^{\infty} c_i B_i^k(x)) = k \cdot \sum_{i=-\infty}^{\infty} \cfrac{c_i - c_{i-1}}{x_{i+k}-x_i} \cdot B_i^{k-1}(x)
+	\]
+	co można też obliczyć algorytmem de Boor'a
+\end{wniosek}
+\begin{wniosek}
+	Dla $k \geq 1$, $B_i^k \in C^{k-1}(\RR)$ (czyli B-splajny rzeczywiście są splajnami)
+\end{wniosek}
+
+\begin{twierdz}
+	Funkcje $\{B_{-k}^k, B_{-k+1}^k, \cdots, B_{n-1}^{k}\}$ tworzą bazę splajnów $S_k$ na przedziale $[a, b]$ ($a = x_0 < x_1 < \cdots < x_n = b$)
+\end{twierdz}
+\begin{wniosek}
+	Jeśli $s \in S_k$, to istnieją $\{c_i\}$ takie, że:
+	\[
+		s(x) \equiv \sum_{i=-k}^{n-1} c_i \cdot B_i^k(x)
+	\]
+\end{wniosek}
+
+
+\section{Całkowanie i różniczkowanie numeryczne}
+
+Treść dostępna dla użytkowników SKRYPT-PREMIUM. Adres portfela bitcoin: (todo).
+
+\chapter{Appendix A}
+Czyli wszystko co nie pasuje do poprzednich rozdziałów i nie będzie na egzaminie.
+\section{Krzywe Bézier'a}
+	Rozważmy krzywą wielomianową $p: [0, 1] \ra \RR^d$ ($d \in \{1, 2, 3\}$).
+	\[
+		p(t) = \sum_{i=0}^n d_i \cdot t^i \quad a_n \neq 0
+	\]
+	\[
+		d_i \in \RR^d
+	\]
+
+Krzywa Béziera: reprezentacja tej krzywej w bazie wielomianów Bernsteina.
+\begin{defi}
+	 Wielomian Bernsteina:
+	 \[
+	 	B_i^n(t) := \binom{n}{i} (1-t)^{n-i} t^i \quad i=0, \cdots, n
+ 	\]
+\end{defi}
+
+\begin{fakt}[o wielomianie Bernsteina]
+
+	\begin{itemize}	
+		\item $B_i^n \geq 0$ na $[0, 1]$
+		\item $\sum B_i^n = 1$ na $\RR$
+		\item $B_i^n(t) = t\cdot B_{i-1}^{n-1}(t) + (1-t) \cdot B_i^{n-1}(t) \quad \quad \quad (B_0^0 = 1, B_{-1}^n = B{n+1}^n = 0)$
+		\item $\{B_i^n\}$ tworzą bazę wielom. stopnia $\leq n$.
+	\end{itemize}
+\end{fakt}
+
+\begin{defi}[Krzywa Bézier'a]
+	\[
+		p(t) = \sum_{i=0}^n b_i \cdot B_i^n(t)
+	\]
+\end{defi}
+
+\begin{fakt}
+	\[
+		p(0) = b_0
+	\]
+	\[
+		p(1) = b_n
+	\]
+\end{fakt}
+
+\begin{fakt}
+	$p(t)$ leży w otoczce wypukłej punktów kontrolnych $b_0, \cdots, b_n \in \RR^d$
+\end{fakt}
+
+\begin{fakt}
+	$\cfrac{d}{dt} B_i^n(t) = n \cdot (B_{i-1}^{n-1}(t) - B_i^{n-1}(t))$, skąd wynika, że:
+	\[
+		\cfrac{d}{dt} p(t)|_{t=0} = n \cdot (b_1 - b_0)
+	\]
+	\[
+		\cfrac{d}{dt} p(t)|_{t=1} = n \cdot (b_n - b_{n-1})
+	\]
+\end{fakt}
+
+\begin{tikzpicture}
+	\node (b0) at (0, 0) {$b_0$};
+	\node (bn) at (6, 0) {$b_3$};
+	\node (b1) at (1.5, 2) {$b_1$};
+	\node (bn1) at (4.5, 2) {$b_2$};
+
+	\draw (b0) .. controls (b1) and (bn1) .. (bn);
+	
+	\draw [->] (b0) -- (b1);
+	\draw [->] (bn) -- (bn1);
+
+\end{tikzpicture}
 
 \printindex
 \end{document}

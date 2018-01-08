@@ -2876,6 +2876,291 @@ Dowód przez indukcję.
 	\]
 \end{wniosek}
 
+\section{Aproksymacja funkcji}
+Dziś postaramy odpowiedzieć na pytanie: ``jak najlepiej aproksymować funkcje"?
+
+\textbf{Zadanie najlepszej aproksymacji}
+
+$f \in F \la \textrm{przestrzeń unormowana (bo musimy jakoś liczyć ten błąd}$
+
+Szukamy $v^\star \in V \subset F$, który najlepiej przybliża $f$ wśród wszystkich elementów z $V$.
+
+Najlepiej przybliża, tzn. błąd aproksymacji $f$ przez $v$ będzie najlepszy możliwy: $\norm{f-v^\star} \leq \norm{f-v} \quad \forall_{v \in V}$. Wtedy $v^\star$ to element najlepszej aproksymacji (ENA). Nie wiemy czy taki element istnieje ani czy jest jeden lub więcej.
+
+\begin{fakt} Jeśli $F$ - przestrzeń liniowa, $V \subset F$ jest jej podprzestrzenią liniową skończonego wymiaru, to dla każdego $f \in F$ istnieje ENA $v^\star \in V$.\end{fakt}
+
+\textbf{Przykład:}
+
+$F = C^0(a, b) \la \textrm{klasa funkcji ciągłych w [a, b]}$
+
+Jest to oczywiście przestrzeń liniowa. Zatem mówimy o ``aproksymacji funkcji ciągłej na [a, b]". Jakie wybrać $V$? Mamy dużo możliwości:
+\[
+	V := \left\{ \begin{array}{ll}
+		\mathbb{P}_1 & \textrm{przestrzeń liniowa wielom. stopnia} \leq n \\
+		S^l & \textrm{przestrzeń liniowa splajnów stopnia} \leq l\textrm{ opartych na węzłach }x_1, ..., x_n\\
+		\{\sum_{i=0}^{n} \alpha_i e^{-\beta_j * t} : \alpha_i \in \RR\} & gdzie\ 0 \leq \beta_0 < ... < \beta_n \\
+		gdy\ [a, b] = [0, 2\pi] & V = span\{1, \sin{t}, \cos{t}, \sin{2t}, \cos{2t}, \cdots, \sin{nt}, \cos{nt} \} \quad \textrm{przestrzeń wielomianów trygonometrycznych}
+   \end{array}\right.
+\]
+
+Po co w ogóle robić? Bo $F$ to przestrzeń nieskończonego wymiaru, a wszystkie przedstawione podprzestrzenie $V$ są skończonego wymiaru i można je łatwiej określać, prośćiej liczyć, wygodnie przechowywać w komputerze i wiele innych zalet.
+
+Musimy zdecydowań się na jakąś normę i znowu mamy tutaj wiele możliwości, np.
+
+\[
+	\begin{array}{l|l}
+		nazwa & wzor \\ \hline
+		L^1(a, b) & \norm{f}_1 := \int_a^b |f(t)| dt \\
+		L^2(a, b) & \norm{f}_2 := \sqrt{\int_a^b |f(t)|^2 dt} \\
+		C^0(a, b) & \norm{f}_\infty := \max_{i \in [a, b]} |f(t)| \\
+		L^2_\rho(a, b) & \norm{f}_{2, \rho} := \sqrt{\int_a^b |f(t)|^2 \rho(t) dt} \quad \rho(t) > 0\ na\ [a, b] \\ \hline
+		\multicolumn{2}{l}{\textrm{ustalone punkty }t_0, \cdots, t_N} \\ \hline
+		l_1\ dyskretna & \sum_{i=0}^N |f(t_i)| \\
+		l_2\ dyskretna & \sqrt{\sum_{i=0}^N |f(t_i)|^2} \\
+		l_\infty\ dyskretna & \max_{i} |f(t_i)| \\
+		l_2\ dyskretna ?? & \sqrt{\sum_{i=0}^N \rho(t_i) |f(t_i)|^2} ???
+	\end{array}
+\]
+
+Te wzory oczywiście różnią się od siebie:
+
+\begin{tikzpicture}
+
+\end{tikzpicture}
+
+$v_1$ ``dobrze" aproksymuje funkcję $f$ w normie $L^2$ (bo mam całkować kwadrat różnicy. I mimo dużej różnicy na małym przedziale, to ze względu na małą miarę tego przedziału i tak norma daje przyzwoity wynik). Ale jednocześniej $v_1$ źle aproksymuje $f$ w normie supremum, bo na tym małym przedziale różnica jest ogromna. Mało tego! Ta funkcja $v_1$ lepiej aproksymuje w normie $L^2$ niż funkcja $v_2$, ale jednocześniej $v_2$ lepiej aproksymuje $f$ niż $v_1$ w normie supremum!
+
+\textrm{Aproksymacja w przestrzeni unitarnej}
+
+Niech $H$ - przestrzeń liniowa z iloczynem skalarnym $(x, y)$ dla $x, y \in H$ (np. $H:=\RR^n \quad (x, y) := x^Ty = \sum_i^n x_i, y_i$)
+
+(np. $H:=C^0[a, b] \quad (f, g) := \int_a^b f(t)g(t) dt$)
+
+Ten iloczyn skalarny indukuje w $H$ normę:
+\[
+	\norm{f} = \sqrt{(f, f)}
+\]
+
+\begin{twierdz}[o charakteryzacji ENA w przestrzeni unitarnej]
+Niech $V \subset H$ będzie podprzestrzenią liniową w $H$. $v^\star \in V$ jest ENA dla $f \in H \iff (f-v^\star, v) = 0 \ \forall_{v \in V}$ 
+\end{twierdz}
+
+(mini ryunek przestrzeni i prostopadłego wektora)
+
+\textbf{Dowód:} ``$\impliedby$"
+
+Dla dowolnego $v \in V$:
+\[
+	\begin{array}{rl}
+	\norm{f-v}^2 & = \norm{f - v^\star + \underbrace{v^\star - v}_{w \in V}}_2^2 \\
+	& = (f-v^\star + w, f-v^\star + w) \\
+	& = (f-v^\star, f-v^\star) + (w, f-v^\star) + (f-v^\star, w) + (w, w) \\
+	& = \norm{f-v^\star}^2 + \underbrace{\norm{w}^2}_{\geq 0} + 2\underbrace{(w, f-v^\star)}_{=0} \\
+	& \geq \norm{f-v^\star}^2
+	\end{array}
+\]
+
+``$\implies$"
+
+Weźmy $h \in V$ oraz $\lambda > 0$.
+\[
+	\begin{array}{rl}
+	\norm{f-v^\star}^2 & \leq \norm{f-v^\star + \lambda*h}^2 \\
+		& = \norm{f-v^\star}^2 + \lambda^2\norm{h}^2 + 2\lambda(f-v^\star, h)
+	\end{array}
+\]
+Stąd:
+\[
+	0 \leq \lambda * \norm{h}^2 + 2(f-v^\star, h)
+\]
+Biorąc $\lambda \searrow 0$ dostajemy $0 \leq 2(f-v^\star, h)$
+
+Biorąc zamiast $h$ wektor $-h$ dostajemy: $0 \leq \lambda \norm{h}^2 - 2(f - v^\star, h)$
+
+$\lambda \searrow 0 \implies$
+\[
+	0 \leq -2(f-v^\star, h)
+\] 
+czyli
+\[
+ 	(f - v^\star, h) \leq 0
+\]
+Skąd
+\[
+	(f-v^\star, h) = 0 \quad \forall_{h \in V}
+\]
+
+Bycie optymalnym oznacza, że wektor błędu jest prostopadły do tej przesrzeni. Tt wygląda jak ciekawostka teoretyczna, ale to prowadzi do algorytmu!
+
+\begin{wniosek}
+	Jeżeli $V$ jest skończonego wymiaru to ENA istnieje i jest jedyny. Gdy $\{v_i\}^n_{i=0}$ są bazą przestrzeni $V$, to $v^\star = \sum_{i=1}^n \alpha_i^\star v_i$ i współczynniki $\{\alpha_i^\star\} istneieją?$
+\end{wniosek}
+
+\[
+	\left[
+		\begin{array}{ccc}
+		(v_1,v_1) & \cdots & (v_1, v_n) \\
+		\vdots & (v_i, v_j) & \vdots \\
+		(v_, v_i) & \cdots & (v_n, v_n)
+		\end{array}
+	\right]
+	\cdot
+	\left[
+		\begin{array}{c}
+		\alpha_1^\star \\ \vdots \\ \alpha_n^\star
+		\end{array}
+	\right]
+	=
+	\left[
+		\begin{array}{c}
+		(f, v_1) \\
+		\vdots \\
+		(f, v_n)
+		\end{array}
+	\right]
+\]
+(układ równań normalnych)
+
+Dowód:
+\[
+	(f- v^\star, v) = 0 \quad \forall_{v \in V}
+\]
+Zatem także dla $v = v_j$:
+\[
+	(f-v^\star, v_j) = 0 \quad \forall_{j = 1, \cdots, n}
+\]
+\[
+	\underbrace{(\sum \alpha_i^\star *v_i, v_j)]}_{\sum \alpha_i^\star(v_i, v_j)} = (v^\star, v_j) = (f, v_j) \quad \textrm{Układ h równań z n niewiadomymi}
+\]
+
+Macierz $\left[ \begin{array}{c} (v_i, v_j) \end{array} \right]_{i, j=1}^n$ jest
+\begin{itemize}
+	\item symetryczna
+	\item dodatnio określona (jako macierz Gramma)
+\end{itemize}
+
+Układ ma więc dokładnie 1 rozwiązanie.
+
+\textbf{Uwaga} Macierz Gramma jest zazwyczaj gęsta i w wielu przypadkach źle uwarunkowana. Jest SPD (symetryczna i dodatnio określona)), więc zadziała algorytm Choleskiego (koszt $O(n^3)$).
+
+Możemy uprościć zadanie wyznaczania ENA przez odpowowiedni dobór bazy:
+
+Wybierając bazę orogonalną w $V$:
+\[
+	V = span\{p_i, p_j\} = 0 \quad dla\ i \neq j
+\]
+Dostajemy macierz Gramma (diagonalną)
+\[
+	\left[
+		\begin{array}{ccc}
+		(p_1,p_1) &  &  \\
+		 & \ddots & \\
+		 &  & (p_n, p_n)
+		\end{array}
+	\right]
+\]
+i w konsekwencji:
+\[
+	v^\star = \sum_{i=1}^n \cfrac{(f, p_i)}{(p_i, p_i)}p_i
+\]
+Gdyby dodatkowo $\{p_i\}$ były unormowane, $\norm{p_i} = 1$ to wtedy ENA jest dana:
+\[
+	v^\star = \sum_{i=1}^{n}(f, p_i) \cdot p_i
+\]
+
+Tylko czy łatwo wybrać bazę ortogonalną w przestrzeni wielomianów?
+
+\subsection{Wielomiany ortogonalne}
+
+Zrobimy to dla przypadku iloczynu skalarnego w $L^2_\rho(a, b)$: $(f, g) = \int_a^b f(x)g(x)\rho(x)dx$
+
+$\rho$ - funkcja wagowa $\rho > 0$ na $[a, b]$, $\norm{f}_{2, \rho} = \sqrt{(f, f)}$
+
+\begin{twierdz}[formuła trójczłonowa]
+	Wielomiany $\{P_k\}$, $k = 0, 1, ...$ postaci
+	\[
+		P_k = x^k + ...\textrm{(niższe potęgi)}...
+	\]
+	wyrażają się wzorem:
+	\[
+		P_k(x) = (x + \beta_k) \cdot P_{k-1}(x) + \gamma_k \cdot P_{k-2}(x) \quad k=1, 2, ...
+	\]
+	\[
+		P_{-1}(x) \equiv 0, \quad P_0(x) \equiv 1
+	\]
+\end{twierdz}
+
+\textbf{Dowód:} Oczywiście $P_k$ jest postaci $x^k + ...$. Weźmy wielomian $w_k = P_k - x * P_{k-1}$. $w_k$ jest wielomianem stopnia $\leq k$. Ponieważ $x \cdot P_{k-1}$ jest stopnia dokładnie $k$, więc 
+\[
+	\begin{array}{cc}
+	x \cdot P_{k-1}(x) & = \sum_{j=0}^k \alpha_{kj} P_j(x) \\
+		& = P_k(x) + \alpha_{k, k-1} P_{k-1}(x) + \alpha_{k, k-2}P_{k-2}(x) + ...
+	\end{array}
+\]
+Skąd
+\[
+	\alpha_{k, j} = \cfrac{(x \cdot P_{k-1}, P_j)}{(P_j, P_j)}
+\]
+ale:
+\[
+	\begin{array}{cc}
+		(x \cdot P_{k-1}, P_j) & = \int_a^b x \cdot P_{k-1}(x) \cdot P_j(x) \cdot \rho(x) dx \\
+		& = \int_a^b P_{k-1}(x) \cdot x P_k(x) \rho (x) dx  \\
+		& = (P_{k-1}, x\cdot P_j)
+	\end{array}
+\]
+
+Więc:
+\[
+	\alpha_{k, j} = \cfrac{(P_{k-1}, x \cdot P_j)}{\norm{P_j}^2}
+\]
+Więc
+\[
+	\alpha_{k, j} = 0 \quad gdy\ k-1 >j+1, to\ j < k-2
+\]
+To oznacza, że
+\[
+	x \cdot P_{k-1}(x) = P_k + \alpha_{k, k-1} P_{k-1} + \alpha_{k, k-2} \cdot P_{k-2} = \beta_k
+\]
+
+\subsection{Przykłady}
+
+\subsubsection{Wielomiany Legendre'a}
+
+ortogonalne w $L^2(-1, 1)$
+\[
+	L_k(x) = \cfrac{2k-1}{k} \cdot x \cdot L_{k-1} - \cfrac{k-1}{k}L_{k-2}
+\]
+\[
+	\norm{L_k}^2 = \cfrac{2}{2k+1}
+\]
+
+\subsubsection{Wielomiany Hermite'a}
+\[
+L_\rho^2(-\infty, \infty)
+\]
+\[
+H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
+\]
+\[
+	H_0(x) \equiv 1
+\]
+\[
+	\norm{H_k}^2 = \sqrt{\pi} 2^k k!
+\]
+\subsubsection{Wielomimany Czebyszewa}
+\[
+	L_\rho^2(-1, 1) \quad \rho(x) = \cfrac{1}{\sqrt{1-x^2}}
+\]
+\[
+	T_k(x) = 2xT_{k-1}(x) - T_{k-2}(x)
+\]
+\[
+	T_0(x) \equiv 1
+\]
+\[
+	\norm{T_k}^2 = \left\{ \begin{array}{rl} \frac{\pi}{2} & k = 1, 2, ... \\ \pi & k = 0\end{array}\right.
+\]
 
 \section{Całkowanie i różniczkowanie numeryczne}
 

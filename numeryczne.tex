@@ -2206,12 +2206,12 @@ To zadanie także ma dokładnie jedno rozwiązanie.
 
 \textbf{Błąd interpolacji:}
 \[
-f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
+f(x) - H_m(x) = \cfrac{f^{m+1}(\xi)}{(m+1)!}w(x)
 \]
 \[
 	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
 \]
-Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych.
+Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
 
 \section{Interpolacja funkcjami sklejanymi (splajny)}
 Spójrzmy na interpolację wielomianową w węzłach równoodległych funkcji $f(x) = \cfrac{1}{1+x^2}$

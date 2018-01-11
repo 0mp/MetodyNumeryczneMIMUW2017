@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[hmargin=2.4cm,vmargin=2.4cm]{geometry}
 \usepackage{amsfonts}
+\usepackage[makeroom]{cancel}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{polski}
 \usepackage{ulem}
@@ -858,7 +859,7 @@ to
 	\frac{\norm{x - \tilde{x}}}{\norm{x}} \leq 4 \cdot cond(A) \cdot \varepsilon
 \]
 
-Dowód:
+\begin{proof}
 
 $(A + \Delta)\tilde{x} = Ax + \delta$
 
@@ -869,6 +870,8 @@ $A(\tilde{x} - x) = \delta - \Delta \tilde{x} = \delta - \Delta(\tilde{x} - x) -
 $(A+\Delta)(\tilde{x} - x) = \delta - \Delta \cdot x$
 
 $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A + \Delta)^{-1}} \cdot \norm{\delta - \Delta}$
+
+\end{proof}
 
 \begin{lemat} Jeśli $\norm{B} < 1$, to macierz $I + B$ jest odwracalna oraz
 	\[
@@ -1431,18 +1434,20 @@ kolumny $V$ - prawe wektory szczególne
 		 			
 		\item Wartość własna $A^TA$ to $\sigma_i^2$.
 		       			
-		      Dowód: $A^TA = (U_1\Sigma V^T)^T(U_1 \Sigma_1 V^T) = V \Sigma_1 \underbrace{U_1^T U_1 \Sigma_1 V^T}_{I} = V \Sigma_1^2V^T$, $\Sigma_1^2 = \begin{bmatrix}
+	      \begin{proof}
+	       	$A^TA = (U_1\Sigma V^T)^T(U_1 \Sigma_1 V^T) = V \Sigma_1 \underbrace{U_1^T U_1 \Sigma_1 V^T}_{I} = V \Sigma_1^2V^T$, $\Sigma_1^2 = \begin{bmatrix}
 		      \lambda_1^2 & 0 & 0\\ 
 		      0 & \ddots^2 & 0\\ 
 		      0 & 0 & \lambda_n^2 
-		\end{bmatrix}$.
+			\end{bmatrix}$.
+		\end{proof}
 				
 		\item $AA^T$ jej wartość własna to $\sigma_1^2, ..., \sigma_m^2$ i $(n-m)$ zer.
 		      Dowód: analogicnzie jak 2.
 		      		
 		\item Jeśli $A$ - pełnego rzędu, to rozwiązaniem LZNK $\norm{b - AX}_2 \ra min!$ jest $x = V\Sigma_1^{-1} U_1^Tb$.
 		      		
-		      Dowód:
+		      \begin{proof}
 		      \[
 		      	\norm{b - U\Sigma V^Tx} _2 ^2 = \norm{U(U^Tb - \Sigma V^Tx)}_2^2 = \norm{U^Tb - \Sigma V^Tx}_2^2 =
 		      	\]
@@ -1460,6 +1465,7 @@ kolumny $V$ - prawe wektory szczególne
 		      \]
 		      
 		      zeruje pierwszy składnik (czyli jak rozwiązanie LZNK)
+		      \end{proof}
 	\end{enumerate}
 \end{fakt}
 
@@ -1760,7 +1766,7 @@ Niech $\tilde{\lambda}$ - w. własna macierzy zaburzonej $\tilde{A} = A + \Delta
 \begin{wniosek}
 	Jeśli $A$ - symetryczna, to $min_i |\lambda_i - \tilde{\lambda}| \leq \norm{\delta}_2$
 	
-	Dowód: Wynika stąd, że $Q^TAQ = \Lambda$, gdzie $Q$ - macierz ortogononalna: $Q^TQ = I$. Zatem $cond_2(Q) = 1$.
+	\begin{proof} Wynika stąd, że $Q^TAQ = \Lambda$, gdzie $Q$ - macierz ortogononalna: $Q^TQ = I$. Zatem $cond_2(Q) = 1$.\end{proof}
 \end{wniosek}
 
 \subsection{Metoda QR wyznaczania wszystkich wartości własnych macierzy}
@@ -1866,7 +1872,7 @@ Niech będą dane węzły interpolacji $a = x_0 < x_1 < x_2 < \cdots < x_n = b$ 
 w(x_i) = y_i \quad dla\ i = 0, \cdots, n
 \]
 \end{twierdz}
-\textbf{Dowód:}
+\begin{proof}
 
 Weżmy dowolną bazę przestrzeni wielomianów stopnia $\leq n$ - $\{\phi_0, \cdots, \phi_n\}$. Wtedy $w(x) = \sum_{i=0}^{n} \alpha_i \phi_i(x)$ i warunki interpolacji dają:
 \[
@@ -1903,6 +1909,7 @@ układ (n+1) równań liniowych z (n+1) niewiadomymi (układ $\star$):
 \right]
 \]
 Aby wykazać, że układ ten ma jednoznaczne rozwiązanie wystarczy, aby wektor zerowy był jedynym rozwiązaniem układu jednorodnego. Jeśli więc $y_i = 0$, dla $i = 0, \cdots, n$ to $w(x_i) = 0$ dla $i = 0, \cdots, n$. Zatem $w(\cdot)$ ma $(n+1)$ zer więc $w \equiv 0$, bo jest wielomianem stopnia $\leq n$.
+\end{proof}
 
 Uwagi:
 \begin{itemize}
@@ -2099,7 +2106,7 @@ $\\$
 Ten algorytm można wykonywać in situ\footnote{(łac.) w miejscu}.
 \end{wniosek}
 
-\textbf{Dowód:}
+\begin{proof}
 
 Przez indukcję - wystarczy pokazać, że jeśli jest to prawda dla $k = n-1$, to też dla $k=n$. Niech $p_k$ - wielomian interpolujący Lagrange'a (stopnia $\leq k$) interpolujący $f$ w węzłach $x_0, \cdots, x_k$. Niech $q$ - wielomian interpolacyjny Lagrange'a (stopnia $\leq n-1$) dla węzłów $x_1, \cdots, x_n$. Wtedy:
 \[
@@ -2112,6 +2119,8 @@ Rzeczywiście:
 	\vdots & \\
 	p_n(x_0) &= q(x_0) + \cfrac{x_0-x_n}{x_n-x_0}(q(x_0) - p_{n-1}(x_0)) = f(x_0)
 \end{align*}
+
+\end{proof}
 
 Co można powiedzieć gdy mam reprezentacje takich dwóch wielomianów? W wielomianie $p_n(x)$ (albo $p_1$??) współczynnik przy $x^n$ jest równy $b_n = f[x_0, \cdots, x_n]$. Natomiast współczynnik przy $x^n$ w wielomianie po drugiej stronie $(\star\star): q(x) + \frac{x-x_n}{x_n-x_0}(q(x) - p_n(x))$. Rozpisując $q$ i $p_{n-1}$ w bazie Newtona:
 \begin{align*}
@@ -2718,7 +2727,7 @@ Zauważmy, że $B_i^k(x)$ jest na każdym przedziale $[x_i, x_{i+1})$ wielomiane
 		\node at (4, -0.3) {$x_{i+k+1}$};
 	\end{tikzpicture}
 	
-	\textbf{Dowód}:
+	\begin{proof}
 	$k = 1 \implies$ prawda
 	
 	Załóżmy, że $k-1$ - prawdziwe, czy $k$ też prawda?
@@ -2751,6 +2760,7 @@ Zauważmy, że $B_i^k(x)$ jest na każdym przedziale $[x_i, x_{i+1})$ wielomiane
 	\end{tikzpicture}
 	
 	Więc ich kombinacja liniowa równa się $0$ dla $x \not\in (x_i, x_{i+k+1})$.
+	\end{proof}
 	
 	\item Obliczanie wartości $\sum_{i=-\infty}^{\infty} c_i \cdot B_i^k(x)$ dla wskazanego $x$. Zwróćmy uwagę, że znów dzięki temu że funkcje bazowe mają ograniczony nośnik to dla ustalonego $x$ jest tylko skończona liczba funkcji, gdzie składnik sumy jest niezerowa. Dlatego nieskońćzona suma zredukuje się do skończonej sumy, bo pozostałe składniki są mnożone przez $0$.
 	
@@ -2844,11 +2854,12 @@ Unormowanie B-splajnów:
 	\sum_{i=-\infty}^{\infty} B_i^k(x) \equiv 1
 \]
 
-\textbf{Dowód:}
+\begin{proof}
 \[
 \sum 1 \cdot B_i^k(x) = \sum \underbrace{(1 \cdot V_i^k(x) + 1 \cdot (1-V_i^k(x))}_{=1} \cdot B_i^{k-1}(x) = \sum B_i^{k-1}(x)
 \]
 Dowód przez indukcję.
+\end{proof}
 
 \begin{fakt}[Pochodna B-splajnu]
 	\[
@@ -2914,8 +2925,8 @@ Musimy zdecydowań się na jakąś normę i znowu mamy tutaj wiele możliwości,
 	\begin{array}{l|l}
 		nazwa & wzor \\ \hline
 		L^1(a, b) & \norm{f}_1 := \int_a^b |f(t)| dt \\
-		L^2(a, b) & \norm{f}_2 := \sqrt{\int_a^b |f(t)|^2 dt} \\
-		C^0(a, b) & \norm{f}_\infty := \max_{t \in [a, b]} |f(t)| \\
+		L^2(a, b) & \norm{f}_2 := \sqrt{\int_a^b |f(t)|^2 dt} \textrm{(aproksymacja średniokwadratowa)} \\
+		C^0(a, b) & \norm{f}_\infty := \max_{t \in [a, b]} |f(t)| \textrm{(aproksymacja jednostajna)}\\
 		L^2_\rho(a, b) & \norm{f}_{2, \rho} := \sqrt{\int_a^b |f(t)|^2 \rho(t) dt} \quad \rho(t) > 0\ na\ [a, b] \\ \hline
 		\multicolumn{2}{l}{\textrm{ustalone punkty }t_0, \cdots, t_N} \\ \hline
 		l_1\ dyskretna & \sum_{i=0}^N |f(t_i)| \\
@@ -2950,7 +2961,8 @@ Niech $V \subset H$ będzie podprzestrzenią liniową w $H$. $v^\star \in V$ jes
 
 (mini ryunek przestrzeni i prostopadłego wektora)
 
-\textbf{Dowód:} ``$\impliedby$"
+\begin{proof}
+``$\impliedby$"
 
 Dla dowolnego $v \in V$:
 \[
@@ -2992,6 +3004,8 @@ Skąd
 \[
 	(f-v^\star, h) = 0 \quad \forall_{h \in V}
 \]
+
+\end{proof}
 
 Bycie optymalnym oznacza, że wektor błędu jest prostopadły do tej przestrzeni. To wygląda jak ciekawostka teoretyczna, ale to prowadzi do algorytmu!
 
@@ -3093,7 +3107,7 @@ $\rho$ - funkcja wagowa $\rho > 0$ na $[a, b]$, $\norm{f}_{2, \rho} = \sqrt{(f, 
 	\]
 \end{twierdz}
 
-\textbf{Dowód:} Oczywiście $P_k$ jest postaci $x^k + ...$. Weźmy wielomian $w_k = P_k - x * P_{k-1}$. $w_k$ jest wielomianem stopnia $\leq k$. Ponieważ $x \cdot P_{k-1}$ jest stopnia dokładnie $k$, więc 
+\begin{proof} Oczywiście $P_k$ jest postaci $x^k + ...$. Weźmy wielomian $w_k = P_k - x * P_{k-1}$. $w_k$ jest wielomianem stopnia $\leq k$. Ponieważ $x \cdot P_{k-1}$ jest stopnia dokładnie $k$, więc 
 \[
 	\begin{array}{cc}
 	x \cdot P_{k-1}(x) & = \sum_{j=0}^k \alpha_{kj} P_j(x) \\
@@ -3125,6 +3139,8 @@ To oznacza, że
 \[
 	x \cdot P_{k-1}(x) = P_k + \alpha_{k, k-1} P_{k-1} + \alpha_{k, k-2} \cdot P_{k-2} = \beta_k
 \]
+
+\end{proof}
 
 \subsection{Przykłady}
 
@@ -3164,6 +3180,231 @@ H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
 \[
 	\norm{T_k}^2 = \left\{ \begin{array}{rl} \frac{\pi}{2} & k = 1, 2, ... \\ \pi & k = 0\end{array}\right.
 \]
+
+\subsection{Wielomiany Czybyszewa}
+
+Określamy $T_k(x) = \cos(k\theta)$ dla $x \in [-1, 1]$, gdzie $x = \cos\theta$ (tzn. $\theta = \arccos x$). Ze wzorów trygonometrycnzych mamy:
+\[
+	\cos{(k+1)\theta} + \cos{(k-1)\theta} = 2\cos\theta\cos{k\theta}
+\]
+Zatem zachodzi:
+\[
+	T_{k+1}(x) = 2T_1(x)T_k(x)-T_{k-1}(x)
+\]
+oraz
+\[
+\begin{array}{ll}
+	T_1(x) & = \cos{1\cdot\theta} = x \\
+	T_0(x) & = 1
+\end{array}
+\]
+A to jest formuła trójczłonowa na wielomiany Czybyszewa. Mimo, że na pierwszy rzut oka nie wyglądają jak wielomiany, to widać, że $T_0$ to wielomian, podobnie jak $T_1$, a pozostałe $T_k$ to sumowa i iloczyn poprzednich wielomianów, zatem to również jest wielomian.
+
+\begin{wniosek}
+$|T_k(x) \leq 1|$ dla $|x| \leq 1$.
+\end{wniosek}
+
+\begin{fakt}
+Miejsca zerowe $k$-tego wielomianu Czybyszewa są rzeczywiste, jednokrotne i leżą w przedziale $(-1, 1)$:
+\[
+	x_j = \cos{\cfrac{2j-1}{2k}\pi} \quad j = 1, \cdots, k
+\]
+\end{fakt}
+
+\begin{proof}
+\[
+\begin{array}{rl}
+	T_k(x) & = 0 \iff \cos{k\theta} = 0 \\
+	k\theta & = (j-\frac{1}{2})\cdot\pi \\
+	\theta & = (\frac{j-\frac{1}{2}}{k})\cdot \pi
+\end{array}
+\]
+\end{proof}
+
+\begin{fakt}
+	Lokalne ekstrema $T_k$ w przedziale $[-1, 1]$ są dane wzorem:
+	\[
+		y_j = \cos{\cfrac{j\pi}{k}}\quad j = 0, \cdots, k
+	\]
+	Ponadto $T_k(y_j) = (-1)^j$.
+\end{fakt}
+
+\begin{tikzpicture}
+	\node (v1) at (-4.5, 0) {};
+	\node (v2) at (4.5, 0) {};
+
+	\draw [->] (v1) edge (v2);
+	\draw [<-] (0, 2) edge (0, -2);
+
+	\draw (-4, 1.5) edge (-4, -1.5);
+	\draw (4, 1.5) edge (4, -1.5);
+
+	%\draw[domain=-2.5:2.5,smooth,scale=2,variable=\x,blue] plot ({\x},{2/(1+\x*\x)});
+
+	%\draw[red] plot[smooth, tension=.5] coordinates {(0.0, 4.0) (0.58, 3.68) (1.14, 3.1) (1.7, 2.22) (2.28, 1.8) (2.9, 1.14) (3.42, 1.4) (3.8, -1)};
+\end{tikzpicture}
+
+\begin{twierdz}[Własność minmaksu]
+Spośród wszystkich wielomianów stopnia $k$ postaci:
+\[
+	x^k + \cdots\textrm{niższe potęgi}\cdots
+\]
+wielomian $\frac{1}{2^{k-1}}T_k{x}$ ma najmniejszą normę maksimum na $[-1, 1]$ (tzn. $\max_{x\in[-1, 1]} |\frac{1}{2^{k-1}}T_k(x)| \leq \max_{x \in [-1, 1]}|w(x)| \quad \forall w(x) = x^k + ...$)
+
+\end{twierdz}
+
+\begin{proof}
+Zauważmy, że:
+\[
+\begin{array}{rl}
+	T_0(x) & = 1 \\
+	T_1(x) & = x \\
+	T_2(x) & = 2x^2 - 1 \\
+	T_3(x) & = 4x^3 - 3x \\
+	T_4(x) & = 8x^4 - 8x^2 + 1 \\
+	\vdots \\
+	T_k(x) & = 2^{k-1}x^k + \cdots \textrm{niższe potęgi} \cdots
+\end{array}
+\]
+więc
+\[
+	\frac{1}{2^{k-1}}T_k(x) = x^k + \cdots \textrm{niższe potęgi} \cdots
+\]
+Przypuśćmy, że jest wielomian $w^\star$ o mniejszej normie:
+\[
+	\max_{[-1, 1]}|w^\star| < \max_{[-1, 1]}|\frac{1}{2^{k-1}}T_k(x)| = \frac{1}{2^{k-1}} \max_{[-1, 1]} |T_k(x)| = 1
+\]
+
+W szczególności, w punktach ekstremalnych $T_k(x)$, $y_j$, musiałoby zachodzić:
+\[
+	\begin{array}{rl}
+	w^\star(y_0) & < \frac{1}{2^{k-1}}  = \frac{1}{2^{k-1}} T(y_0)\\
+	w^\star(y_1) & > -\frac{1}{2^{k-1}} = -\frac{1}{2^{k-1}} T(y_1) \\
+	\vdots \\
+	w^\star(y_k)
+	\end{array}
+\]
+
+Zatem wielomian $(w^\star - \frac{1}{2^{k-1}}T_k(x))$ w przedziale $[-1, 1]$ zmieniałby $n-krotnie$ znak $\implies$ musi mieć $n$ miejsc zerowych. Ale:
+\[
+	w^\star(x)  - \frac{1}{2^{k-1}}T_k(x) = \cancel{x^k} + \cdots \textrm{niższe potegi}\cdots - (\cancel{x^k} + \cdots \textrm{niższe potęgi}\cdots) = \textrm{wielomian stopnia k-1}
+\]
+Stąd:
+\[
+	w^\star - \frac{1}{2^{k-1}}T_k = 0
+\]
+sprzeczność.
+\end{proof}
+
+\begin{wniosek}[Węzły Czebyszewa w interpolacji wielomianowej Lagrange'a]
+(przypomnienie twierdzenia o błędzie interpolacji)
+\[
+	\norm{f-w}_{\infty, [a, b]} \leq \cfrac{\norm{f^{(n+1)}}_{\infty, [a,b]}}{(n+1)!} \cdot \norm{(x-x_0), \cdots, (x-x_n)}_\infty
+\]
+Wyraz $\max_{x \in [a, b]}|(x-x_0)\cdots(x-x_n)|$ jest najmniejszy dla $[a, b] = [-1, 1]$, gdy $x_0, \cdots, x_n$ - miejsca zerowe $T_{n+1}(x)!$ Dla dowolnego $[a, b]$ zachodzi analogiczny fakt dla węzłów Czybyszewa przeskalowany liniowo na $[a,b]$.
+\[
+	x \in [-1, 1] \underbrace{\ra}_{\textrm{przekszt. liniowe}} [a, b] \ni \xi(x) = A\cdot x + B \quad\quad\textrm{(A, B - do wyznaczenia)}
+\]
+\[
+	x_i \mapsto \xi(x_i)
+\]
+\end{wniosek}
+
+\subsection{Zadanie aproksymacji jednostajnej wielomianem}
+$f \in C[a, b]$ ($f$ ciągła na $[a,b]$). Szukamy wielomianu najlepszej aproksymacji dla $f$ w sensie normy supremum na $[a,b]$:
+\[
+	\norm{f - p^\star}_\infty \leq \norm{f - p}_\infty \quad \forall_{p \in \mathbb{P}_n}
+\]
+\[
+	\norm{g}_\infty = \max_{x \in [a, b)}|g(x)|
+\]
+
+\begin{fakt}
+	Taki wielomian istnieje
+\end{fakt}
+
+\begin{twierdz}[Czybyszewa o alternansie]
+ $p^\star \in \mathbb{P}_n$ jest ENA dla $f \iff$ istnieją co najmniej $(n+2)$ punkty $k_0, \cdots, k_{n+1}$ w $[a,b]$ takie, że:
+ \[
+ 	f(x_i) - p^\star(x_i) = \varepsilon \cdot (-1)^i \cdot \norm{f - p^\star}_\infty
+ \]
+ gdzie $\varepsilon \in \{+1, -1\}$
+ 
+(zestaw punktów $x_0, \cdots, x_n$ o tej własności to \textbf{alternans}).
+ 
+Opowiadając: jest jakaś funkcja $f$, jakiś wielomian $p$. Zawsze mogę policzyć błąd aproksymacji $f$ przez $p$ czyli tę normę. Ona jest ileś tam równa. W punktach alternansu zachodzi $|f(x_i) - p^\star(x_i)| = \norm{f-p^\star}_\infty$, czyli jest największy błąd. Ale to nie wystarczy. Dodatkowo w punktach alternansu te różnice są raz na plusie, raz na minusie - na przemian. Czyli $f(x_i) - p^\star(x_i) = -(f(x_{i+1})-p^\star(x_{i+1}))$.
+\end{twierdz}
+
+\begin{proof}(pokażemy tylko ``$\impliedby$")
+
+Załóżmy, że alternans istnieje. Pokażemy, że $p^\star$ jest ENA nie wprost: gdyby tak nie było, to istniałby $q \in \mathbb{P}_n$ taki, że
+\[
+	\norm{f-q} < \norm{f - p^\star}
+\]
+W szczególności w punktach alternansu:
+\[
+	|f(x_i) - q(x_i)| < |f(x_i) - p^\star(x_i)|
+\]
+\begin{tikzpicture}
+\end{tikzpicture}
+
+Zatem różnica:
+\[
+	q(x) - p^\star \leftarrow \textrm{wielomian stopnia }\leq n
+\]
+zeruje się w $n+1$ punktach. Czyli $q-p^\star \equiv 0$
+
+Dowód ``$\implies$" pomijamy, bo niełatwy.
+\end{proof}
+Po co właściwie to robimy? Norma nieskończoność to maksimum z błędu na całym przedziale, czyli jest to błąd najgorszy. Wyobraźmy sobie, że piszemy biblotekę numeryczną, w której wyznaczamy jakąś wartość funkcji. Naturalnym sposobem jest przybliżanie jej wielomianem, bo to jest fajna prosta funkcja. Chciałbym ten wielomian wyznaczyć w taki sposób, aby spełnić z góry zadane kryterium numerycznej poprawności. Jak to zrobić żeby było tanio i dobrze. Powiedzmy, że chcemy żeby przynajmniej dawało błąd nie większy niż 2epsilon od poprawnego wyniku. Czyli mam zadane kryterium. Więc muszę znaleźć taki wielomian, który to spełni. Ponieważ to ma być funkcja biblioteczna, to będzie często wykonywana i musi być tania, dlatego chciałbym mieć dla \textbf{możliwie niskiego stopnia} jak \textbf{najlepszą jakość aproksymacji}. Czy można zrobić coś lepiej niż najlepiej? Nie, dlatego to jest najlepszy wielomian.
+
+\begin{twierdz}[o jednoznaczności optymalnego wyelomianu aproksymajci jednostajnej]
+Istnieje dokładnie 1 ENA dla zadanej $f \in C[a, b]$ w sensie aproksymacji jednostajnej.
+\end{twierdz}
+\begin{proof}
+Niech $p^\star$, $q^\star$ - dwa optymalne wielmiany. Wtedy $\frac{1}{2}(p^\star + q^\star)$ też jest optymalny! Zatem dla niego i $f$ istnieje alternans:
+\[
+	f(x_i) - \frac{1}{2}(p^\star(x_i) + q^\star(x_i)) = \varepsilon\cdot(-1)^i\underbrace{\norm{f-\frac{1}{2}(p^\star + q^\star)}}_{=\underbrace{=\norm{f-p^\star}}_{=E_n := \norm{f - q^\star}}}
+\]
+\[
+	\frac{1}{2}(\underbrace{f(x_i) - p^\star(x_i)}_{|\cdot| \leq E_n}) + \frac{1}{2}(\underbrace{f(x_i) - q^\star(x_i)}_{|\cdot| \leq E_n}) = \varepsilon(-1)^i\cdot E_n
+\]
+Skąd:
+\[
+	\cancel{f(x_i)} - p^\star(x_i) = \cancel{f(x_i)} - q^\star(x_i) \quad \quad i = 0, \cdots, n+2
+\]
+więc musi zachodzić $p^\star(x) \equiv q^\star(x)$
+\end{proof}
+
+Wyznaczanie ENA dla wielomianów aproksymacji jednostajnej: iteracyjny (nieskończony!) algorytm Remeza.
+
+\subsubsection{Inerpolacja o najlepszej aproksymacji w normie supremum}
+
+Niech $p^\star \in \mathbb{P}_n$ - ENA dla $f$ i niech $E_n = \norm{f-f p^\star}_\infty$. Rozważamy $w \in \mathbb{P}_n$ - wielomian interpolacyjny Lagrange'a dla $f$ oparty na węzłach $x_0, \cdots, x_n$:
+\[
+	w(x) = \sum_{i=0}^n f(x_i) \cdot L_i(x)
+\]
+gdzie
+\[
+	L_i(x) = \cfrac{(x-x_0)\cdot(x-x_1)\cdots\cdot(x-x_n)}{(x_i-x_0)\cdot(x_i - x_1)\cdots(x_i-x_n)}
+\]
+Wtedy
+\[
+	\norm{f-w}_\infty = \norm{f-p^\star + p^\star - w}_infty \leq \underbrace{\norm{f-p^\star}_\infty}_{E_n} + \norm{p^\star - w}_\infty
+\]
+... za tydzień dokończenie twierdzenia
+
+\begin{fakt}
+	Jeśli rozważyć $f \in C[-1, 1]$ i $w$ - wielomian interpolacyjny Lagrange'a dla $f$ oparty na węzłach Czebyszewa, to 
+	\[
+		E_n \leq \norm{f-w}_\infty \leq \underbrace{(2+\frac{2}{\pi}\ln{n+1})}_{<10, dla\ n \leq 10^5}\cdot \underbrace{E_n}_{\textrm{błąd najlepszej aproksymacji}}
+	\]
+	Ponadto:
+	\[
+		% w(x) = \cfrac{\sum_{i=0}^{n}'' \frac{(-1)^i f(x_i)}{x-x_i}}{\sum_{i=0}^n'' \frac{(-1)^i}{x-x_i}}
+	\]
+	% gdzie $\sum''_{i=0}^n a_i = \frac{1}{2}a_0 + a_1 + \cdots + a_{n-1} + \frac{1}{2}a_n$
+\end{fakt}
 
 \section{Całkowanie i różniczkowanie numeryczne}
 

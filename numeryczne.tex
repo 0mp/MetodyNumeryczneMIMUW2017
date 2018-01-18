@@ -8,7 +8,8 @@
 \usepackage{ulem}
 \usepackage{makeidx}
 
-\usepackage{minted}
+\usepackage[outputdir=/home/bartek/.cache/gummi]{minted}
+%\usepackage{minted}
 
 \setminted[python]{
     breaklines=true,
@@ -1882,10 +1883,10 @@ układ (n+1) równań liniowych z (n+1) niewiadomymi (układ $\star$):
 \[
 \left[
 	\begin{array}{ccc}
-		\phi_0(x_0) & \cdots & \phi_0(x_n) \\
-		\phi_1(x_0) & \cdots & \phi_1(x_n) \\
+		\phi_0(x_0) & \cdots & \phi_n(x_0) \\
+		\phi_0(x_1) & \cdots & \phi_n(x_1) \\
 		\vdots & \ddots & \vdots \\
-		\phi_n(x_0) & \cdots & \phi_n(x_n)
+		\phi_0(x_n) & \cdots & \phi_n(x_n)
 	\end{array}
 \right]
 \cdot
@@ -1933,7 +1934,7 @@ Czy da się dokonać taniej eliminacji Gaussa dla macierzy Vandermonde'a? Sprób
 \begin{obserw}
 Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n$, natomiast $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_i(x_i) - w_{n-1}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x_{n-1})}_{\phi_n(x)}$. Czyli
 \[
-	w_n(x) = w_{n-1}x + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
+	w_n(x) = w_{n-1}(x) + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
 \]
 gdzie 
 \begin{align*}
@@ -1944,10 +1945,10 @@ gdzie
 \[
 \left[
 	\begin{array}{ccc}
-		\phi_0(x_0) & \cdots & \phi_0(x_n) \\
-		\phi_1(x_0) & \cdots & \phi_n(x_n) \\
+		\phi_0(x_0) & \cdots & \phi_n(x_0) \\
+		\phi_0(x_1) & \cdots & \phi_n(x_1) \\
 		\vdots & & \vdots \\
-		\phi_n(x_0) & \cdots & \phi_n(x_n)
+		\phi_0(x_n) & \cdots & \phi_n(x_n)
 	\end{array}
 \right]
 \cdot
@@ -1974,7 +1975,7 @@ gdzie
 \begin{array}{ccccc}
 1 & 0 & 0 & \cdots & 0 \\
 1 & (x_1 - x_0) & 0 & \cdots & 0 \\
-\vdots & \vdots & (x_2 - x_3)(x_2 - x_1) & \cdots & 0 \\
+\vdots & \vdots & (x_2 - x_0)(x_2 - x_1) & \cdots & 0 \\
 1 & (x_n - x_0) & \cdots & \cdots & \ddots
 \end{array}
 \right]
@@ -2215,12 +2216,12 @@ To zadanie także ma dokładnie jedno rozwiązanie.
 
 \textbf{Błąd interpolacji:}
 \[
-f(x) - H_m(x) = \cfrac{f^{m+1}(\xi)}{(m+1)!}w(x)
+f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
 \]
 \[
 	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
 \]
-Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
+Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
 
 \section{Interpolacja funkcjami sklejanymi (splajny)}
 Spójrzmy na interpolację wielomianową w węzłach równoodległych funkcji $f(x) = \cfrac{1}{1+x^2}$
@@ -3181,7 +3182,7 @@ H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
 	\norm{T_k}^2 = \left\{ \begin{array}{rl} \frac{\pi}{2} & k = 1, 2, ... \\ \pi & k = 0\end{array}\right.
 \]
 
-\subsection{Wielomiany Czybyszewa}
+\subsection{Wielomiany Czebyszewa}
 
 Określamy $T_k(x) = \cos(k\theta)$ dla $x \in [-1, 1]$, gdzie $x = \cos\theta$ (tzn. $\theta = \arccos x$). Ze wzorów trygonometrycnzych mamy:
 \[
@@ -3198,14 +3199,14 @@ oraz
 	T_0(x) & = 1
 \end{array}
 \]
-A to jest formuła trójczłonowa na wielomiany Czybyszewa. Mimo, że na pierwszy rzut oka nie wyglądają jak wielomiany, to widać, że $T_0$ to wielomian, podobnie jak $T_1$, a pozostałe $T_k$ to sumowa i iloczyn poprzednich wielomianów, zatem to również jest wielomian.
+A to jest formuła trójczłonowa na wielomiany Czebyszewa. Mimo, że na pierwszy rzut oka nie wyglądają jak wielomiany, to widać, że $T_0$ to wielomian, podobnie jak $T_1$, a pozostałe $T_k$ to sumowa i iloczyn poprzednich wielomianów, zatem to również jest wielomian.
 
 \begin{wniosek}
 $|T_k(x) \leq 1|$ dla $|x| \leq 1$.
 \end{wniosek}
 
 \begin{fakt}
-Miejsca zerowe $k$-tego wielomianu Czybyszewa są rzeczywiste, jednokrotne i leżą w przedziale $(-1, 1)$:
+Miejsca zerowe $k$-tego wielomianu Czebyszewa są rzeczywiste, jednokrotne i leżą w przedziale $(-1, 1)$:
 \[
 	x_j = \cos{\cfrac{2j-1}{2k}\pi} \quad j = 1, \cdots, k
 \]
@@ -3301,7 +3302,7 @@ sprzeczność.
 \[
 	\norm{f-w}_{\infty, [a, b]} \leq \cfrac{\norm{f^{(n+1)}}_{\infty, [a,b]}}{(n+1)!} \cdot \norm{(x-x_0), \cdots, (x-x_n)}_\infty
 \]
-Wyraz $\max_{x \in [a, b]}|(x-x_0)\cdots(x-x_n)|$ jest najmniejszy dla $[a, b] = [-1, 1]$, gdy $x_0, \cdots, x_n$ - miejsca zerowe $T_{n+1}(x)!$ Dla dowolnego $[a, b]$ zachodzi analogiczny fakt dla węzłów Czybyszewa przeskalowany liniowo na $[a,b]$.
+Wyraz $\max_{x \in [a, b]}|(x-x_0)\cdots(x-x_n)|$ jest najmniejszy dla $[a, b] = [-1, 1]$, gdy $x_0, \cdots, x_n$ - miejsca zerowe $T_{n+1}(x)!$ Dla dowolnego $[a, b]$ zachodzi analogiczny fakt dla węzłów Czebyszewa przeskalowany liniowo na $[a,b]$.
 \[
 	x \in [-1, 1] \underbrace{\ra}_{\textrm{przekszt. liniowe}} [a, b] \ni \xi(x) = A\cdot x + B \quad\quad\textrm{(A, B - do wyznaczenia)}
 \]
@@ -3323,7 +3324,7 @@ $f \in C[a, b]$ ($f$ ciągła na $[a,b]$). Szukamy wielomianu najlepszej aproksy
 	Taki wielomian istnieje
 \end{fakt}
 
-\begin{twierdz}[Czybyszewa o alternansie]
+\begin{twierdz}[Czebyszewa o alternansie]
  $p^\star \in \mathbb{P}_n$ jest ENA dla $f \iff$ istnieją co najmniej $(n+2)$ punkty $k_0, \cdots, k_{n+1}$ w $[a,b]$ takie, że:
  \[
  	f(x_i) - p^\star(x_i) = \varepsilon \cdot (-1)^i \cdot \norm{f - p^\star}_\infty
@@ -3406,9 +3407,262 @@ Wtedy
 	% gdzie $\sum''_{i=0}^n a_i = \frac{1}{2}a_0 + a_1 + \cdots + a_{n-1} + \frac{1}{2}a_n$
 \end{fakt}
 
-\section{Całkowanie i różniczkowanie numeryczne}
+---
 
-Treść dostępna dla użytkowników SKRYPT-PREMIUM. Adres portfela bitcoin: (todo).
+\textbf{Uzupełnienie} Interpolacja o najlepszej aproksymacji w sensie jednostajnym (w przypadku ogólnym)
+
+$\underbrace{E_n}_{błąd najlepszej aproksymacji} = \norm{f-p^\star}_\infty$, $p^\star$ - wielomian najlepszej aproksymacji stopnia $\leq$ n.
+
+Niech $w$ - wielomian inteprolacyjny Lagrange'a oparty na $x_0, ..., x_n$ i pytanie: jak się ma $\norm{f-w}_\infty$ do $E_n$?
+
+Mamy:
+\[
+	\norm{f-w}_\infty = \norm{f - p^\star + p^\star - w}_\infty \leq \underbrace{\norm{f-p^\star}_\infty}_{E_n} + \norm{p^\star - w}_\infty \leq (1 + \Lambda_n)\cdot E_n
+\]
+\[
+\begin{array}{ll}
+	\norm{p^\star - w} & = \norm{p^\star - \sum_{i=0}^n f(x_i) \underbrace{L_i(x)}_{wielomiany\ bazowe\ Lagrange'a}}_\infty \\
+	& = \norm{\sum p^\star(x_i) \cdot L_i(x) - \sum f(x_i)\cdot L_i(x)}_\infty \\
+	& \leq sup_x \sum |(p^\star(x_i) - f(x_i))| \cdot |L_i(x)|\\
+	& \\
+	|(p^\star(x_i) - f(x_i))| & \leq \max_i |p^\star(x_i) - f(x_i)| \\
+	& \leq \max_x |p^\star(x) - f(x)| \\
+	& = \norm{p^\star - f}_\infty \\
+	& = E_n
+	\\
+	& \\
+	\norm{p^\star - w} \leq (\sup_x \sum_{i=0}^n |L_i(x)|) \cdot E_n \\
+	& \\
+	(\sup_x \sum_{i=0}^n |L_i(x)|) & = \Lambda_n - \textrm{stała Lebesgue'a dla węzłów }x_0, x_1, ...., x_n
+\end{array}
+\]
+
+\begin{fakt}
+\begin{itemize}$ $
+
+	\item Dla węzłów równoodległych na $[-1, 1]$ zachodzi \[
+		\Lambda_n \geq \cfrac{2^{n-2}}{n^2}
+	\]
+	\item Dla węzłów czebyszewa na $[-1, 1]$ zachodzi \[
+		\Lambda_n \leq \cfrac{2}{\pi} \lim{n+1}+1
+	\]
+	\item Dla dowolnych węzłów zachodzi: \[
+		\Lambda_n \geq c \cdot \ln{n}
+	\]
+\end{itemize}
+\end{fakt}
+
+
+\section{Równania nieliniowe}
+
+$f: \RR \ra \RR$ - zadana funkcja
+
+Znaleźć: $x \in \RR$
+\[
+	f(x) = d \ra \textrm{dana}
+\]
+Bez utraty ogólności, $d = 0$.
+
+\begin{tikzpicture}
+	
+\end{tikzpicture}
+
+Niech $f(a) \cdot f(b) < 0$ i niech $f$ będzie ciągła na $[a, b]$. Z twierdzenia Darboux - istenieje co najmniej jedno miejsce zerowe $f$ w $[a, b]$. Możemy iterować tę procedurę:
+\begin{minted}{python}
+    [|$a$|, |$b$|]: |$f(a) \cdot f(b) < 0$|
+    def bisekcja(f, a, b):
+        while |b - a| > toleracja:
+            m = |$\frac{a+b}{2}$|
+            if f(m) == 0:
+                return m
+            elif f(m) * f(a) < 0: # (f(m) < 0 and f(a) > 0) or (f(m) > 0 and f(a) < 0)
+                b = m
+            else:
+                a = m
+        return |$\frac{a+b}{2}$|
+\end{minted}
+
+\begin{twierdz}
+	Niech $[a_0, b_0], [a_1, b_1], ...$ oznaczają przedziały lokalizujące zero w kolejnych ??? metody bisekcji. Wtedy $a_n \ra x^\star$, $b_n \ra x^\star$ oraz $|x^\star - \frac{a_n+b_n}{2}| \leq \frac{1}{2^{n+1}}|b - a|$
+\end{twierdz}
+
+\textbf{Uwagi:}
+\begin{itemize}
+	\item Szybkość zbieżności słabo zależny od $f$.
+	\item Zbieżność przy minimalnych wymaganiach na $f$.
+	\item Szybkość zbieżności niezbyt duża.
+	\item W implementacji nie obliczamy $f(m)*f(a)$
+\end{itemize}
+
+Dlaczego w implementacji nie obliczamy $f(m)*f(a)$, skoro w algorytmie ewidentnie jest to mnożenie. W tym miejscu bardzo szybko pojawi się underflow, a nas interesuje tylko znak, a to oczywiście bardzo łatwo zrobić bez zbędnego mnożenia.
+
+Wspomnieliśmy o zbieżności, ale potrzebujemy narzędzi do określenia, która metoda działa szybciej, a która wolniej.
+
+\begin{defi}{Szybkość zbieżności ciągu $x_n \ra x^\star$}
+	Powiemy, że szybkość zbieżności jest wykładnicza z wykładnikiem (co najmniej) $p>1$, gdy
+	\[
+		\exists_{c \geq 0} \exists_{N > 0} \forall_{n \geq N} |x_{n+1}-x^\star| \leq c * |x_n - x^\star|^p
+	\]
+	Powiemy, że szybkość zbiżności jest co najmniej liniowa jeśli
+	\[
+		\exists_{\gamma \in [0, 1)} \exists_{N > 0}  \forall_{n \geq N}  |x_{n+1}-x^\star| \leq \gamma \cdot |x_n - x^\star|
+	\]
+\end{defi}
+
+\textbf{Przykład:} $|x_0 - x^\star| = \frac{1}{10}$
+\[
+\begin{array}{c|c|c|c}
+n & \textrm{liniowa} (\gamma = \frac{1}{10}) & \textrm{kwadratowa} (c = 1) & \textrm{sześcienna} (c=1) \\ \hline
+0 & \frac{1}{10} & \frac{1}{10} & \frac{1}{10} \\
+1 & \frac{1}{100} & \frac{1}{100} & \frac{1}{1000} \\
+2 & \frac{1}{1000} & \frac{1}{10000} & \frac{1}{1000000000} \\
+3 & \frac{1}{10000} & \frac{1}{10000000} & \frac{1}{1....} \\
+\end{array}
+\]
+
+A jak jest u nas? ciąg $\frac{1}{2^{n+1}}|b-a|$ jest zbieżny liniowo, $\gamma = \frac{1}{2}$
+
+\subsection{Metoda Newtona}
+
+\[
+	0 = f(x^\star) = f(\underline{x} + \underline{h}) = f(x) + f'(x)\cdot h + f''\cdot\frac{h^2}{2} + \cdots
+\]
+(jeśli h - małe, to pominiemy człony wyższych rzędów)
+Zatem w przybliżeniu:
+\[
+	0 = f(x) + f'(x) \cdot h \implies h
+\]
+I jeśli $x \simeq x^\star$, to $x+h$ - powinno być nacznie lepsze.
+\[
+	x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
+\]
+
+\begin{twierdz}{o zbienżności m. Newtona}
+	Niech $f \in C^2[a, b]$ i istnieje $x^\star \in (a, b)$ t. że $f(x^\star) = 0$ oraz $f'(x^\star) \neq 0$. Wtedy istnieje otoczenie $U \ni x^\star$ takie, że metoda Newtona jest zbieżna do $x^\star$ dla dowolnego $x_0 \in U$. Ponadto zbieżność jest kwadratowa:
+	\[
+		\exists_{c>0} \forall_{n = 0, 1, \cdots} |x_{n+1} - x^\star| \leq c \cdot |x_n - x^\star|^2
+	\]
+\end{twierdz}
+
+\begin{proof}
+	Niech $e_n := x_n - x^\star$. Mamy więc $x_{n+1} = x_{n+1} - x^\star = \underbrace{x_n - x^\star}_{e_n} - \frac{f(x_n)}{f'(x_n)}$
+	Ponadto ze wzoru Taylora:
+	\[
+	0 = f(x^\star) = f(x_n - e_n) = f(x_n) - f'(x_n)\cdot e_n + \frac{1}{2}f''(\xi)\cdot e_n^2
+	\]
+	gdzie
+	$\xi \in int(x^\star, x_n)$.
+	
+	Zatem:
+	\[
+		f(x_n) = f'(x_n) \cdot e_n - \frac{1}{2} \cdot f''(\xi_n) \cdot e_n^2
+	\]
+	więc:
+	\[
+		e_{n+1} = e_n - \cfrac{f'(x_n)\cdot e_n - \frac{1}{2}f''(\xi_n)\cdot e_n^2}{f'(x_n)} = \frac{1}{2}\cfrac{f''(\xi_n)e_n^2}{f'(x_n)}
+	\]
+	Jeśli $x_n \in K := \{y : |y - x^\star| \leq \delta\}$
+	i oznaczymy:
+	\[
+		c_\delta = \frac{1}{2} \cfrac{\max_{\xi \in K} |f''(\xi)|}{\min_{x \in K}|f'(x)|}
+	\]
+	to
+	\[
+		(\star) |e_{n+1}| \leq c_\delta * |e_n|^2
+	\]
+	Jeśli dodatkowo zachodzi $\delta \cdot c_\delta < 1$ to z $(\star)$ wynika, że $|e_{n+1}| = c_\delta \cdot |e_n| \cdot |e_n| \leq \underbrace{c_\delta \cdot \delta}_{\gamma} \cdot |e_n| = \underbrace{\gamma}_{<1} \cdot |e_n|$
+	Zatem:
+	\[
+		x_{n+1} \in K
+	\]
+	\[
+		x_n \ra x^\star (bo\ e_n \ra 0,\ bo\ |e_n| = \gamma^n\cdot|e_0|)
+	\]
+\end{proof}
+
+\textbf{Przykłady}
+
+\begin{itemize}
+	\item Metoda Herona obliczania $\sqrt{a}$:
+		\[
+			x_{n+1} = \frac{1}{2}(x_n + \frac{a}{x_n})
+		\]
+		\[
+			f(x) = x^2 - a
+		\]
+	\item Obliczanie $\frac{1}{a}$ bez dzielenia (na ćwiczeniach)
+\end{itemize}
+
+\textbf{Uwagi:}
+
+\begin{itemize}
+	\item f - musi być różniczkowalna
+	\item trzeba znać wzór na pochodną
+	\item $f'(x^\star) \neq 0 \implies x^\star $ - zero jednokrotne (gdy jest krotności $m$, to metoda zbieżna liniowo $|x_{n+1} - x^\star| \simeq (1 - |frac{1}{m}) |x_n - x^\star|$)\
+	\item trzeba mieć "dostatecznie dobre" $x_0$ (lokalnie zbieżna, w bisekcji $x_0$ było dowolne).
+\end{itemize}
+
+Są pewne modyfikacje do metody Newtona, które poprawiają zbieżnosć?
+
+\subsubsection{Modyfikacje metody Newtona}
+\begin{itemize}
+	\item metoda siecznych (obrazek):
+	\[
+		f'(x_n) \simeq \cfrac{f(x_n) - f(x_{n-1})}{x_n - x_{n-1}}
+	\]
+	\[
+		x_{n+1} = x_n - f(x_n) \cdot \cfrac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}
+	\]
+	Przy analogicznych założeniach jak w metodzie Newtona, metoda siecznych jest lokalnie zbieżna do $x^\star$, ale z wykładnikiem $p = \cfrac{1+\sqrt{5}}{2} \simeq 1.618...$. Drugi problem: w liczniku mam różnicę dwóch coraz bliższych liczb. Na dole to samo, ale gorzej bo funkcja $f$ może to wypłaszczać. Zatem może się tutaj coś psuć numerycznie jeśli chcemy mieć wysoką dokładność rozwiązania.
+	\item metoda Steffensena:
+	\[
+		x_{n+1} = x_n - f(x_n) \cdot \frac{f(x_n)}{f(x_n + f(x_n)) - f(x_n)}
+	\]
+	Zamiast brać jakieś tam $h$, to my bierzemy $h$, które maleje, czyli po prostu $f$. Dla tej metody $p = 2$. Ale ta metoda znowu ma wady poprzedniej metody.
+	\item metoda cięciw (zbieżność liniowa):
+	\[
+		x_{n+1} = x_n - \cfrac{f(x_n)}{f'(x_0)}
+	\]
+	\item metoda Halley'a
+	\[
+	x_{n+1}= x_n - \frac{2 \cdot f(x_n) \cdot f'(x_n) }{ 2 \cdot \left( f'(x_n) \right)^2 - f(x_n) \cdot f''(x_n) }
+	\]
+\end{itemize}
+
+\subsection{Metody tepu punktu stałego}
+
+Na przykład:
+\[
+	x_{n+1} = x_n - \cfrac{f(x_n}{f'(x_n)}
+\]
+inaczej:
+\[
+	x_{n+1} = F(x_n)
+\]
+gdzie:
+\[
+	F(x) = x - \cfrac{f(x)}{f'(x)}
+\]
+
+Zatem skoro $x_n \longrightarrow x^\star$, to
+\[
+	x^\star = F(x^\star)\quad \quad \la \textrm{punkt stały dla F}
+\]
+\begin{twierdz}{Twierdzenie Banacha o kontrakcji}
+	Niech $F: [a, b] \ra [a, b]$ i spełnia warunek kontrakcji:
+	\[
+		\exists_{\gamma < 1} \forall_{x, y \in [a, b]} |F(x) - F(y)| \leq \gamma |x-y|
+	\]
+	Wtedy $\exists! x^\star \in [a, b] F(x^\star) = x^\star$
+	oraz ciąg:
+	\[
+		x_{n+1} = F(x_n)
+	\]
+	jest zbieżny do $x^\star$ dla dowolnego $x_0 \in [a, b]$ liniowo:
+	\[
+		|x_{n+1} - x^\star| \leq \gamma|x_n - x^\star|
+	\]
+\end{twierdz}
 
 \chapter{Appendix A}
 Czyli wszystko co nie pasuje do poprzednich rozdziałów i nie będzie na egzaminie.

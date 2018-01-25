@@ -86,7 +86,7 @@ G. Stewart ``Afternotes on numerical analysis"
 
 \section{Wstęp}
 \[
-	\underbrace{6,63}_{mantysa} \cdot \underbrace{10^{\overbrace{-34}^{wykładnik}}}_{\textrm{rząd wielkości}}
+	\underbrace{6,63}_{mantysa} \cdot \underbrace{10^{\overbrace{-34}^{\textrm{wykładnik}}}}_{\textrm{rząd wielkości}}
 \]
 
 Liczby maszynowe:
@@ -167,7 +167,7 @@ np. $\frac{0}{0} = \infty - \infty = NaN$
 
 (bez biasu)
 
-$\beta = 2$, $p = 3$, $e_{min} = -1, e_{max} + 1$
+$\beta = 2$, $p = 3$, $e_{min} = -1$, $e_{max} = +1$
 
 $x = (1.f_1f_2)_2 \cdot 2^{e}$
 
@@ -198,7 +198,7 @@ Aby wypełnić pustkę wokół zera uzupełnia się system o liczby subnormalizo
 
 Reprezentacja liczb rzeczywistych w arytmetyce fl:
 \[
-	x \in \mathbb{R} \rightarrow fl(x) : \textrm{jego numeryczna reprezentacja (l. masyznowa odpowiadjąca x)}
+	x \in \mathbb{R} \rightarrow fl(x) : \textrm{numeryczna reprezentacja x (l. maszynowa odpowiadająca x)}
 \]
 
 Gdy x - liczba maszynowa, fl(x) = x.
@@ -219,10 +219,10 @@ Gdzie \texttt{Round(x)} może być wybrany na jeden ze sposobów:
 
 Dalej zakładamy, że $fl(x) = \texttt{RN(x)}$. Wtedy łatwo pokazać, że 
 \[
-	\frac{|fl(x) - x|}{|x|} \leq 2^{-p} = \nu \leftarrow \textrm{ preycja arytmetyki}
+	\frac{|fl(x) - x|}{|x|} \leq 2^{-p} = \nu \leftarrow \textrm{ precyzja arytmetyki}
 \]
 
-(o ile nie ma undeflow/overflow)
+(o ile nie ma underflow/overflow)
 
 Inaczej mówiąc:
 \[
@@ -236,7 +236,7 @@ Inaczej mówiąc:
 
 co zapisujemy
 \[
-	\underbrace{fl(a\ \square\ b)}_{\textrm{wynik w fl}} = \underbrace{fl(a\ \square\ b)}_{\textrm{reprezentacja} a \square b \textrm{ w fl}}
+	\underbrace{fl(a\ \square\ b)}_{\textrm{wynik w fl}} = \underbrace{fl(a\ \square\ b)}_{\textrm{reprezentacja } a \square b \textrm{ w fl}}
 \]
 
 (o ile brak underflow/overfow/NaN)
@@ -246,7 +246,7 @@ Ponadto tak też ma być dla $\sqrt{}$ i dla
 	\underbrace{FMA(a, b, c)}_{\textrm{fast multiply add}} := a \cdot b + c
 \]
 
-$fl(FMA(a, b, c) = fl(a \cdot b + c)$
+$fl(FMA(a, b, c)) = fl(a \cdot b + c)$
 
 \section{Problemy arytmetyki fl}
 
@@ -276,7 +276,7 @@ Dane: $x, y \in \RR$. Obliczamy
 
 Jaki jest błąd?
 \[
-	\cfrac{|\tilde{s} - s|}{|s|} = \cfrac{|x + (\varepsilon_x + \varepsilon)\cdot x + y + (\varepsilon_y + \varepsilon)\cdot y + \textrm{małe }\nu^2|}{|x + y|} \leq \cfrac{}{} \leq 2 \cdot \cfrac{|x|+|y|}{|x+y|} \cdot \nu
+	\cfrac{|\tilde{s} - s|}{|s|} = \cfrac{|x + (\varepsilon_x + \varepsilon)\cdot x + y + (\varepsilon_y + \varepsilon)\cdot y + \textrm{małe }\nu^2|}{|x + y|} \leq 2 \cdot \cfrac{|x|+|y|}{|x+y|} \cdot \nu
 \]
 
 Zatem
@@ -296,16 +296,16 @@ Dane:
 	\item Dane: $A \in \RR^{N \times N}$, $x \in \RR^n$. Obliczyć $y = A \cdot b$.
 	      $D = \RR^{N \times N} \times R^N$
 	\item Dane $A \in \RR^{N \times N}$, $b \in \RR^n$. Obliczyć rozwiązanie układu $Ay = b$. Wtedy $P(x) := A^{-1}x$
-	\item Dla danego $F: \RR \ra \RR$ obliczyć $x$, t. że $f(x) = 0$
+	\item Dla danego $F: \RR \ra \RR$ obliczyć $x$, t. że $f(x) = 0$,
 	      $P(z) = f^{-1}(z)$, $D = \{0\}$
 \end{enumerate}
 
 
 \section{Numeryczna poprawność}
 
-Pożądane jest, aby algorytm dawał "dobry" wynik zarówno w arytmetyce idealnej, jak i w arytmetyce $fl$u. Niestety, jak zobaczymy, nie zawsze jest to możliwe. Nawet jeśli algorytm jest dokładny, to w wyniku jego realizacji w $fl$ możemy otrzymać wynik $fl(ALG(x))$ daleko odbiegający od $P(x)$. W szczególności, prawie zawsze mamy
+Pożądane jest, aby algorytm dawał "dobry" wynik zarówno w arytmetyce idealnej, jak i w arytmetyce $fl$. Niestety, jak zobaczymy, nie zawsze jest to możliwe. Nawet jeśli algorytm jest dokładny, to w wyniku jego realizacji w $fl$ możemy otrzymać wynik $fl(ALG(x))$ daleko odbiegający od $P(x)$. W szczególności, prawie zawsze mamy
 \[P(x) \neq fl(ALG(x))\]
-Zauważmy również, że o ile z reguły znamy dokładne zachowanie się algorytmu w arytmetyce idealnej dla danej informacji, to nie można tego samego powiedzieć o jego zachowaniu się w arytmetyce $fl$u. W związku z tym powstaje pytanie, jak kontrolować błąd algorytmów wynikający z błędów zaokrągleń i jakie algorytmy uznamy za te o najwyższej jakości numerycznej.
+Zauważmy również, że o ile z reguły znamy dokładne zachowanie się algorytmu w arytmetyce idealnej dla danej informacji, to nie można tego samego powiedzieć o jego zachowaniu się w arytmetyce $fl$. W związku z tym powstaje pytanie, jak kontrolować błąd algorytmów wynikający z błędów zaokrągleń i jakie algorytmy uznamy za te o najwyższej jakości numerycznej.
 
 Istnienie błędów reprezentacji liczb rzeczywistych powoduje, że informacja $y=N(f)$ o danej $f$ nie jest w ogólności reprezentowana dokładnie. Znaczy to, że zamiast na informacji dokładnej, dowolny algorytm będzie operować na informacji nieco zaburzonej $y_\nu$, tzn. zaburzonej na poziomie błędu reprezentacji. Tak samo wynik dawany przez algorytm będzie w ogólności zaburzony na poziomie błędu reprezentacji. W najlepszym więc wypadku wynikiem działania algorytmu w $fl_\nu$ będzie $(\varphi(y_\nu))_\nu$ zamiast $\varphi(y)$. Algorytmy dające tego rodzaju wyniki uznamy za posiadające najlepsze własności numeryczne w arytmetyce $fl$u i nazwiemy numerycznie poprawnymi.
 
@@ -391,7 +391,7 @@ Pytanie: jak dobrym przybliżeniem $P(x)$ jest y?
 
 $\cfrac{\norm{P(x) - P(\tilde{x})}}{\norm{P(x)}} = \cfrac{\norm{P(X) < y}}{\norm{P(x)}} \leq ?$
 
-To jest pytanie o czułość zadania P na zaburzenia danych i nie ma nic wspólnego z tym jaki algorytm użyjemy.
+To jest pytanie o czułość zadania P na zaburzenia danych i nie ma nic wspólnego z tym jakiego algorytmu użyjemy.
 
 
 Zamiast iksa biorę iks zaburzony. Pytanie jaki jest błąd (względny):
@@ -449,7 +449,7 @@ Wtedy małe zaburzenie danych może spowodować duży błąd wyniku. W przeciwny
 
 \section{Numeryczne kryterium NP}\index{numeryczne kryterium NP}
 
-Mamy jakieś $\tilde{x}$ - przybliżone (?) rozwiązanie $Ax = b$. Pytanie czy spełnia rozwiązanie
+Mamy jakieś $\tilde{x}$ - przybliżone rozwiązanie $Ax = b$. Pytanie czy spełnia równanie:
 \[
 	(A + \Delta)\tilde{x} = b + \delta
 \]
@@ -471,11 +471,11 @@ Przykłady (na uwarunkowanie)
 	\item dodawanie $a+b$:
 	      \begin{itemize}
 	      	\item dobre uwarunkowanie, gdy $a, b$ -  tego samego znaku,
-	      	\item źle uwarunkowane, gdy $a \simeq b$
+	      	\item źle uwarunkowane, gdy $a \simeq -b$
 	      \end{itemize}
 	\item układy równań mogą być źle uwarunkowane: np. macierz Hilberta $H_{i,j} = \frac{1}{i+j-1}$
-	\item mnożenie, dzielenie, dodawanie są NP (w standardowym IEEE-754) (o ile brak under/overflow)
-	\item rozwiązywanie układów trójkątnych standardowym algorytmem jest NP $\tilde{x}$ spełnia:
+	\item mnożenie, dzielenie, dodawanie są NP (w standardzie IEEE-754) (o ile brak under/overflow)
+	\item rozwiązywanie układów trójkątnych standardowym algorytmem jest NP. $\tilde{x}$ spełnia:
 	      \[
 	      	(U+\Delta)\tilde{x} = b, \cfrac{|\Delta_{i, j}|}{|U_{i, j}|} \leq N \cdot \nu
 	      \]
@@ -545,10 +545,10 @@ to
 	x_n & = \frac{b_n - \sum_{i=0}^{n-1} a_{i,n} x_i}{a_{n,n}} & \text{($2n + 1$ operacji)} 
 \end{align*}
 
-A koszt rozwiązania jest następujący:
-$1+3+5+...+2(k-1)+1+... = \sum_{k=1}^{n} 2k - \sum 1 = O(2n^2)$
+Koszt rozwiązania jest następujący:
+$1+3+5+...+2(k-1)+... = \sum_{k=1}^{n} 2k - \sum 1 = O(n^2)$
 
-Jest to metoda podstawienia w przód/tył. Rozmiar danych jest rzędu $O(n^2)$, więc widać, że to jest optymalna metoda.
+Jest to metoda podstawienia w przód/tył. Rozmiar danych jest rzędu $O(n^2)$, więc widać, że jest to optymalna metoda.
 
 \subsubsection{Macierze ortogonalne}
 
@@ -559,7 +559,7 @@ $Q^T \cdot Q = I$, gdzie $Q \in \RR^{N, N}$
 $\arraycolsep=0.6em\def\arraystretch{1.8}
 \left[
 	\begin{array}{c}
-		\quad _1^T \quad   \\ \hline
+		\quad q_1^T \quad   \\ \hline
 		\quad q_2^T \quad  \\ \hline
 		\quad \vdots \quad \\ \hline
 		\quad q_n^T \quad  
@@ -595,7 +595,7 @@ Układ $Q \cdot x = b$ ma rozwiązanie:
 	\end{aligned}
 \end{equation}
 
-koszt to koszt wymnożenia macierzy, zatem  $O(n^2)$.
+koszt rozwiązania to koszt wymnożenia macierzy, zatem  $O(n^2)$.
 
 
 \subsection{W miarę proste układy równań}
@@ -676,7 +676,7 @@ $B_1 \cdot \underbrace{ B_2 \cdot x}_{y} = b$
 
 \subsubsection{}
 
-Zauważmy, że na ten algorytm można popatrzeć jak na rozkład na "łatwiejsze" macierze
+Zauważmy, że na ten algorytm można popatrzeć jak na rozkład na ``łatwiejsze" macierze
 \[\arraycolsep=1em\def\arraystretch{2}
 	\left[
 		\begin{array}{c|c}
@@ -735,8 +735,8 @@ Spróbujmy blokowo:
 	\cdot 
 	\left[
 		\begin{array}{c|c}
-			L_{11} & L_{12} \\ \hline
-			0      & L_{22} 
+			U_{11} & U_{12} \\ \hline
+			0      & U_{22}
 		\end{array}
 	\right]
 \]
@@ -790,7 +790,7 @@ Można na to patrzeć jako na sekwencję przejść A prowadzącą do macierzy U.
 
 \section{Algorytm eliminacji Gaussa}
 \index{eliminacje Gaussa}
-Ten algorytm nie zadziała jeśli w trakcie będziemy dzielić przez 0, np.
+Ten algorytm nie zadziała, jeśli w trakcie będziemy dzielić przez 0, np.
 
 $A = \left[
 	\begin{array}{cc}
@@ -801,7 +801,7 @@ $A = \left[
 Aby algorytm eliminacji Gaussa zadziałał zawsze (o ile tylko A - nieosobliwa), uzupełnimy go o procedurę \uwave{wyboru elementu głównego} (osiowania). 
 
 \begin{enumerate}
-	\item Szukamy w kolumnie, w której prowadzimy eliminację, elementu  największym module (niezerowy, bo A nieosobliwa)
+	\item Szukamy w kolumnie, w której prowadzimy eliminację, elementu o największym module (niezerowy, bo A nieosobliwa)
 	\item "Zamieniam"\footnote{Zamiana wierszy - mnożenie macierzy przez macierz permutacji} wiersz, w którym jest znaleziony element z wierszem wyżej 
 \end{enumerate}
 
@@ -818,25 +818,25 @@ Stąd algorytm rozwiązywania układów równań:
 
 \begin{enumerate}
 	\item Rozłóż $PA = LU$
-	\item Rozwiąż $Ly= Pb$ $\quad\quad O(n^2)$
+	\item Rozwiąż $Ly = Pb$ $\quad\quad O(n^2)$
 	\item Rozwiąż $Ux = y$ $\quad\quad O(n^2)$
 \end{enumerate}
 
 Koszt rozkładu:
 
-$2*(n-1)^2 + 2(n-2)^2 + ... + 2 + O(n^2) = 2 \cdot \underbrace{((n-1)^2 + (n-2)^2 + ... + 1^2)}_{\frac{1}{3}n^2}$
+$2*(n-1)^2 + 2(n-2)^2 + ... + 2 + O(n^2) = 2 \cdot \underbrace{((n-1)^2 + (n-2)^2 + ... + 1^2)}_{\frac{1}{3}n^3}$
 
 \subsection{Uwarunkowanie układu równań liniowych}
 
 \index{uwarunkowanie!układu równań liniowych}
 $x = A^{-1}b, Ax = b$
 
-$\tilde{x} = A^{-1}(b + \delta) = A\tilde{x} = b + \delta$, $\frac{pl x - \tilde{x} \norm{}{} x pl} \leq ?$
+$\tilde{x} = A^{-1}(b + \delta) = A\tilde{x} = b + \delta$, $\frac{\norm{x - \tilde{x}}}{\norm{x}} \leq ?$
 
 
 $\frac{\norm{\delta}}{\norm{b}} \leq \varepsilon$
 \[
-	\norm{x - \tilde{x}} = \norm{A^{-1}b - A^{-1}(b + \delta)} = \norm{A^{-1}b - A^{-1}b - A^{-1}\delta} \leq \pl A
+	\norm{x - \tilde{x}} = \norm{A^{-1}b - A^{-1}(b + \delta)} = \norm{A^{-1}b - A^{-1}b - A^{-1}\delta} = \norm{A^{-1}\delta} \leq \norm{A} \cdot \norm{\delta}
 \]
 
 \[
@@ -896,10 +896,10 @@ $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A 
 
 \begin{wniosek} Jeśli $A$ jest odwracalna i $\norm{A ^ {-1} \Delta} < 1$, to $(A + \Delta)^{-1}$ istnieje i rzecz jasna
 	\[
-		(A \cdot \Delta)^{-1} \leq \frac{\norm{A^{-1}}}{1 - \norm{A^{-1}} \cdot \underbrace{\norm{\Delta}}_{\leq \varepsilon \cdot \norm{A}}}
+		\norm{A \cdot \Delta)^{-1}} \leq \frac{\norm{A^{-1}}}{1 - \norm{A^{-1}} \cdot \underbrace{\norm{\Delta}}_{\leq \varepsilon \cdot \norm{A}}}
 	\]
 	
-	$A + \Delta  A(I + A^{-1} \Delta)$
+	$A + \Delta = A(I + A^{-1} \Delta)$
 	
 	Zatem
 	\[
@@ -923,7 +923,7 @@ $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A 
 	\]
 \end{fakt}
 
-Niestety $\rho_N \leq 2^{N-1}$ i istnieją macierze, na których jest osiągnane. Jednak prawie wszystkie spotykane w życiu macierze mają niewielki wskaźnik wzrostu.
+Niestety $\rho_N \leq 2^{N-1}$ i istnieją macierze, na których jest osiągane. Jednak prawie wszystkie spotykane w życiu macierze mają niewielki wskaźnik wzrostu.
 
 \section{Układy równań z macierzami rozrzedzonymi}
 
@@ -954,7 +954,7 @@ Chcemy przechowywać niezerowe wartości.
 	      
 	\item Metody bezpośrednie dla macierzy rzadkich:
 	      \begin{itemize}
-	      	\item zanim rozkład LU (lub $LL^T$)... najpierw permutacje wierszy i kolumn tak, by w ??? $LU$ pojawiło się jak najwięcej zer;
+	      	\item zanim rozkład LU (lub $LL^T$)... najpierw permutacje wierszy i kolumn tak, by w czynnikach $LU$ pojawiło się jak najwięcej zer;
 	      	      odwracając kolejność wierszy i kolejność kolumn.
 	      \end{itemize}
 \end{enumerate}
@@ -965,13 +965,13 @@ Chcemy przechowywać niezerowe wartości.
 Zamiast poszukiwać dokładnej wartości $x$, takiej że $Ax=b$, znajdźmy jego przybliżenie! Będziemy używać metod iteracyjnych, których podstawowym składnikiem będzie operacja $A \cdot w$, która kosztuje $O(N)$, jeśli $\overbrace{nnz}^{\textrm{non zero}}(A) = O(N)$.
 
 
-Najprostsze metody i metody stacjonarne:
+Najprostsze metody (stacjonarne):
 \begin{align*}
 	A & = M - Z \\
 	Ax & = Mx - Zx = b\\
 	Mx_{k+1} & = b + Zx_k 
 \end{align*}
-Zauważamy, że jeśli $x_i \ra x^\star$ to,
+Zauważamy, że jeśli $x_k \ra x^\star$ to,
 \[
 	Mx_{k+1} \ra Mx^\star,\quad Zx_k \ra Zx^\star
 \]
@@ -1029,20 +1029,20 @@ Przykłady metod stacjonarnych (iteracji prostej):
 \[
 	\begin{array}{ll}
 		a_{11}x_1^{(k+1)} & = b_1 - a_{12}x_2^{(k)} - ... - a_{1N}x_N^{(k)} \\
-		a_{21}x_2^{(k+1)} & = b_2 - \sum_{j\neq 2} a_{2j}x_j^{(k)}          \\
+		a_{22}x_2^{(k+1)} & = b_2 - \sum_{j\neq 2} a_{2j}x_j^{(k)}          \\
 		                  & ...                                             \\
-		a_{N1}x_N^{(k+1)} & = b_N - \sum_{j\neq N} a_{Nj}x_N^{(k)}          \\
+		a_{NN}x_N^{(k+1)} & = b_N - \sum_{j\neq N} a_{Nj}x_N^{(k)}          \\
 		M                 & = diag(A) = D                                   
 	\end{array}
 \]
 
 D - macierz Jacobiego, może być wolno zbieżna.
 
-\begin{twierdz}[o zbieżności macierzy Jacobiego] Niech A maa dominującą przekątną, tzn.
+\begin{twierdz}[o zbieżności macierzy Jacobiego] Niech A ma dominującą przekątną, tzn.
 	\[
 		|A_{ii}| > \sum_{j \neq i}|a_{ij}| \forall_{i=1..N}
 	\]
-	wtedy m. Jacobiego jest zbieżna. (dowód był)	
+	wtedy m. Jacobiego jest zbieżna. (dowód był)
 \end{twierdz}
  
 
@@ -1084,7 +1084,7 @@ gdzie $K_{k, i} = \{r_0, Ar_0, ..., A^{k-1}r_0\}$, gdzie $r_0 = b - Ax_0$.
 \index{metody stacjonarne!gradientów sprzężonych (CG)}
 Zakładamy, że $A = A^T > 0$. Wyznaczmy $x_k \in x_0 + K_k$ takie, żeby:
 \[
-	\norm{x_k - x^\star} \leq \norm{x - x^\star}_A \forall_{x \in x_0 + K_k}
+	\norm{x_k - x^\star}_A \leq \norm{x - x^\star}_A \forall_{x \in x_0 + K_k}
 \]
 gdzie $\norm{y}_A^2 := y^T A y$.	
 	
@@ -1133,14 +1133,14 @@ for i = 0, 1, 2, ...:
     |$Ae_n = r_i$|
     |$x_{i+1} = x_i + e_i$|
 \end{minted}
-Hej, a gdzie tu uproszczenie? Krok 2 i 4 przeprowadzimy dokładnie (jedynie krok 3 w pojedynczym flu). Załóżmy, że nasz algorytm rozwiązywania równań $Ax = b$ w fl jest numerycznie poprawny. To znaczy, że zamiast wyznaczyć dokładną wartość $e_i$, wyznacza jakieś jego przybliżenie $\tilde{e_i}$ takie że jest ono dokładnym rozwiązaniem zadania zaburzonego:
+Hej, a gdzie tu uproszczenie? Krok 2 i 4 przeprowadzimy dokładnie (jedynie krok 3 w pojedynczym flu). Załóżmy, że nasz algorytm rozwiązywania równań $Ax = b$ w fl jest numerycznie poprawny. To znaczy, że zamiast wyznaczyć dokładną wartość $e_i$, wyznacza jakieś jego przybliżenie $\tilde{e_i}$ takie, że jest ono dokładnym rozwiązaniem zadania zaburzonego:
 \[
 	(A + H)\tilde{e_i} = r_i \ \ \ \textrm{(dokładnie)}
 \]
 
-przy czym $\norm{H} \leq c \norm{A} \cdot \underbrace{\nu}_{\textrm{precyzja algorytmu? pojedynczej prezycji}}$
+przy czym $\norm{H} \leq c \norm{A} \cdot \underbrace{\nu}_{\textrm{precyzja arytmetyki pojedynczej prezycji}}$
 
-Niech $x^\star$ rozwiązanie dokładne $Ax = b$.
+Niech $x^\star$ będzie rozwiązaniem dokładnym $Ax = b$.
 
 \begin{align*}
 	\underbrace{x^\star - x_{n+1}}_{e_{n+1}} & = \underbrace{x^\star - x_n}_{e_n} - \tilde{e_n} \\

@@ -3663,6 +3663,157 @@ Zatem skoro $x_n \longrightarrow x^\star$, to
 	\]
 \end{twierdz}
 
+\section{Całkowanie numeryczne}
+
+Po co informatykom liczenie całek? Może się wydawać, że skoro było na analizie, to już nie trzeba. Aaale to nie do końca prawda! Po pierwsze, już się u nas całki pojawiały - przy iloczynach sklarnych. Jak widzimy, numeryka tak jak biurokracja sama tworzy problemy, które potem rozwiązuje. Ale nie tylko! W wielu zastosowaniach trzeba liczyć różne średnie i stąd te całki mogą się pojawić. 
+
+My tutaj tylko będziemy mówić o całkach jednowymiarowych, a szkoda, bo całkowanie po wielu wymiarach to istna kopalnia pieniędzy...
+
+(Tego tematu nie będzie na egzaminie... Ale tylko w pierwszym terminie.)
+
+\textbf{Przykładowe zastosowania wielomianów interpolacyjnych}
+\begin{itemize}
+	\item Aproksymacja skomplikowanych funkcji
+	\item Rozwiązywanie równań nieliniowych
+	\item Obliczenia całek
+\end{itemize}
+
+\subsection*{Kwadratura}
+
+Termin ``kwadratura numeryczna", często po prostu kwadratura, jest synonimem całkowania numerycznego, w szczególności w odniesieniu do całek jednowymiarowych.
+
+\textbf{Problem: } Obliczyć przybliżoną wartość całki $I(f) = \int\limits_a^bf(x)dx$.
+
+\textbf{Pomysł: } Przybliżyć $f$ wielomianem, bo one oczywiście łatwo się całkują. Dokładniej:
+\[
+	w(x)\textrm{ - wielomian interpolacyjny Lagrange'a dla f}
+\]
+\[
+	w(x) = \sum\limits_{i=0}^n f(x_i)\cdot L_i(x) \quad L_i(x)\textrm{wielomiany bazowe Lagrange'a}
+\]
+Zatem:
+\[
+	I(f) \simeq \int\limits_a^bw(x)dx = \int\limits_a^b zf(x_i)L_i(x)dx = \sum\limits_{i=0}^n f(x_i)\underbrace{\int\limits_a^b L_i(x)dx}_{A_i} = \sum\limits_{i=0}^n A_if(x_i)
+\]
+\begin{defi}
+	Kwadraturą nazywamy funkcjonały liniowe postaci $Q(f) = \sum\limits_{i=0}^n a_if(x_i)$. Jeśli:
+	\[
+		Q(f) = \int\limits_a^bw_f(x)dx
+	\]
+	gdzie $w_f$ - wielomian interpolacyjny Lagrange'a dla $f$ oparty na węzłach $x_0, ..., x_n$, to kwadraturę nazywamy \textbf{interpolacyjną}.
+\end{defi}
+
+\textbf{Przykłady:}
+\begin{itemize}
+	\item kwadratura prostokątów:
+	\[
+		Q(f) = (b-a)\cdot f(\frac{a+b}{2})
+	\]
+	(obrazek)
+	\item kwadratura trapezów:
+	\[
+		T(f) = \frac{b-a}{2}(f(a)+f(b))
+	\]
+	(obrazek)
+	\item kwadratura parabol (Simpsona)
+	\[
+		P(f) = \frac{b-a}{6}(f(a) + 4f(\frac{a+b}{2})+f(b))
+	\]
+	(obrazek)
+\end{itemize}
+
+\subsection{Błąd kwadratur interpolacyjnych}
+\begin{twierdz}
+	Niech $f \in C^{n+1}(a, b)$ oraz $\norm{f^{n+1}}_{\infty, [a, b]} \leq M$ i niech $Q$ będzie kwadraturą interpolacyjną opartną na węzłąch $x_0, \cdots x_n \in [a, b]$. Wtedy:
+	\[
+		|Q(f) - I(f)| \leq \frac{M}{(n+1)!} \cdot |b-a|^{n+2}
+	\]
+\end{twierdz}
+
+\begin{twierdz}[o błędzie kwadratury trapezów i Simpsona]$\\$
+	\begin{itemize}
+		\item jeśli $f \in C^2[a, b]$, to dla kwadratury trapezów:
+		\[
+			I(f) - \int\limits_a^bf(x)dx = \frac{(b-a)^3}{12}f^{(2)}(\xi_T)
+		\]
+		gdzie $\xi_T \in [a, b]$
+		\item jeśli $f \in C^4[a, b]$ to dla kwadratury Simpsona
+		\[
+			P(f) - \int\limits_a^bf(x)dx = \frac{(b-a)^5}{2280}f^{(4)}(\xi_T)
+		\]
+		dla pewnego $\xi_T \in [a, b]$
+	\end{itemize}
+\end{twierdz}
+
+\subsection{Kwadratury złożone}
+
+Chcielibyśmy, aby błąd kwadratur malał do zera, gdy liczba węzłów rośnie do nieskończoności. Można to osiągnąć stosując np. kwadratury złożone. Są to kwadratury, które powstają przez scałkowanie funkcji kawałkami wielomianowej interpolującej $f$.
+
+\textbf{Idea:} $\int\limits_a^b f(x)dx = \sum_{i=0}^{n-1} \int\limits_{x_i}^{x_{i+1}} f(x)dx$
+(obrazek)
+\[
+	I(f) \simeq \sum\limits_{i=0}^{n-1} Q_{[x_i, x_{i+1}]}(f) =: Q_n(f)
+\]
+
+\begin{twierdz} Jeśli $Q$ jest oparta na $m$ węzłach kwadraturą interpolacyjną, a $Q_n$ - kwadraturą złożoną, opartą na podziale $[a, b]$ na $n$ równych części, natomisat $f \in C^m[a, b]$, $\norm{f^{(m)}}_\infty \leq M$ to:
+\[
+\begin{array}{rl}
+	|Q_n(f) - I(f)| & = |\sum_i Q_{[x_i, x_{i+1}]}(f) - \sum\limits_a^b f(x)dx| \\
+	& = |\sum\limits_{i=0}^{n-1}\left(Q_{[x_i, x_{i+1}]}(f) - \int\limits_{x_i}^{x_{i+1}} f(x)dx\right)| \\
+	& \leq \sum |Q_{[x_i, x_{i+1}]}(f) - \int\limits_{x_i}^{x_{i+1}} f(x)dx|\\
+	|Q_{[x_i, x_{i+1}]}(f) - \int\limits_{x_i}^{x_{i+1}} f(x)dx|  & \leq \frac{M}{m!}|x_{i+1}-x_i|^{m+1} \\
+	& = \frac{M}{m!}(\frac{|b-a|}{n})^{m+1}
+\end{array}
+\]
+Zatem
+\[
+\begin{array}{rl}
+	|I(f) - Q_n(f)| & \leq \bcancel{n}\frac{M}{m!}(frac{b-a}{n})^m(\frac{b-a}{\bcancel{n}}) \\
+	& = \frac{M}{m!}(b-a)\cdot(\frac{b-a}{n})^m = O(h^m)
+\end{array}
+\]
+gdzie $h = \frac{b-a}{n}$
+\end{twierdz}
+
+\begin{wniosek}
+	Dla ustalonego $m$, błąd kwadratury złożonej opartej na przedziale $[a, b]$ na $n$ równych części
+	\[
+		|I(f) - Q_n(f)| \stackrel[n \ra \infty]{}{\longrightarrow} 0
+	\]
+\end{wniosek}
+
+Dygresja: powinniśmy zagęscić podził tak, gdzie f się szybko zmienia, a rozrzedzić tam gdzie wolno się zmienia. Ale z tym jest jak z uzdrowianiem służby zdrowia: łatwo się mówi, trudniej się robi. I tutaj jest pomysł: zamiast patrzeć na to gdzie się szybko/wolno zmienia to: zagęścijmy podział tam, gdzie kwadratura ma duży błąd, a rozrzedźmy tam gdzie błąd jest w zadanej tolerancji. Jest lepiej, ale wciąż daleko od prostego rozwiązania. Teraz jednak wkraczamy na grząski grunt, gdzie numeryka przestaje być nauką, a zaczyna być sztuką. Bo to czy błąd będzie duży lub mały trzeba estymować, szacować, stosować pewne heurystyki. Wróćmy do nauki.
+
+\begin{defi}
+	Kwadratura $Q(f)$ jest rzędu $r$ gdy jednocześnie:
+	\begin{itemize}
+		\item jest dokładna dla wszystkich wielomianów stopnia $< r$
+		\item istnieje wielomian stopnia $r$, dla którego est niedokładna 
+	\end{itemize}
+\end{defi}
+
+\subsection{Maksymalny rząd kwadratur interpolacyjnych}
+\begin{fakt} Jeśli $Q(f)$ - kwadratura interpolacyjna oparta na $(n+1)$ węzłach, to:
+\[
+	n+1 \leq \textrm{rząd}(Q) \leq 2(n+1)
+\]
+\end{fakt}
+
+\begin{twierdz}[maksymalny rząd ?? kwadratury Gaussa]
+	Spośród wszystkich kwadratur interpolacyjnych opartych na $(n+1)$ węzłach, najwyższy rząd równy $2(n+1)$, ??? kwadratury Gaussa:
+	\begin{itemize}
+		\item oparte na węzłach będących zerem $(n+1)$ wielomianu ortogonalnego w $L^2_\rho(a, b)$
+	\end{itemize}
+\end{twierdz}
+
+\begin{twierdz}[o błędzie kwadratury Gaussa]
+	Jeśli $f \in  C^{2n+2}[a, b]$, a $Q$ - kwadratura Gaussa oparta na $(n+1)$ węzłach, to:
+	\[
+		\int\limits_a^b f(x)\rho(x)dx - Q(f) = \norm{P_{n+1}}^2_\rho\cdot \frac{f^{(2n+2)}(\xi)}{(2n+2)!}
+	\]
+	gdzie $\xi \in [a, b]$, $P_{n+1}$ - $(n+1)$ wielomian ortogonalny w $L^2_\rho(a, b)$
+\end{twierdz}
+
 \chapter{Appendix A}
 Czyli wszystko co nie pasuje do poprzednich rozdziałów i nie będzie na egzaminie.
 \section{Krzywe Bézier'a}

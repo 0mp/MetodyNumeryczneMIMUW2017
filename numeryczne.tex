@@ -1931,7 +1931,7 @@ Uwagi:
 Czy da się dokonać taniej eliminacji Gaussa dla macierzy Vandermonde'a? Spróbujmy wybrać inną bazę.
 
 \begin{obserw}
-Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n$, natomiast $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_i(x_i) - w_{n-1}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x_{n-1})}_{\phi_n(x)}$. Czyli
+Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n$, natomiast $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_n(x_i) - w_{n-1}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x_{n-1})}_{\phi_n(x)}$. Czyli
 \[
 	w_n(x) = w_{n-1}(x) + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
 \]
@@ -2152,9 +2152,9 @@ Podobnie ma się sprawa w przypadku implementacji funkcji elementarnych ($\sin$,
 Z tego punktu widzenia, interpolacja wielomianowa może być traktowana jako jeden ze sposobów aproksymacji funkcji, opartym na próbkowaniu. Naturalnym staje się więc pytanie o błąd takiej aproksymacji.
 
 \begin{twierdz}[o najgorszym błędzie interpolacji]
-Niech $f \in C^{n+1}[a, b]$\footnote{zbiór funkcji na przedziale $[a, b]$, $(n+1)$-krotnie różniczkowalnych}, $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w_n(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
+Niech $f \in C^{n+1}[a, b]$\footnote{zbiór funkcji na przedziale $[a, b]$, o $(n+1)$ ciągłych pochodnych}, $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
 \[
-	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)}\ f(x) - w_n(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(\omega_n(x))
+	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)}\ f(x) - w(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(\omega_n(x))
 \]
 gdzie $\omega_n(x) = (x-x_0) \cdots (x-x_n)$ (gdzie $\omega(x_i) = f(x_i)$ dla $i = 0, \cdots, n$). (Dowód był)
 
@@ -2220,7 +2220,7 @@ f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
 \[
 	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
 \]
-Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
+Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
 
 \section{Interpolacja funkcjami sklejanymi (splajny)}
 Spójrzmy na interpolację wielomianową w węzłach równoodległych funkcji $f(x) = \cfrac{1}{1+x^2}$
@@ -2387,7 +2387,7 @@ $s_i := s|_{[x_i, x_{i+1})}$:
 			s_i''(x) = 2c_i + 6d_i(x-x_i)
 		\]
 		\[
-			s_i''(x) = s_{i+1}''(x_{i+1})
+			s_i''(x_{i+1}) = s_{i+1}''(x_{i+1})
 		\]
 		Niech $h = x_{i+1}-x_i$. Jak to sobie rozpiszemy, mamy:
 		\begin{align*}
@@ -2396,7 +2396,7 @@ $s_i := s|_{[x_i, x_{i+1})}$:
 		\end{align*}
 		\item ciagłość splajnu w $x_{i+1}$
 		\[
-			s_i(x_{i+1}) = s_{i+1}(x{i+1})
+			s_i(x_{i+1}) = s_{i+1}(x_{i+1})
 		\]
 		\[
 			y_i + b_ih + c_i \cdot h^2 + d_i\cdot h^3 = y_{i+1}
@@ -3047,7 +3047,7 @@ Zatem także dla $v = v_j$:
 	(f-v^\star, v_j) = 0 \quad \forall_{j = 1, \cdots, n}
 \]
 \[
-	\underbrace{(\sum \alpha_i^\star *v_i, v_j)]}_{\sum \alpha_i^\star(v_i, v_j)} = (v^\star, v_j) = (f, v_j) \quad \textrm{Układ h równań z n niewiadomymi}
+	\underbrace{[\sum \alpha_i^\star (*v_i, v_j)]}_{\sum \alpha_i^\star(v_i, v_j)} = (v^\star, v_j) = (f, v_j) \quad \textrm{Układ h równań z n niewiadomymi}
 \]
 
 Macierz $\left[ \begin{array}{c} (v_i, v_j) \end{array} \right]_{i, j=1}^n$ jest
@@ -3060,9 +3060,9 @@ Układ ma więc dokładnie 1 rozwiązanie.
 
 \textbf{Uwaga} Macierz Gramma jest zazwyczaj gęsta i w wielu przypadkach źle uwarunkowana. Jest SPD (symetryczna i dodatnio określona)), więc zadziała algorytm Choleskiego (koszt $O(n^3)$).
 
-Możemy uprościć zadanie wyznaczania ENA przez odpowowiedni dobór bazy:
+Możemy uprościć zadanie wyznaczania ENA przez odpowiedni dobór bazy:
 
-Wybierając bazę orogonalną w $V$:
+Wybierając bazę ortogonalną w $V$:
 \[
 	V = span\{p_i, p_j\} = 0 \quad dla\ i \neq j
 \]
@@ -3167,7 +3167,7 @@ H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
 \[
 	\norm{H_k}^2 = \sqrt{\pi} 2^k k!
 \]
-\subsubsection{Wielomimany Czebyszewa}
+\subsubsection{Wielomiany Czebyszewa}
 \[
 	L_\rho^2(-1, 1) \quad \rho(x) = \cfrac{1}{\sqrt{1-x^2}}
 \]
@@ -3358,11 +3358,11 @@ Dowód ``$\implies$" pomijamy, bo niełatwy.
 \end{proof}
 Po co właściwie to robimy? Norma nieskończoność to maksimum z błędu na całym przedziale, czyli jest to błąd najgorszy. Wyobraźmy sobie, że piszemy biblotekę numeryczną, w której wyznaczamy jakąś wartość funkcji. Naturalnym sposobem jest przybliżanie jej wielomianem, bo to jest fajna prosta funkcja. Chciałbym ten wielomian wyznaczyć w taki sposób, aby spełnić z góry zadane kryterium numerycznej poprawności. Jak to zrobić żeby było tanio i dobrze. Powiedzmy, że chcemy żeby przynajmniej dawało błąd nie większy niż 2epsilon od poprawnego wyniku. Czyli mam zadane kryterium. Więc muszę znaleźć taki wielomian, który to spełni. Ponieważ to ma być funkcja biblioteczna, to będzie często wykonywana i musi być tania, dlatego chciałbym mieć dla \textbf{możliwie niskiego stopnia} jak \textbf{najlepszą jakość aproksymacji}. Czy można zrobić coś lepiej niż najlepiej? Nie, dlatego to jest najlepszy wielomian.
 
-\begin{twierdz}[o jednoznaczności optymalnego wyelomianu aproksymajci jednostajnej]
+\begin{twierdz}[o jednoznaczności optymalnego wielomianu aproksymacji jednostajnej]
 Istnieje dokładnie 1 ENA dla zadanej $f \in C[a, b]$ w sensie aproksymacji jednostajnej.
 \end{twierdz}
 \begin{proof}
-Niech $p^\star$, $q^\star$ - dwa optymalne wielmiany. Wtedy $\frac{1}{2}(p^\star + q^\star)$ też jest optymalny! Zatem dla niego i $f$ istnieje alternans:
+Niech $p^\star$, $q^\star$ - dwa optymalne wielomiany. Wtedy $\frac{1}{2}(p^\star + q^\star)$ też jest optymalny! Zatem dla niego i $f$ istnieje alternans:
 \[
 	f(x_i) - \frac{1}{2}(p^\star(x_i) + q^\star(x_i)) = \varepsilon\cdot(-1)^i\underbrace{\norm{f-\frac{1}{2}(p^\star + q^\star)}}_{=\underbrace{=\norm{f-p^\star}}_{=E_n := \norm{f - q^\star}}}
 \]
@@ -3380,7 +3380,7 @@ Wyznaczanie ENA dla wielomianów aproksymacji jednostajnej: iteracyjny (nieskoń
 
 \subsubsection{Inerpolacja o najlepszej aproksymacji w normie supremum}
 
-Niech $p^\star \in \mathbb{P}_n$ - ENA dla $f$ i niech $E_n = \norm{f-f p^\star}_\infty$. Rozważamy $w \in \mathbb{P}_n$ - wielomian interpolacyjny Lagrange'a dla $f$ oparty na węzłach $x_0, \cdots, x_n$:
+Niech $p^\star \in \mathbb{P}_n$ - ENA dla $f$ i niech $E_n = \norm{f- p^\star}_\infty$. Rozważamy $w \in \mathbb{P}_n$ - wielomian interpolacyjny Lagrange'a dla $f$ oparty na węzłach $x_0, \cdots, x_n$:
 \[
 	w(x) = \sum_{i=0}^n f(x_i) \cdot L_i(x)
 \]
@@ -3390,7 +3390,7 @@ gdzie
 \]
 Wtedy
 \[
-	\norm{f-w}_\infty = \norm{f-p^\star + p^\star - w}_infty \leq \underbrace{\norm{f-p^\star}_\infty}_{E_n} + \norm{p^\star - w}_\infty
+	\norm{f-w}_\infty = \norm{f-p^\star + p^\star - w}_\infty \leq \underbrace{\norm{f-p^\star}_\infty}_{E_n} + \norm{p^\star - w}_\infty
 \]
 ... za tydzień dokończenie twierdzenia
 
@@ -3410,7 +3410,7 @@ Wtedy
 
 \textbf{Uzupełnienie} Interpolacja o najlepszej aproksymacji w sensie jednostajnym (w przypadku ogólnym)
 
-$\underbrace{E_n}_{błąd najlepszej aproksymacji} = \norm{f-p^\star}_\infty$, $p^\star$ - wielomian najlepszej aproksymacji stopnia $\leq$ n.
+$\underbrace{E_n}_{blad\ najlepszej\ aproksymacji} = \norm{f-p^\star}_\infty$, $p^\star$ - wielomian najlepszej aproksymacji stopnia $\leq$ n.
 
 Niech $w$ - wielomian inteprolacyjny Lagrange'a oparty na $x_0, ..., x_n$ i pytanie: jak się ma $\norm{f-w}_\infty$ do $E_n$?
 
@@ -3531,12 +3531,12 @@ Zatem w przybliżeniu:
 \[
 	0 = f(x) + f'(x) \cdot h \implies h
 \]
-I jeśli $x \simeq x^\star$, to $x+h$ - powinno być nacznie lepsze.
+I jeśli $x \simeq x^\star$, to $x+h$ - powinno być znacznie lepsze.
 \[
 	x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
 \]
 
-\begin{twierdz}{o zbienżności m. Newtona}
+\begin{twierdz}{o zbieżności m. Newtona}
 	Niech $f \in C^2[a, b]$ i istnieje $x^\star \in (a, b)$ t. że $f(x^\star) = 0$ oraz $f'(x^\star) \neq 0$. Wtedy istnieje otoczenie $U \ni x^\star$ takie, że metoda Newtona jest zbieżna do $x^\star$ dla dowolnego $x_0 \in U$. Ponadto zbieżność jest kwadratowa:
 	\[
 		\exists_{c>0} \forall_{n = 0, 1, \cdots} |x_{n+1} - x^\star| \leq c \cdot |x_n - x^\star|^2
@@ -3544,7 +3544,7 @@ I jeśli $x \simeq x^\star$, to $x+h$ - powinno być nacznie lepsze.
 \end{twierdz}
 
 \begin{proof}
-	Niech $e_n := x_n - x^\star$. Mamy więc $x_{n+1} = x_{n+1} - x^\star = \underbrace{x_n - x^\star}_{e_n} - \frac{f(x_n)}{f'(x_n)}$
+	Niech $e_n := x_n - x^\star$. Mamy więc $e_{n+1} = x_{n+1} - x^\star = \underbrace{x_n - x^\star}_{e_n} - \frac{f(x_n)}{f'(x_n)}$
 	Ponadto ze wzoru Taylora:
 	\[
 	0 = f(x^\star) = f(x_n - e_n) = f(x_n) - f'(x_n)\cdot e_n + \frac{1}{2}f''(\xi)\cdot e_n^2
@@ -3632,7 +3632,7 @@ Są pewne modyfikacje do metody Newtona, które poprawiają zbieżnosć?
 
 Na przykład:
 \[
-	x_{n+1} = x_n - \cfrac{f(x_n}{f'(x_n)}
+	x_{n+1} = x_n - \cfrac{f(x_n)}{f'(x_n)}
 \]
 inaczej:
 \[

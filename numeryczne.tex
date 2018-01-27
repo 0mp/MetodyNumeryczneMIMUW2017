@@ -277,7 +277,7 @@ Dane: $x, y \in \RR$. Obliczamy
 
 Jaki jest błąd?
 \[
-	\cfrac{|\tilde{s} - s|}{|s|} = \cfrac{|x + (\varepsilon_x + \varepsilon)\cdot x + y + (\varepsilon_y + \varepsilon)\cdot y + \textrm{małe }\nu^2|}{|x + y|} \leq 2 \cdot \cfrac{|x|+|y|}{|x+y|} \cdot \nu
+	\cfrac{|\tilde{s} - s|}{|s|} = \cfrac{|x + (\varepsilon_x + \varepsilon)\cdot x + y + (\varepsilon_y + \varepsilon)\cdot y + \textrm{małe }\nu^2 - x - y|}{|x + y|} \leq 2 \cdot \cfrac{|x|+|y|}{|x+y|} \cdot \nu
 \]
 
 Zatem
@@ -749,7 +749,7 @@ $
 	A_{1,1} & = L_{1,1} \cdot U_{1,1}                                                                           \\
 	A_{2,1} & = L_{2,1} \cdot U_{1,1} \implies L_{2,1} = A_{2,1}U_{11}^{-1}                                     \\
 	A_{1,2} & = L_{1,1} \cdot U_{1,2}  \implies U_{1,2} = L^{-1}_{1,1} A_{1,2}                                  \\
-	A_{2,2} & = L_{2,1} \cdot U_{1,2} + L_{1,2} \cdot A_{2,2} \implies A_{22} - L_{2,1}U_{1,2} = L_{2,2}U_{2,2} 
+	A_{2,2} & = L_{2,1} \cdot U_{1,2} + L_{2,2} \cdot U_{2,2} \implies A_{22} - L_{2,1}U_{1,2} = L_{2,2}U_{2,2} 
 \end{array}
 $
 
@@ -837,7 +837,7 @@ $\tilde{x} = A^{-1}(b + \delta) = A\tilde{x} = b + \delta$, $\frac{\norm{x - \ti
 
 $\frac{\norm{\delta}}{\norm{b}} \leq \varepsilon$
 \[
-	\norm{x - \tilde{x}} = \norm{A^{-1}b - A^{-1}(b + \delta)} = \norm{A^{-1}b - A^{-1}b - A^{-1}\delta} = \norm{A^{-1}\delta} \leq \norm{A} \cdot \norm{\delta}
+	\norm{x - \tilde{x}} = \norm{A^{-1}b - A^{-1}(b + \delta)} = \norm{A^{-1}b - A^{-1}b - A^{-1}\delta} = \norm{A^{-1}\delta} \leq \norm{A^{-1}} \cdot \norm{\delta}
 \]
 
 \[
@@ -846,7 +846,7 @@ $\frac{\norm{\delta}}{\norm{b}} \leq \varepsilon$
 
 Wpływ zaburzeń macierzy i prawej strony:
 
-$Ax = b$, $(a + \Delta)\tilde{x} = b + \delta$, gdzie
+$Ax = b$, $(A + \Delta)\tilde{x} = b + \delta$, gdzie
 
 $\frac{\norm{\Delta}}{\norm{A}} \leq \varepsilon$, $\frac{\delta}{b} \leq \varepsilon$
 
@@ -897,7 +897,7 @@ $\norm{\tilde{x} - x} = \norm{(A+\Delta)^{-1}(\delta - \Delta x)} \leq \norm{(A 
 
 \begin{wniosek} Jeśli $A$ jest odwracalna i $\norm{A ^ {-1} \Delta} < 1$, to $(A + \Delta)^{-1}$ istnieje i rzecz jasna
 	\[
-		\norm{A \cdot \Delta)^{-1}} \leq \frac{\norm{A^{-1}}}{1 - \norm{A^{-1}} \cdot \underbrace{\norm{\Delta}}_{\leq \varepsilon \cdot \norm{A}}}
+		\norm{(A + \Delta)^{-1}} \leq \frac{\norm{A^{-1}}}{1 - \norm{A^{-1}} \cdot \underbrace{\norm{\Delta}}_{\leq \varepsilon \cdot \norm{A}}}
 	\]
 	
 	$A + \Delta = A(I + A^{-1} \Delta)$
@@ -1000,7 +1000,7 @@ Będziemy dobierać $M$ tak, by rozwiązanie układu $Mx_{k+1} = \tilde{b}$ był
 		& = M^{-1}Zx_k - M^{-1}Zx^\star\\
 		& = M^{-1}Z(x_k - x^\star) \\ \\
 		\norm{x_{k+1} - x^\star} & = \norm{M^{-1}Z(x_k - x^\star)} \\
-		& \leq \norm{M^{-1}Z} \cdot \underbrace{\norm{x_k - x^\star}}_{\gamma < 1} \\ \\
+		& \leq \underbrace{\norm{M^{-1}Z}}_{\gamma < 1} \cdot \norm{x_k - x^\star} \\ \\
 		\norm{x_{k+1} - x^\star} & \leq \underbrace{\gamma^{k+1}}_{gdy\ k \ra \infty, to\ \ra 0} \norm{x_0 - x\star}
 		 && \qedhere
   \end{align*}
@@ -1104,19 +1104,19 @@ gdzie $\norm{y}_A^2 := y^T A y$.
 	Dla macierzy niesymetrycznych, nieosobliwych metoda GMRES minimalizuje $\norm{r_k}_2$, dla $x \in x_0 + K_k$.
 \end{fakt}
 
-Jak licząc w niższej prezycji uzyskać wynik wyższej precyzji?
+Jak licząc w niższej precyzji uzyskać wynik wyższej precyzji?
 
 \subsection{Iteracyjne poprawianie rozwiązania}
 
 $Ax = b$
 
-Umiemy ``tanio" obliczyć rozwiązanie w niższej prezycji, ale chcemy uzyskać rozwiązanie w wyższej. Pomysł jest następujący: \textbf{Algorytm iteracynego poprawiania}.
+Umiemy ``tanio" obliczyć rozwiązanie w niższej precyzji, ale chcemy uzyskać rozwiązanie w wyższej. Pomysł jest następujący: \textbf{Algorytm iteracyjnego poprawiania}.
 
 $x_0$ - rozwiązanie obliczone w niższej precyzji (dla uproszczenia: w pojedynczej)
 
-$r = b-Ax_0$ - reziduum obliczone w podwójnej prezycji
+$r = b-Ax_0$ - reziduum obliczone w podwójnej precyzji
 
-Gdybym więc rozwiązał układ rozwiązania taki: $Ae = r$, to dostałbym poprawkę, ktora przyłożona do $x_0$ dałaby poprawne rozwiązanie $x = x_0 + e$. Ale poniważ $Ae = r$ policzę w pojedynczej precyzji to policzę to niedokładnie, ale miejmy nadzieję, że to nam i tak poprawi wynik. Zatem teraz w podwónej precyzji policzę $x = x_0 + e$. Mogę tak robić iteracyjnie:
+Gdybym więc rozwiązał układ rozwiązania taki: $Ae = r$, to dostałbym poprawkę, która przyłożona do $x_0$ dałaby poprawne rozwiązanie $x = x_0 + e$. Ale poniważ $Ae = r$ policzę w pojedynczej precyzji to policzę to niedokładnie, ale miejmy nadzieję, że to nam i tak poprawi wynik. Zatem teraz w podwónej precyzji policzę $x = x_0 + e$. Mogę tak robić iteracyjnie:
 
 $x_0$ - rozwiązanie w pojedynczej
 \begin{minted}[linenos]{python}
@@ -1154,7 +1154,7 @@ Niech $x^\star$ będzie rozwiązaniem dokładnym $Ax = b$.
 Zatem
 \begin{align*}
 	\norm{e_{n+1}} & = \norm{(I - (I - B)^{-1})A^{-1} r_n} \\
-	& \leq \norm{I - (I - B){-1}} \cdot \norm{\underbrace{A^{-1} r_n}_{e_n}} \\
+	& \leq \norm{I - (I - B)^{-1}} \cdot \norm{\underbrace{A^{-1} r_n}_{e_n}} \\
 	& \leq \norm{B} \cdot \norm{(I - B)^{-1}} \cdot \norm{e_n}
 \end{align*}
 
@@ -1230,12 +1230,12 @@ Jak to rozwiązać? Przyda nam się jeszcze jeden rozkład.
 
 \subsection{Rozkład QR macierzy prostokątnej} \index{rozkład!QR}
 
-Algorytm rozwiązaywania LZNK przez rozkład QR
+Algorytm rozwiązywania LZNK przez rozkład QR
 
 
 \texttt{krok 1: Wyznacz rozkład $A = QR$}
 
-\texttt{krok 2: Mnimalizuj }\begin{align*}
+\texttt{krok 2: Minimalizuj }\begin{align*}
 \norm{b - Ax}_2^2 &= \norm{b - QRx}^2_2 \\
 & = \norm{Q(Q^Tb - Rx)}_2^2 \\
 & \stackrel{\norm{Q y}_2 = \norm{y}_2}{=} \norm{Q^Tb - Rx}_2^2 \\
@@ -1424,7 +1424,7 @@ kolumny $V$ - prawe wektory szczególne
 
 \begin{fakt} $\ $ %todo usunąć ten hack na nową linjkę :D
 	\begin{enumerate}
-		\item Jeśli $A=A^T$, to oczywście ma rozkład $A = U \cdot \Lambda \cdot U^T$, gdzie kolumny $U$ to wartości własne A, $\Delta = \begin{bmatrix}
+		\item Jeśli $A=A^T$, to oczywiście ma rozkład $A = U \cdot \Lambda \cdot U^T$, gdzie kolumny $U$ to wektory własne A, $\Delta = \begin{bmatrix}
 		      \lambda_1 & 0 & 0\\ 
 		      0 & \ddots & 0\\ 
 		      0 & 0 & \lambda_n 
@@ -1436,7 +1436,7 @@ kolumny $V$ - prawe wektory szczególne
 		\item Wartość własna $A^TA$ to $\sigma_i^2$.
 		       			
 	      \begin{proof}
-	       	$A^TA = (U_1\Sigma V^T)^T(U_1 \Sigma_1 V^T) = V \Sigma_1 \underbrace{U_1^T U_1 \Sigma_1 V^T}_{I} = V \Sigma_1^2V^T$, $\Sigma_1^2 = \begin{bmatrix}
+	       	$A^TA = (U_1\Sigma V^T)^T(U_1 \Sigma_1 V^T) = V \Sigma_1 \underbrace{U_1^T U_1 }_{I} \Sigma_1 V^T = V \Sigma_1^2V^T$, $\Sigma_1^2 = \begin{bmatrix}
 		      \lambda_1^2 & 0 & 0\\ 
 		      0 & \ddots^2 & 0\\ 
 		      0 & 0 & \lambda_n^2 
@@ -1444,7 +1444,7 @@ kolumny $V$ - prawe wektory szczególne
 		\end{proof}
 				
 		\item $AA^T$ jej wartość własna to $\sigma_1^2, ..., \sigma_m^2$ i $(n-m)$ zer.
-		      Dowód: analogicnzie jak 2.
+		      Dowód: analogicznie jak 2.
 		      		
 		\item Jeśli $A$ - pełnego rzędu, to rozwiązaniem LZNK $\norm{b - AX}_2 \ra min!$ jest $x = V\Sigma_1^{-1} U_1^Tb$.
 		      		
@@ -1597,7 +1597,7 @@ for k = 0, 1, 2, ...:
     |$x_{k+1}$| = A * |$x_k$|
     |$x_{k+1} = \frac{x_{k+1}}{\norm{x_{k+1}}_2^2}$|
 \end{minted}
-Działanie tej metody przeanalizujemy dla A, która jet diagonalizowalna:
+Działanie tej metody przeanalizujemy dla A, która jest diagonalizowalna:
 \[
 	X^{-1} A X = \Lambda = \begin{bmatrix} \lambda_1 &  & \\  &  \ddots & \\ &  & \lambda_n \end{bmatrix}
 \]
@@ -1628,10 +1628,10 @@ Szybkość zbieżności $x_k$ do kierunku wektora $v_1$ jest proporcjonalna do $
 
 %Co warto zauważyć:
 
-\begin{fakt}
-	Jeśli $\lambda$ - w. własna macierzy A, to $(\lambda - \nu)$ - w. własny macierzy $(A - \nu I)$
+\begin{fakt} 
+	Jeśli $\lambda$ - w. własna macierzy A, to $(\lambda - \mu)$ - wartość własna macierzy $(A - \mu I)$
 	\[
-		(A - \nu I)v \overbrace{=}^{v\textrm{ - wektor własny odpowiadający }\lambda} = Av - \lambda v = \lambda v - \nu v = (\lambda - \nu)v
+		(A - \mu I)v \overbrace{=}^{v\textrm{ - wektor własny odpowiadający }\lambda} = Av - \mu v = \lambda v - \mu v = (\lambda - \mu)v
 	\]
 \end{fakt} 
 
@@ -1748,8 +1748,8 @@ No dobrze, ale ile wynosi wyznacznik?
 	
 \end{twierdz}
 
-\begin{twierdz}[o uwarunkowaniu zadania wyznaczania wartości własnej macierzy diagonalizowalnej, twierdzenie B....?-Fike]
-	Niech $A$ będzie diagonaliziwalna, tzn. istnieje $X$ nieosobliwa t. że
+\begin{twierdz}[o uwarunkowaniu zadania wyznaczania wartości własnej macierzy diagonalizowalnej, twierdzenie Bauera-Fike]
+	Niech $A$ będzie diagonalizowalna, tzn. istnieje $X$ nieosobliwa t. że
 	
 	\[
 		X^{-1}AX = \left[ \begin{array}{ccc} \lambda_i & & \\ & \ddots \\ & & \lambda_N \end{array} \right] = \Lambda

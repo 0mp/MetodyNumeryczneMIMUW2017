@@ -2152,14 +2152,12 @@ Podobnie ma się sprawa w przypadku implementacji funkcji elementarnych ($\sin$,
 
 Z tego punktu widzenia, interpolacja wielomianowa może być traktowana jako jeden ze sposobów aproksymacji funkcji, opartym na próbkowaniu. Naturalnym staje się więc pytanie o błąd takiej aproksymacji.
 
-\begin{twierdz}[o najgorszym błędzie interpolacji]
-Niech $f \in C^{n+1}[a, b]$\footnote{zbiór funkcji na przedziale $[a, b]$, o $(n+1)$ ciągłych pochodnych}, $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
+\begin{twierdz}[o błędzie interpolacji]
+Niech $f \in C^{n+1}[a, b]$\footnote{zbiór funkcji na przedziale $[a, b]$, o $(n+1)$ ciągłych pochodnych}, $a = x_0 < x_1 < \cdots < x_n = b$ i niech $w_f(x)$ będzie wielomianem interpolacyjnym Lagrange'a dla f na tych węzłach. Wtedy
 \[
-	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)}\ f(x) - w(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(\omega_n(x))
+	\forall_{x \in [a, b]} \exists_{\xi \in (a, b)}\ f(x) - w_f(x) = \cfrac{f^{(n+1)}(\xi)}{(n+1)!}(\omega_n(x))
 \]
-gdzie $\omega_n(x) = (x-x_0) \cdots (x-x_n)$ (gdzie $\omega(x_i) = f(x_i)$ dla $i = 0, \cdots, n$). (Dowód był)
-
-Przecież $\omega(x_i) = f(x_i)$ dla $i = 0, \cdots, n$ wcale nie zachodzi, bo $\omega(x_i)$ zeruje się dla każdego i, a $f$ niekoniecznie...
+gdzie $\omega_n(x) = (x-x_0) \cdots (x-x_n).$ (Dowód był)
 
 \end{twierdz}
 

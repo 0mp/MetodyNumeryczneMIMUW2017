@@ -2669,7 +2669,7 @@ Baza dla tej przestrzeni funkcji:
 	\node [circle,draw=black,fill=white,inner sep=1.5pt] at (4, 0) {};
 \end{tikzpicture}
 
-Co więcej ta baza ma podobne właśniwości jak ta z poprzedniego przykładu! 
+Co więcej ta baza ma podobne właściwości jak ta z poprzedniego przykładu!
 \[
 	supp(B_i^1(x)) = (x_i, x_{i+2})
 \]
@@ -2718,7 +2718,7 @@ Zauważmy, że $B_i^k(x)$ jest na każdym przedziale $[x_i, x_{i+1})$ wielomiane
 \begin{itemize}
 	\item \textbf{Ograniczony nośnik:}
 	
-	Jeśli $x \not\in (x_i, x_{i+k+1}$, to $B_i^k(x) = 0$.
+	Jeśli $x \not\in (x_i, x_{i+k+1})$, to $B_i^k(x) = 0$.
 	
 	\begin{tikzpicture}
 		\draw (0,0) -- (5, 0);
@@ -2768,7 +2768,7 @@ Zauważmy, że $B_i^k(x)$ jest na każdym przedziale $[x_i, x_{i+1})$ wielomiane
 	Więc ich kombinacja liniowa równa się $0$ dla $x \not\in (x_i, x_{i+k+1})$.
 	\end{proof}
 	
-	\item Obliczanie wartości $\sum_{i=-\infty}^{\infty} c_i \cdot B_i^k(x)$ dla wskazanego $x$. Zwróćmy uwagę, że znów dzięki temu że funkcje bazowe mają ograniczony nośnik to dla ustalonego $x$ jest tylko skończona liczba funkcji, gdzie składnik sumy jest niezerowa. Dlatego nieskońćzona suma zredukuje się do skończonej sumy, bo pozostałe składniki są mnożone przez $0$.
+	\item Obliczanie wartości $\sum_{i=-\infty}^{\infty} c_i \cdot B_i^k(x)$ dla wskazanego $x$. Zwróćmy uwagę, że znów dzięki temu że funkcje bazowe mają ograniczony nośnik to dla ustalonego $x$ jest tylko skończona liczba funkcji, gdzie składnik sumy jest niezerowy. Dlatego nieskończona suma zredukuje się do skończonej sumy, bo pozostałe składniki są mnożone przez $0$.
 	
 	Zauważmy, że:
 	\[
@@ -2899,13 +2899,13 @@ Dowód przez indukcję.
 \section{Aproksymacja funkcji}
 Dziś postaramy odpowiedzieć na pytanie: ``jak najlepiej aproksymować funkcje"?
 
-\textbf{Zadanie najlepszej aproksymacji}
+\subsection{Zadanie najlepszej aproksymacji}
 
-$f \in F \la \textrm{przestrzeń unormowana (bo musimy jakoś liczyć ten błąd}$
+$f \in F \la \textrm{przestrzeń unormowana (bo musimy jakoś liczyć ten błąd)}$
 
 Szukamy $v^\star \in V \subset F$, który najlepiej przybliża $f$ wśród wszystkich elementów z $V$.
 
-Najlepiej przybliża, tzn. błąd aproksymacji $f$ przez $v$ będzie najlepszy możliwy: $\norm{f-v^\star} \leq \norm{f-v} \quad \forall_{v \in V}$. Wtedy $v^\star$ to element najlepszej aproksymacji (ENA). Nie wiemy czy taki element istnieje ani czy jest jeden lub więcej.
+Najlepiej przybliża, tzn. błąd aproksymacji $f$ przez $v$ będzie najlepszy możliwy: $\norm{f-v^\star} \leq \norm{f-v} \quad \forall_{v \in V}$. Wtedy $v^\star$ to element najlepszej aproksymacji (ENA). Nie wiemy, czy taki element istnieje ani czy jest jeden lub więcej.
 
 \begin{fakt} Jeśli $F$ - przestrzeń liniowa, $V \subset F$ jest jej podprzestrzenią liniową skończonego wymiaru, to dla każdego $f \in F$ istnieje ENA $v^\star \in V$.\end{fakt}
 
@@ -2925,11 +2925,11 @@ Jest to oczywiście przestrzeń liniowa. Zatem mówimy o ``aproksymacji funkcji 
 
 Po co w ogóle to robić? Bo $F$ to przestrzeń nieskończonego wymiaru, a wszystkie przedstawione podprzestrzenie $V$ są skończonego wymiaru i można je łatwiej określać, prościej liczyć, wygodnie przechowywać w komputerze i mają wiele innych zalet.
 
-Musimy zdecydowań się na jakąś normę i znowu mamy tutaj wiele możliwości, np.
+Musimy zdecydować się na jakąś normę i znowu mamy tutaj wiele możliwości, np.
 
 \[
 	\begin{array}{l|l}
-		nazwa & wzor \\ \hline
+		nazwa & wzór \\ \hline
 		L^1(a, b) & \norm{f}_1 := \int_a^b |f(t)| dt \\
 		L^2(a, b) & \norm{f}_2 := \sqrt{\int_a^b |f(t)|^2 dt} \textrm{(aproksymacja średniokwadratowa)} \\
 		C^0(a, b) & \norm{f}_\infty := \max_{t \in [a, b]} |f(t)| \textrm{(aproksymacja jednostajna)}\\
@@ -2938,7 +2938,7 @@ Musimy zdecydowań się na jakąś normę i znowu mamy tutaj wiele możliwości,
 		l_1\ dyskretna & \sum_{i=0}^N |f(t_i)| \\
 		l_2\ dyskretna & \sqrt{\sum_{i=0}^N |f(t_i)|^2} \\
 		l_\infty\ dyskretna & \max_{i} |f(t_i)| \\
-		l_{2,\rho}\ dyskretna ?? & \sqrt{\sum_{i=0}^N \rho(t_i) |f(t_i)|^2} ???
+		l_{2,\rho}\ dyskretna & \sqrt{\sum_{i=0}^N |f(t_i)|^2 \rho(t_i)}
 	\end{array}
 \]
 
@@ -2948,11 +2948,13 @@ Te wzory oczywiście różnią się od siebie:
 
 \end{tikzpicture}
 
-$v_1$ ``dobrze" aproksymuje funkcję $f$ w normie $L^2$ (bo mam całkować kwadrat różnicy. I mimo dużej różnicy na małym przedziale, to ze względu na małą miarę tego przedziału i tak norma daje przyzwoity wynik). Ale jednocześniej $v_1$ źle aproksymuje $f$ w normie supremum, bo na tym małym przedziale różnica jest ogromna. Mało tego! Ta funkcja $v_1$ lepiej aproksymuje w normie $L^2$ niż funkcja $v_2$, ale jednocześniej $v_2$ lepiej aproksymuje $f$ niż $v_1$ w normie supremum!
+$v_1$ ``dobrze" aproksymuje funkcję $f$ w normie $L^2$ (bo mam całkować kwadrat różnicy. I mimo dużej różnicy na małym przedziale, to ze względu na małą miarę tego przedziału i tak norma daje przyzwoity wynik). Ale jednocześnie $v_1$ źle aproksymuje $f$ w normie supremum, bo na tym małym przedziale różnica jest ogromna. Mało tego! Ta funkcja $v_1$ lepiej aproksymuje w normie $L^2$ niż funkcja $v_2$, ale jednocześnie $v_2$ lepiej aproksymuje $f$ niż $v_1$ w normie supremum!
 
-\textrm{Aproksymacja w przestrzeni unitarnej}
+\subsubsection{Aproksymacja w przestrzeni unitarnej}
 
-Niech $H$ - przestrzeń liniowa z iloczynem skalarnym $(x, y)$ dla $x, y \in H$ (np. $H:=\RR^n \quad (x, y) := x^Ty = \sum_i^n x_i, y_i$)
+Niech $H$ - przestrzeń liniowa z iloczynem skalarnym $(x, y)$ dla $x, y \in H$
+
+(np. $H:=\RR^n \quad (x, y) := x^Ty = \sum_i^n x_i, y_i$)
 
 (np. $H:=C^0[a, b] \quad (f, g) := \int_a^b f(t)g(t) dt$)
 
@@ -2962,10 +2964,10 @@ Ten iloczyn skalarny indukuje w $H$ normę:
 \]
 
 \begin{twierdz}[o charakteryzacji ENA w przestrzeni unitarnej]
-Niech $V \subset H$ będzie podprzestrzenią liniową w $H$. $v^\star \in V$ jest ENA dla $f \in H \iff (f-v^\star, v) = 0 \ \forall_{v \in V}$ 
+Niech $V \subset H$ będzie podprzestrzenią liniową w $H$. Wówczas $v^\star \in V$ jest ENA dla $f \in H \iff (f-v^\star, v) = 0 \ \forall_{v \in V}$
 \end{twierdz}
 
-(mini ryunek przestrzeni i prostopadłego wektora)
+(mini rysunek przestrzeni i prostopadłego wektora)
 
 \begin{proof}
 ``$\impliedby$"
@@ -3016,7 +3018,7 @@ Skąd
 Bycie optymalnym oznacza, że wektor błędu jest prostopadły do tej przestrzeni. To wygląda jak ciekawostka teoretyczna, ale to prowadzi do algorytmu!
 
 \begin{wniosek}
-	Jeżeli $V$ jest skończonego wymiaru to ENA istnieje i jest jedyny. Gdy $\{v_i\}^n_{i=0}$ są bazą przestrzeni $V$, to $v^\star = \sum_{i=1}^n \alpha_i^\star v_i$ i współczynniki $\{\alpha_i^\star\}$ istnieją?
+	Jeżeli $V$ jest skończonego wymiaru to ENA istnieje i jest jedyny. Gdy $\{v_i\}^n_{i=0}$ są bazą przestrzeni $V$, to $v^\star = \sum_{i=1}^n \alpha_i^\star v_i$ i współczynniki $\{\alpha_i^\star\}$ spełniają:
 \end{wniosek}
 
 \[
@@ -3064,15 +3066,15 @@ Macierz $\left[ \begin{array}{c} (v_i, v_j) \end{array} \right]_{i, j=1}^n$ jest
 
 Układ ma więc dokładnie 1 rozwiązanie.
 
-\textbf{Uwaga} Macierz Gramma jest zazwyczaj gęsta i w wielu przypadkach źle uwarunkowana. Jest SPD (symetryczna i dodatnio określona)), więc zadziała algorytm Choleskiego (koszt $O(n^3)$).
+\textbf{Uwaga} Macierz Gramma jest zazwyczaj gęsta i w wielu przypadkach źle uwarunkowana. Jest SPD (symetryczna i dodatnio określona), więc zadziała algorytm Choleskiego (koszt $O(n^3)$).
 
 Możemy uprościć zadanie wyznaczania ENA przez odpowiedni dobór bazy:
 
 Wybierając bazę ortogonalną w $V$:
 \[
-	V = span\{p_i, p_j\} = 0 \quad dla\ i \neq j
+	V = span\{p_1, \cdots, p_n\} gdzie (p_i, p_j) = 0 \quad dla\ i \neq j
 \]
-Dostajemy macierz Gramma (diagonalną)
+Dostajemy macierz Gramma diagonalną
 \[
 	\left[
 		\begin{array}{ccc}
@@ -3161,9 +3163,8 @@ ortogonalne w $L^2(-1, 1)$
 \]
 
 \subsubsection{Wielomiany Hermite'a}
-\[
-L_\rho^2(-\infty, \infty)
-\]
+
+ortogonalne w $L_\rho^2(-\infty, \infty)$
 \[
 H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
 \]
@@ -3174,9 +3175,8 @@ H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
 	\norm{H_k}^2 = \sqrt{\pi} 2^k k!
 \]
 \subsubsection{Wielomiany Czebyszewa}
-\[
-	L_\rho^2(-1, 1) \quad \rho(x) = \cfrac{1}{\sqrt{1-x^2}}
-\]
+
+ortogonalne w $L_\rho^2(-1, 1) \quad dla \rho(x) = \cfrac{1}{\sqrt{1-x^2}}$
 \[
 	T_k(x) = 2xT_{k-1}(x) - T_{k-2}(x)
 \]
@@ -3189,7 +3189,7 @@ H_k(x) = 2xH_{k-1}(x) - (2k - 2)H_{k-2}(x)
 
 \subsection{Wielomiany Czebyszewa}
 
-Określamy $T_k(x) = \cos(k\theta)$ dla $x \in [-1, 1]$, gdzie $x = \cos\theta$ (tzn. $\theta = \arccos x$). Ze wzorów trygonometrycnzych mamy:
+Określamy $T_k(x) = \cos(k\theta)$ dla $x \in [-1, 1]$, gdzie $x = \cos\theta$ (tzn. $\theta = \arccos x$). Ze wzorów trygonometrycznych mamy:
 \[
 	\cos{(k+1)\theta} + \cos{(k-1)\theta} = 2\cos\theta\cos{k\theta}
 \]
@@ -3220,7 +3220,8 @@ Miejsca zerowe $k$-tego wielomianu Czebyszewa są rzeczywiste, jednokrotne i le�
 \begin{proof}
 \[
 \begin{array}{rl}
-	T_k(x) & = 0 \iff \cos{k\theta} = 0 \\
+	T_k(x) & = 0 \\
+	\cos{k\theta} & = 0 \\
 	k\theta & = (j-\frac{1}{2})\cdot\pi \\
 	\theta & = (\frac{j-\frac{1}{2}}{k})\cdot \pi
 \end{array}
@@ -3250,12 +3251,14 @@ Miejsca zerowe $k$-tego wielomianu Czebyszewa są rzeczywiste, jednokrotne i le�
 	%\draw[red] plot[smooth, tension=.5] coordinates {(0.0, 4.0) (0.58, 3.68) (1.14, 3.1) (1.7, 2.22) (2.28, 1.8) (2.9, 1.14) (3.42, 1.4) (3.8, -1)};
 \end{tikzpicture}
 
-\begin{twierdz}[Własność minmaksu]
+\begin{twierdz}[Własność minimaksu]
 Spośród wszystkich wielomianów stopnia $k$ postaci:
 \[
 	x^k + \cdots\textrm{niższe potęgi}\cdots
 \]
-wielomian $\frac{1}{2^{k-1}}T_k{x}$ ma najmniejszą normę maksimum na $[-1, 1]$ (tzn. $\max_{x\in[-1, 1]} |\frac{1}{2^{k-1}}T_k(x)| \leq \max_{x \in [-1, 1]}|w(x)| \quad \forall w(x) = x^k + ...$)
+wielomian $\frac{1}{2^{k-1}}T_k(x)$ ma najmniejszą normę maksimum na $[-1, 1]$
+
+(tzn. $\max_{x\in[-1, 1]} |\frac{1}{2^{k-1}}T_k(x)| \leq \max_{x \in [-1, 1]}|w(x)| \quad \forall w(x) = x^k + ...$)
 
 \end{twierdz}
 
@@ -3307,7 +3310,7 @@ sprzeczność.
 \[
 	\norm{f-w}_{\infty, [a, b]} \leq \cfrac{\norm{f^{(n+1)}}_{\infty, [a,b]}}{(n+1)!} \cdot \norm{(x-x_0), \cdots, (x-x_n)}_\infty
 \]
-Wyraz $\max_{x \in [a, b]}|(x-x_0)\cdots(x-x_n)|$ jest najmniejszy dla $[a, b] = [-1, 1]$, gdy $x_0, \cdots, x_n$ - miejsca zerowe $T_{n+1}(x)!$ Dla dowolnego $[a, b]$ zachodzi analogiczny fakt dla węzłów Czebyszewa przeskalowany liniowo na $[a,b]$.
+Wyraz $\max_{x \in [a, b]}|(x-x_0)\cdots(x-x_n)|$ jest najmniejszy dla $[a, b] = [-1, 1]$, gdy $x_0, \cdots, x_n$ - miejsca zerowe $T_{n+1}(x)!$ Dla dowolnego $[a, b]$ zachodzi analogiczny fakt dla węzłów Czebyszewa przeskalowanych liniowo na $[a,b]$.
 \[
 	x \in [-1, 1] \underbrace{\ra}_{\textrm{przekszt. liniowe}} [a, b] \ni \xi(x) = A\cdot x + B \quad\quad\textrm{(A, B - do wyznaczenia)}
 \]
@@ -3330,11 +3333,11 @@ $f \in C[a, b]$ ($f$ ciągła na $[a,b]$). Szukamy wielomianu najlepszej aproksy
 \end{fakt}
 
 \begin{twierdz}[Czebyszewa o alternansie]
- $p^\star \in \mathbb{P}_n$ jest ENA dla $f \iff$ istnieją co najmniej $(n+2)$ punkty $k_0, \cdots, k_{n+1}$ w $[a,b]$ takie, że:
+ $p^\star \in \mathbb{P}_n$ jest ENA dla $f \iff$ istnieją co najmniej $(n+2)$ punkty $x_0, \cdots, x_{n+1}$ w $[a,b]$ takie, że:
  \[
- 	f(x_i) - p^\star(x_i) = \varepsilon \cdot (-1)^i \cdot \norm{f - p^\star}_\infty
+ 	f(x_i) - p^\star(x_i) = s \cdot (-1)^i \cdot \norm{f - p^\star}_\infty
  \]
- gdzie $\varepsilon \in \{+1, -1\}$
+ gdzie $s \in \{+1, -1\}$
  
 (zestaw punktów $x_0, \cdots, x_n$ o tej własności to \textbf{alternans}).
  
@@ -3362,7 +3365,7 @@ zeruje się w $n+1$ punktach. Czyli $q-p^\star \equiv 0$
 
 Dowód ``$\implies$" pomijamy, bo niełatwy.
 \end{proof}
-Po co właściwie to robimy? Norma nieskończoność to maksimum z błędu na całym przedziale, czyli jest to błąd najgorszy. Wyobraźmy sobie, że piszemy biblotekę numeryczną, w której wyznaczamy jakąś wartość funkcji. Naturalnym sposobem jest przybliżanie jej wielomianem, bo to jest fajna prosta funkcja. Chciałbym ten wielomian wyznaczyć w taki sposób, aby spełnić z góry zadane kryterium numerycznej poprawności. Jak to zrobić żeby było tanio i dobrze. Powiedzmy, że chcemy żeby przynajmniej dawało błąd nie większy niż 2epsilon od poprawnego wyniku. Czyli mam zadane kryterium. Więc muszę znaleźć taki wielomian, który to spełni. Ponieważ to ma być funkcja biblioteczna, to będzie często wykonywana i musi być tania, dlatego chciałbym mieć dla \textbf{możliwie niskiego stopnia} jak \textbf{najlepszą jakość aproksymacji}. Czy można zrobić coś lepiej niż najlepiej? Nie, dlatego to jest najlepszy wielomian.
+Po co właściwie to robimy? Norma nieskończoność to maksimum z błędu na całym przedziale, czyli jest to błąd najgorszy. Wyobraźmy sobie, że piszemy bibliotekę numeryczną, w której wyznaczamy jakąś wartość funkcji. Naturalnym sposobem jest przybliżanie jej wielomianem, bo to jest fajna prosta funkcja. Chciałbym ten wielomian wyznaczyć w taki sposób, aby spełnić z góry zadane kryterium numerycznej poprawności. Jak to zrobić, żeby było tanio i dobrze? Powiedzmy, że chcemy, żeby przynajmniej dawało błąd nie większy niż $2 \varepsilon$ od poprawnego wyniku. Czyli mam zadane kryterium. Więc muszę znaleźć taki wielomian, który to spełni. Ponieważ to ma być funkcja biblioteczna, to będzie często wykonywana i musi być tania, dlatego chciałbym mieć dla \textbf{możliwie niskiego stopnia} jak \textbf{najlepszą jakość aproksymacji}. Czy można zrobić coś lepiej niż najlepiej? Nie, dlatego to jest najlepszy wielomian.
 
 \begin{twierdz}[o jednoznaczności optymalnego wielomianu aproksymacji jednostajnej]
 Istnieje dokładnie 1 ENA dla zadanej $f \in C[a, b]$ w sensie aproksymacji jednostajnej.
@@ -3384,7 +3387,7 @@ więc musi zachodzić $p^\star(x) \equiv q^\star(x)$
 
 Wyznaczanie ENA dla wielomianów aproksymacji jednostajnej: iteracyjny (nieskończony!) algorytm Remeza.
 
-\subsubsection{Inerpolacja o najlepszej aproksymacji w normie supremum}
+\subsubsection{Interpolacja o najlepszej aproksymacji w normie supremum}
 
 Niech $p^\star \in \mathbb{P}_n$ - ENA dla $f$ i niech $E_n = \norm{f- p^\star}_\infty$. Rozważamy $w \in \mathbb{P}_n$ - wielomian interpolacyjny Lagrange'a dla $f$ oparty na węzłach $x_0, \cdots, x_n$:
 \[
@@ -3416,9 +3419,9 @@ Wtedy
 
 \textbf{Uzupełnienie} Interpolacja o najlepszej aproksymacji w sensie jednostajnym (w przypadku ogólnym)
 
-$\underbrace{E_n}_{blad\ najlepszej\ aproksymacji} = \norm{f-p^\star}_\infty$, $p^\star$ - wielomian najlepszej aproksymacji stopnia $\leq$ n.
+$\underbrace{E_n}_{\textrm{błąd najlepszej aproksymacji}} = \norm{f-p^\star}_\infty$, $p^\star$ - wielomian najlepszej aproksymacji stopnia $\leq$ n.
 
-Niech $w$ - wielomian inteprolacyjny Lagrange'a oparty na $x_0, ..., x_n$ i pytanie: jak się ma $\norm{f-w}_\infty$ do $E_n$?
+Niech $w$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, ..., x_n$ i pytanie: jak się ma $\norm{f-w}_\infty$ do $E_n$?
 
 Mamy:
 \[

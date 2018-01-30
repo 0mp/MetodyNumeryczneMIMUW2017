@@ -1823,7 +1823,7 @@ p(x) = a_0 + a_1x + a_2x^2 + \cdots + a_nx^n
 Wielomiany są przyjemne, bo do ich wyliczenia wystarczy dodawanie i mnożenie, a to potrafi sprzęt (a jak ktoś ma dobre oko to nawet zauważy tutaj FMA - ``fused multiply-add").
 
 \subsection{Algorytm Hornera} \index{Horner, algorytm}
-Algorytm Hornera służy do szybkiego wyznaczania wartości $w = p(x)$. On polega na tym, aby w odpowiednim miejscu powstawiać nawiasy.
+Algorytm Hornera służy do szybkiego wyznaczania wartości $w = p(x)$. Polega on na tym, aby w odpowiednim miejscu powstawiać nawiasy.
 \begin{align*}
 	p(x) & = a_0 + x(a_1 + a_2x + \cdots + a_nx^{n-1}) \\
 	& = a_0 + x (a_1 + x(a_2 + a_3 x + \cdots + a_nx^{n-2})) \\
@@ -1937,7 +1937,7 @@ Uwagi:
 Czy da się dokonać taniej eliminacji Gaussa dla macierzy Vandermonde'a? Spróbujmy wybrać inną bazę.
 
 \begin{obserw}
-Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n$, natomiast $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, x_{n-1}$. Wtedy $\star = w_n(x_i) - w_{n-1}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x_{n-1})}_{\phi_n(x)}$. Czyli
+Niech $w_n(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na węzłach $x_0, \cdots x_n$, natomiast $w_{n-1}(\cdot)$ - wielomian interpolacyjny Lagrange'a oparty na $x_0, \cdots x_{n-1}$. Wtedy $\star = w_n(x_i) - w_{n-1}(x_i) = 0$ dla $i=0, \cdots, n-1$. Zatem ten $(\star)$ wielomian zeruje się w $n$ punktach, więc $w_n(x) - w_{n-1}(x) = b_n\underbrace{(x-x_0)\cdot \cdots \cdot (x-x_{n-1})}_{\phi_n(x)}$. Czyli
 \[
 	w_n(x) = w_{n-1}(x) + b_n\cdot\phi_n(x) = \sum_{i=0}^{n} b_i\phi_i(x)
 \]
@@ -2210,21 +2210,23 @@ Uogólnieniem rozpatrzonego zadania interpolacji jest zadanie interpolacji Hermi
 
 Znaleźć wielomian $H_n(x)$ stopnia $\leq n$ taki, że
 \[
-	H_n^{(j)}(x_i) = f^{(j)}(x_i) \quad i = 0, \cdots, n \quad j = 0, \cdots, n
+	H_n^{(j)}(x_i) = f^{(j)}(x_i) \quad i = 0, \cdots, n \quad j = 0, \cdots, m_i
 \] 
 \[
-	m = (\sum m_i - 1)
+	m = \sum m_i - 1
 \]
 To zadanie także ma dokładnie jedno rozwiązanie.
 
 \textbf{Błąd interpolacji:}
 \[
-f(x) - H_m(x) = \cfrac{f^{n+1}(\xi)}{(m+1)!}w(x)
+f(x) - H_m(x) = \cfrac{f^{(n+1)}(\xi)}{(m+1)!}w(x)
 \]
 \[
 	w(x) = (x-x_0)^{m_0} \cdot \cdots \cdot (x - x_n)^{m_n}
 \]
-Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych. $m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
+$m_i$ oznacza krotność $i$-tego węzła, tj. liczba znanych pochodnych + 1.
+
+Dla wyznaczenia wielomianu interpolacyjnego Hermite'a w bazie Newtona (z węzłami krotnymi) działa zmodyfikowany algorytm różnic dzielonych.
 
 \section{Interpolacja funkcjami sklejanymi (splajny)}
 Spójrzmy na interpolację wielomianową w węzłach równoodległych funkcji $f(x) = \cfrac{1}{1+x^2}$
@@ -2245,7 +2247,7 @@ Spójrzmy na interpolację wielomianową w węzłach równoodległych funkcji $f
 
 \end{tikzpicture}
 
-Jak widać interpolacja wielomianu wysokiego stopnia w węzłach równoodległych może dawać duży błąd, dlatego potrzebujemy innego sposobu przybliżania skomplikowanych funkcji.
+Jak widać interpolacja wielomianem wysokiego stopnia w węzłach równoodległych może dawać duży błąd, dlatego potrzebujemy innego sposobu przybliżania skomplikowanych funkcji.
 
 W przeciwieństwie do metody interpolacji Lagrange'a, gdzie stosowaliśmy jeden globalny wielomian dla całego przedziału interpolacji, w metodzie splajnów stosowane są funkcje zdefiniowane jako wielomiany niskiego stopnia osobno dla każdego odcinka pomiędzy sąsiednimi węzłami interpolacyjnymi. Te lokalne wielomiany są jednak tak dobrane, aby - oprócz warunków interpolacji - spełniać warunki sklejenia w taki sposób, aby cały splajn był funkcją o odpowiedniej regularności. Skoncentrujemy się przede wszystkim na zagadnieniu interpolacji za pomocą \texttt{splajnu kubicznego}, tj. funkcji ciągłej wraz z pochodnymi do rzędu drugiego włącznie i zbudowanej z wielomianów 3-ego stopnia. 
 
@@ -2320,7 +2322,7 @@ W zastosowaniach interpolacyjnych często używamy \texttt{splajnów kubicznych}
 
 \subsection{Zadanie interpolacji splajnowej} Dla zadanej funkcji $f$, znaleźć splajn $s \in S_l$ taki, że \[s(x_i) = f(x_i)\quad i=0, ..., n\]
 
-Te warunki dają n+1 warunków, a w przypadku interpolacji splajnem ``brakuje" jeszcze dwóch zależności, aby było tyle samo warunków co stopni swobody zadania (bo stopni swobody jest $n+2m-1$).
+Te warunki dają n+1 warunków, a w przypadku interpolacji splajnem ``brakuje" jeszcze dwóch zależności, aby było tyle samo warunków co stopni swobody zadania (bo stopni swobody jest $n+l$, a $l=3$).
 
 W ogólności, gdy rozważamy splajny interpolacyjne nieparzystego stopnia, $l=2m-1$ mamy swobodę doboru $2m-2$ dodatkowych warunków. Często są to na przykład:
 
@@ -2328,10 +2330,10 @@ W ogólności, gdy rozważamy splajny interpolacyjne nieparzystego stopnia, $l=2
 	\item \textbf{hermitowskie warunki brzegowe}
 	Żądam aby nie tylko wartości, ale też ich kolejne pochodne zgadzały się z tym co było powiedziane.
 	\[
-		s^{(k)}(a) = f^{(k)(a)} \quad k = 1, \cdots, m-1
+		s^{(k)}(a) = f^{(k)}(a) \quad k = 1, \cdots, m-1
 	\]
 	\[
-		s^{(k)}(b) = f^{(k)(b)} \quad k = 1, \cdots, m-1
+		s^{(k)}(b) = f^{(k)}(b) \quad k = 1, \cdots, m-1
 	\]
 	
 	\item \textbf{naturalne warunki brzegowe}
@@ -2537,7 +2539,7 @@ $(I + M)$ jest nieosobliwe o ile $\norm{M} < 1$. Ponadto $\norm{(I+M)^{-1}}_\inf
 	\norm{A^{-1}}_\infty = \cfrac{1}{4} \cdot \norm{(I+M)^{-1}}_\infty \leq \cfrac{1}{4} \cdot \cfrac{1}{1-\norm{M}_\infty} = \cfrac{1}{2}
 \]
 
-\begin{twierdz}[o błędzie aproksymacji interpolacja splajnem kubicznym z Hermitowskimi warunkami brzegowymi]
+\begin{twierdz}[o błędzie aproksymacji interpolacyjnym splajnem kubicznym z Hermitowskimi warunkami brzegowymi]
 	Niech $s \in S_3[a, b]$ będzie splajnem interpolacyjnym kubicznym z Hermitowskimi warunkami brzegowymi, tzn: \[s(x_i) = f(x_i) \quad i=0, ..., n\] oraz \[s'(a) = f'(a) \quad s'(b) = f'(b)\] przy czym dla urposzczenia węzły są równoodległe ($h = x_{i+1}-x_i$). Wtedy jeśli $f \in C^4[a, b]$, to: 
 	\[ 
 		\norm{f-s}_\infty \leq \cfrac{5}{384} \cdot h^4 \cdot \norm{f^{(4)}}_\infty
@@ -2550,7 +2552,7 @@ $(I + M)$ jest nieosobliwe o ile $\norm{M} < 1$. Ponadto $\norm{(I+M)^{-1}}_\inf
 	\]
 \end{twierdz}
 
-\subsection{Krzywe B-splajne (B-spline)}
+\subsection{Krzywe B-sklejane (B-spline)}
 
 Krzywa B-sklejana jest jedną z najczęściej stosowanych reprezentacji parametrycznych krzywych sklejanych. Angielska nazwa spline wzięła się z gwary kreślarzy i odnosiła do długiej elastycznej metalowej taśmy, której używano do rysowania samolotów, samochodów, statków itp. Zawieszając odpowiednio dobrane obciążniki można było uzyskać krzywą o ciągłości geometrycznej drugiego rodzaju. Angielska nazwa krzywych B-sklejanych – B-spline jest skrótem od basis spline function, co znaczy "funkcja bazowa splajnów". Chociaż biorąc pod uwagę wykres, który wygląda jak dzwon, można też uznać, że pochodzi to od słowa ``bell" :-).
 

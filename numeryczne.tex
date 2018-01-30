@@ -3491,12 +3491,12 @@ Niech $f(a) \cdot f(b) < 0$ i niech $f$ będzie ciągła na $[a, b]$. Z twierdze
 \end{minted}
 
 \begin{twierdz}
-	Niech $[a_0, b_0], [a_1, b_1], ...$ oznaczają przedziały lokalizujące zero w kolejnych ??? metody bisekcji. Wtedy $a_n \ra x^\star$, $b_n \ra x^\star$ oraz $|x^\star - \frac{a_n+b_n}{2}| \leq \frac{1}{2^{n+1}}|b - a|$
+	Niech $[a_0, b_0], [a_1, b_1], ...$ oznaczają przedziały lokalizujące zero w kolejnych krokach metody bisekcji. Wtedy $a_n \ra x^\star$, $b_n \ra x^\star$ oraz $|x^\star - \frac{a_n+b_n}{2}| \leq \frac{1}{2^{n+1}}|b - a|$
 \end{twierdz}
 
 \textbf{Uwagi:}
 \begin{itemize}
-	\item Szybkość zbieżności słabo zależny od $f$.
+	\item Szybkość zbieżności słabo zależy od $f$.
 	\item Zbieżność przy minimalnych wymaganiach na $f$.
 	\item Szybkość zbieżności niezbyt duża.
 	\item W implementacji nie obliczamy $f(m)*f(a)$
@@ -3506,12 +3506,12 @@ Dlaczego w implementacji nie obliczamy $f(m)*f(a)$, skoro w algorytmie ewidentni
 
 Wspomnieliśmy o zbieżności, ale potrzebujemy narzędzi do określenia, która metoda działa szybciej, a która wolniej.
 
-\begin{defi}{Szybkość zbieżności ciągu $x_n \ra x^\star$}
+\begin{defi}[Szybkość zbieżności ciągu $x_n \ra x^\star$]
 	Powiemy, że szybkość zbieżności jest wykładnicza z wykładnikiem (co najmniej) $p>1$, gdy
 	\[
 		\exists_{c \geq 0} \exists_{N > 0} \forall_{n \geq N} |x_{n+1}-x^\star| \leq c * |x_n - x^\star|^p
 	\]
-	Powiemy, że szybkość zbiżności jest co najmniej liniowa jeśli
+	Powiemy, że szybkość zbieżności jest co najmniej liniowa, jeśli
 	\[
 		\exists_{\gamma \in [0, 1)} \exists_{N > 0}  \forall_{n \geq N}  |x_{n+1}-x^\star| \leq \gamma \cdot |x_n - x^\star|
 	\]
@@ -3528,24 +3528,25 @@ n & \textrm{liniowa} (\gamma = \frac{1}{10}) & \textrm{kwadratowa} (c = 1) & \te
 \end{array}
 \]
 
-A jak jest u nas? ciąg $\frac{1}{2^{n+1}}|b-a|$ jest zbieżny liniowo, $\gamma = \frac{1}{2}$
+A jak jest u nas? Ciąg $\frac{1}{2^{n+1}}|b-a|$ jest zbieżny liniowo, $\gamma = \frac{1}{2}$.
 
 \subsection{Metoda Newtona}
 
 \[
-	0 = f(x^\star) = f(\underline{x} + \underline{h}) = f(x) + f'(x)\cdot h + f''\cdot\frac{h^2}{2} + \cdots
+	0 = f(x^\star) = f(\underline{x} + \underline{h}) = f(x) + f'(x)\cdot h + f''(x)\cdot\frac{h^2}{2} + \cdots
 \]
-(jeśli h - małe, to pominiemy człony wyższych rzędów)
+(jeśli h - małe, to pominiemy człony wyższych rzędów).
+
 Zatem w przybliżeniu:
 \[
-	0 = f(x) + f'(x) \cdot h \implies h
+	0 \simeq f(x) + f'(x) \cdot h \implies h = -\frac{f(x)}{f'(x)}
 \]
 I jeśli $x \simeq x^\star$, to $x+h$ - powinno być znacznie lepsze.
 \[
 	x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
 \]
 
-\begin{twierdz}{o zbieżności m. Newtona}
+\begin{twierdz}[o zbieżności metody Newtona]
 	Niech $f \in C^2[a, b]$ i istnieje $x^\star \in (a, b)$ t. że $f(x^\star) = 0$ oraz $f'(x^\star) \neq 0$. Wtedy istnieje otoczenie $U \ni x^\star$ takie, że metoda Newtona jest zbieżna do $x^\star$ dla dowolnego $x_0 \in U$. Ponadto zbieżność jest kwadratowa:
 	\[
 		\exists_{c>0} \forall_{n = 0, 1, \cdots} |x_{n+1} - x^\star| \leq c \cdot |x_n - x^\star|^2
@@ -3606,11 +3607,11 @@ I jeśli $x \simeq x^\star$, to $x+h$ - powinno być znacznie lepsze.
 \begin{itemize}
 	\item f - musi być różniczkowalna
 	\item trzeba znać wzór na pochodną
-	\item $f'(x^\star) \neq 0 \implies x^\star $ - zero jednokrotne (gdy jest krotności $m$, to metoda zbieżna liniowo $|x_{n+1} - x^\star| \simeq (1 - |frac{1}{m}) |x_n - x^\star|$)\
+	\item $f'(x^\star) \neq 0 \implies x^\star $ - zero jednokrotne (gdy jest krotności $m$, to metoda zbieżna liniowo $|x_{n+1} - x^\star| \simeq (1 - frac{1}{m}) |x_n - x^\star|$)\
 	\item trzeba mieć "dostatecznie dobre" $x_0$ (lokalnie zbieżna, w bisekcji $x_0$ było dowolne).
 \end{itemize}
 
-Są pewne modyfikacje do metody Newtona, które poprawiają zbieżnosć?
+Istnieją modyfikacje metody Newtona, które poprawiają zbieżność.
 
 \subsubsection{Modyfikacje metody Newtona}
 \begin{itemize}
@@ -3621,7 +3622,7 @@ Są pewne modyfikacje do metody Newtona, które poprawiają zbieżnosć?
 	\[
 		x_{n+1} = x_n - f(x_n) \cdot \cfrac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}
 	\]
-	Przy analogicznych założeniach jak w metodzie Newtona, metoda siecznych jest lokalnie zbieżna do $x^\star$, ale z wykładnikiem $p = \cfrac{1+\sqrt{5}}{2} \simeq 1.618...$. Drugi problem: w liczniku mam różnicę dwóch coraz bliższych liczb. Na dole to samo, ale gorzej bo funkcja $f$ może to wypłaszczać. Zatem może się tutaj coś psuć numerycznie jeśli chcemy mieć wysoką dokładność rozwiązania.
+	Przy analogicznych założeniach jak w metodzie Newtona, metoda siecznych jest lokalnie zbieżna do $x^\star$, ale z wykładnikiem $p = \cfrac{1+\sqrt{5}}{2} \simeq 1.618...$. Drugi problem: w liczniku mam różnicę dwóch coraz bliższych liczb. Na dole to samo, ale gorzej, bo funkcja $f$ może to wypłaszczać. Zatem może się tutaj coś psuć numerycznie, jeśli chcemy mieć wysoką dokładność rozwiązania.
 	\item metoda Steffensena:
 	\[
 		x_{n+1} = x_n - f(x_n) \cdot \frac{f(x_n)}{f(x_n + f(x_n)) - f(x_n)}
@@ -3637,7 +3638,7 @@ Są pewne modyfikacje do metody Newtona, które poprawiają zbieżnosć?
 	\]
 \end{itemize}
 
-\subsection{Metody tepu punktu stałego}
+\subsection{Metody typu punktu stałego}
 
 Na przykład:
 \[
@@ -3656,7 +3657,7 @@ Zatem skoro $x_n \longrightarrow x^\star$, to
 \[
 	x^\star = F(x^\star)\quad \quad \la \textrm{punkt stały dla F}
 \]
-\begin{twierdz}{Twierdzenie Banacha o kontrakcji}
+\begin{twierdz}[Twierdzenie Banacha o kontrakcji]
 	Niech $F: [a, b] \ra [a, b]$ i spełnia warunek kontrakcji:
 	\[
 		\exists_{\gamma < 1} \forall_{x, y \in [a, b]} |F(x) - F(y)| \leq \gamma |x-y|

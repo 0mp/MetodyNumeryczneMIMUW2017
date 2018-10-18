@@ -9,3 +9,7 @@ Wersja live: https://www.sharelatex.com/project/59d606877ef26a08a8cf3c58
  * poprawić niektóre macierze
  * rozdzielić na mniejsze pliki
  * poprawić błędy latexowe
+
+### Karta wzorów
+
+https://github.com/0mp/mn-karta-wzorow
